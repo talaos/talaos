@@ -37,7 +37,7 @@ export class TicketPage {
               public modalCtrl: ModalController, public loadingCtrl: LoadingController) {
     // If we navigated to this page, we will have an item available as a nav param
     this.criteria = [ { field: 12, searchtype: "equals", value: "notold" }];
-    this.forcedisplayBase = [1, 2, 80, 12, 19, 14, 7];
+    this.forcedisplayBase = [1, 2, 80, 12, 19, 14, 7, 82];
     this.forcedisplaySup = [];
     this.selectedItem = navParams.get("item");
   }
@@ -91,21 +91,36 @@ export class TicketPage {
 
     if (data.data !== undefined) {
       for (const item of data.data) {
-        let status = "";
         let type = "Incident";
+        let statusIcon = "";
+        let statusColor = "";
 
         if (item[12] === 1) {
-          status = "glpi-ticket-status-new";
+          statusIcon = "md-bulb";
+          statusColor = "primary";
         } else if (item[12] === 2) {
-          status = "glpi-ticket-status-assigned";
+          statusIcon = "md-person";
+          statusColor = "primary";
         } else if (item[12] === 3) {
-          status = "glpi-ticket-status-planned";
+          statusIcon = "md-calendar";
+          statusColor = "primary";
         } else if (item[12] === 4) {
-          status = "glpi-ticket-status-wait";
+          statusIcon = "md-pause";
+          statusColor = "light";
         } else if (item[12] === 5) {
-          status = "glpi-ticket-status-solve";
+          statusIcon = "md-checkmark";
+          statusColor = "secondary";
         } else if (item[12] === 6) {
-          status = "glpi-ticket-status-close";
+          statusIcon = "md-done-all";
+          statusColor = "secondary";
+        }
+
+        // Manage late
+        if (item[82] === 1) {
+          if (item[12] < 4) {
+            statusIcon = "md-bonfire";
+            statusColor = "danger";
+          }
         }
 
         if (item[14] === 2) {
@@ -115,11 +130,11 @@ export class TicketPage {
         const myrow = {
           category: item[7],
           date_mod: item[19],
-          icon: "person",
           id: item[2],
           name: item[1],
           note: "",
-          status,
+          statusColor,
+          statusIcon,
           type,
         };
         for (const sup of this.forcedisplaySup) {
