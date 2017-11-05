@@ -14,3 +14,29 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
+
+ion-icon {
+  &[class*="glpi-"] {
+    width: 100px;
+    height: 18px;
+  }
+  &[class*="glpi-ticket-status-new"] {
+    background: url(../assets/imgs/status_new.png);
+  }
+  &[class*="glpi-ticket-status-assigned"] {
+    background: url(../assets/imgs/status_assigned.png);
+  }
+  &[class*="glpi-ticket-status-planned"] {
+    background: url(../assets/imgs/status_planned.png);
+  }
+  &[class*="glpi-ticket-status-wait"] {
+    background: url(../assets/imgs/status_wait.png);
+  }
+  &[class*="glpi-ticket-status-solve"] {
+    background: url(../assets/imgs/status_solve.png);
+  }
+  &[class*="glpi-ticket-status-close"] {
+    background: url(../assets/imgs/status_close.png);
+  }
+
+}

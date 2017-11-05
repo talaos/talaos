@@ -1,34 +1,51 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { ErrorHandler, NgModule } from '@angular/core';
-import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
+import { ErrorHandler, NgModule } from "@angular/core";
+import { HttpModule } from "@angular/http";
+import { BrowserModule } from "@angular/platform-browser";
+import { IonicApp, IonicErrorHandler, IonicModule } from "ionic-angular";
 
-import { MyApp } from './app.component';
-import { HomePage } from '../pages/home/home';
-import { ListPage } from '../pages/list/list';
+import { BackendComponent } from "../backend/backend.component";
+import { BackendService } from "../backend/backend.service";
 
-import { StatusBar } from '@ionic-native/status-bar';
-import { SplashScreen } from '@ionic-native/splash-screen';
+import { HomePage } from "../pages/home/home";
+import { LoginPage } from "../pages/login/login";
+import { TicketPage } from "../pages/ticket/ticket";
+import { Search } from "../search/search";
+import { MyApp } from "./app.component";
+
+import { TicketForm } from "../pages/ticket/ticket_form";
+
+import { SplashScreen } from "@ionic-native/splash-screen";
+import { StatusBar } from "@ionic-native/status-bar";
 
 @NgModule({
+  bootstrap: [IonicApp],
   declarations: [
     MyApp,
+    BackendComponent,
+    LoginPage,
     HomePage,
-    ListPage
+    TicketPage,
+    TicketForm,
+    Search,
+  ],
+  entryComponents: [
+    MyApp,
+    LoginPage,
+    HomePage,
+    TicketPage,
+    TicketForm,
+    Search,
   ],
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
-  ],
-  bootstrap: [IonicApp],
-  entryComponents: [
-    MyApp,
-    HomePage,
-    ListPage
+    HttpModule,
   ],
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
-  ]
+    BackendService,
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+  ],
 })
 export class AppModule {}

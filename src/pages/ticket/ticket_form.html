@@ -1,0 +1,185 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Ticket #{{selectedItem.id}} - {{selectedItem.name}}</ion-title>
+  </ion-navbar>
+
+  <ion-toolbar no-border-top>
+    <ion-segment [(ngModel)]="ticketzone">
+      <ion-segment-button value="summary">
+        <ion-icon name="md-information-circle"></ion-icon>
+      </ion-segment-button>
+      <ion-segment-button value="actors">
+        <ion-icon name="md-contacts"></ion-icon>
+      </ion-segment-button>
+      <ion-segment-button value="dates">
+        <ion-icon name="md-time"></ion-icon>
+      </ion-segment-button>
+      <ion-segment-button value="details">
+        <ion-icon name="md-filing"></ion-icon>
+      </ion-segment-button>
+      <ion-segment-button value="traitement">
+        <ion-icon name="md-chatbubbles"></ion-icon>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+  <div [ngSwitch]="ticketzone">
+    <ion-list *ngSwitchCase="'summary'">
+      <ion-grid>
+        <ion-row>
+          <ion-col col-sm-12 col-md-6>
+            <ion-item>
+              <ion-label>Type</ion-label>
+              <ion-select [(ngModel)]="selectedItem.type" interface="popover">
+                <ion-option *ngFor="let type of types" [value]="type.value">
+                  {{type.viewValue}}
+                </ion-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+          <ion-col col-sm-12 col-md-6>
+            <ion-item>
+              <ion-label>Status</ion-label>
+              <ion-select [(ngModel)]="selectedItem.status" interface="popover">
+                <ion-option *ngFor="let st of status" [value]="st.value">
+                  {{st.viewValue}}
+                </ion-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <ion-item>
+        <ion-label floating>Title</ion-label>
+        <ion-input type="text" value="{{selectedItem.name}}"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label floating>Description</ion-label>
+        <ion-textarea type="text" value="{{selectedItem.content}}" [attr.rows]="25"></ion-textarea>
+      </ion-item>
+    </ion-list>
+
+
+
+    <ion-list *ngSwitchCase="'actors'">
+
+      <ion-item-group>
+        <ion-item-divider color="light">Demandeurs</ion-item-divider>
+        <ion-item *ngFor="let item of actors.demandeurs">
+          <ion-icon name="person" item-start></ion-icon>
+          {{item.users_id}}
+        </ion-item>
+        <ion-item *ngFor="let item of groups.demandeurs">
+          <ion-icon name="md-people" item-start></ion-icon>
+          {{item.groups_id}}
+        </ion-item>
+      </ion-item-group>
+
+      <ion-item-group>
+        <ion-item-divider color="light">Observateurs</ion-item-divider>
+        <ion-item *ngFor="let item of actors.observateurs">
+          <ion-icon name="person" item-start></ion-icon>
+          {{item.users_id}}
+        </ion-item>
+        <ion-item *ngFor="let item of groups.observateurs">
+          <ion-icon name="md-people" item-start></ion-icon>
+          {{item.groups_id}}
+        </ion-item>
+      </ion-item-group>
+
+      <ion-item-group>
+        <ion-item-divider color="light">Assignés</ion-item-divider>
+        <ion-item *ngFor="let item of actors.assignes">
+          <ion-icon name="person" item-start></ion-icon>
+          {{item.users_id}}
+        </ion-item>
+        <ion-item *ngFor="let item of groups.assignes">
+          <ion-icon name="md-people" item-start></ion-icon>
+          {{item.groups_id}}
+        </ion-item>
+      </ion-item-group>
+
+    </ion-list>
+
+    <ion-list *ngSwitchCase="'dates'">
+      <ion-grid>
+        <ion-row>
+          <ion-col col-sm-12 col-md-3>
+            <ion-item>
+              <ion-label floating>Date ouverture</ion-label>
+              <ion-datetime displayFormat="YYYY-MM-DD HH:mm:ss" [(ngModel)]="selectedItem.date"></ion-datetime>
+            </ion-item>
+          </ion-col>
+          <ion-col col-sm-12 col-md-3>
+            <ion-item>
+              <ion-label floating>Dernière modification</ion-label>
+              <ion-datetime displayFormat="YYYY-MM-DD HH:mm:ss" [(ngModel)]="selectedItem.date_mod"></ion-datetime>
+            </ion-item>
+          </ion-col>
+          <ion-col col-sm-12 col-md-3>
+            <ion-item>
+              <ion-label floating>Date de résolution</ion-label>
+              <ion-datetime displayFormat="YYYY-MM-DD HH:mm:ss" [(ngModel)]="selectedItem.solvedate"></ion-datetime>
+            </ion-item>
+          </ion-col>
+          <ion-col col-sm-12 col-md-3>
+            <ion-item>
+              <ion-label floating>Date de cloture</ion-label>
+              <ion-datetime displayFormat="YYYY-MM-DD HH:mm:ss" [(ngModel)]="selectedItem.closedate"></ion-datetime>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-list>
+
+    <ion-list *ngSwitchCase="'details'">
+    </ion-list>
+
+    <ion-list *ngSwitchCase="'traitement'">
+      <ion-fab left bottom>
+        <button ion-fab><ion-icon name="add"></ion-icon></button>
+        <ion-fab-list side="top">
+          <button ion-fab><ion-icon name="md-chatboxes"></ion-icon></button>
+          <button ion-fab><ion-icon name="md-checkbox-outline"></ion-icon></button>
+          <button ion-fab><ion-icon name="md-document"></ion-icon></button>
+          <button ion-fab><ion-icon name="md-checkmark"></ion-icon></button>
+        </ion-fab-list>
+      </ion-fab>
+
+      <ion-card *ngFor="let item of timeline">
+        <ion-item>
+          <ion-icon name="person" item-start large></ion-icon>
+          <h2>{{item.users_id}}</h2>
+          <p>{{item.date}}</p>
+        </ion-item>
+
+        <ion-item>
+          <ion-icon name="{{item._type}}" item-start large></ion-icon>
+          <p>{{item.content}}</p>
+        </ion-item>
+
+        <ion-row>
+          <ion-col *ngIf="item.private">
+            <button ion-button icon-left clear small>
+              <ion-icon name="md-lock"></ion-icon>
+              <div>Private</div>
+            </button>
+          </ion-col>
+          <ion-col center text-center>
+            <ion-note>
+              {{item.requesttypes_id}}
+            </ion-note>
+          </ion-col>
+        </ion-row>
+      </ion-card>
+
+    </ion-list>
+
+  </div>
+</ion-content>

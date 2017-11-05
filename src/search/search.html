@@ -1,0 +1,75 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Search
+    </ion-title>
+    <ion-buttons start>
+      <button ion-button (click)="dismiss()">
+        <span ion-text color="primary" showWhen="ios">Cancel</span>
+        <ion-icon name="md-close" showWhen="android,windows"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      <ion-item>
+        <ion-select [(ngModel)]="mysearch.operator" interface="popover">
+          <ion-option value="and">And</ion-option>
+          <ion-option value="or">Or</ion-option>
+        </ion-select>
+      </ion-item>
+      <ion-fab>
+        <button ion-fab (click)="addLevel1()"><ion-icon name="add"></ion-icon></button>
+      </ion-fab>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-card *ngFor="let blocklv1 of mysearch.blocks">
+        <ion-card-header>
+          <ion-item>
+            <ion-select [(ngModel)]="blocklv1.operator" interface="popover">
+              <ion-option value="and">And</ion-option>
+              <ion-option value="or">Or</ion-option>
+            </ion-select>
+          </ion-item>
+          <ion-fab>
+            <button ion-fab (click)="addLevel2(blocklv1)"><ion-icon name="add"></ion-icon></button>
+          </ion-fab>
+        </ion-card-header>
+
+        <ion-card-content>
+          <ion-card *ngFor="let blocklv2 of blocklv1.blocks">
+            <ion-card-content>
+              <ion-item>
+                <!-- Add card content here! -->
+                <ion-select [(ngModel)]="blocklv2.field" interface="popover">
+                  <ion-option *ngFor="let field of fields" [value]="field.id">{{field.name}}</ion-option>
+                </ion-select>
+              </ion-item>
+
+              <ion-item>
+                <ion-select [(ngModel)]="blocklv2.searchtype" interface="popover">
+                  <ion-option *ngFor="let searchtype of loadSearchtypes(blocklv2.field)" [value]="searchtype.name">{{searchtype.translate}}</ion-option>
+
+
+                  <ion-option value="contains">contains</ion-option>
+                  <ion-option value="equals">equals</ion-option>
+                  <ion-option value="is">is</ion-option>
+                </ion-select>
+              </ion-item>
+
+              <ion-item>
+                <ion-label floating>Value</ion-label>
+                <ion-input type="text" [(ngModel)]="blocklv2.value" value="{{blocklv2.value}}"></ion-input>
+              </ion-item>
+            </ion-card-content>
+          </ion-card>
+        </ion-card-content>
+      </ion-card>
+    </ion-card-content>
+  </ion-card>
+  <button ion-button block (click)="CloseModal()">Close</button>
+</ion-content>
