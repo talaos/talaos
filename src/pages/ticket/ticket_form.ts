@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
-import { NavController, NavParams } from "ionic-angular";
+import { ModalController, NavController, NavParams } from "ionic-angular";
 import { BackendService } from "../../backend/backend.service";
+import { DropdownSelect } from "../../dropdownselect/dropdownselect";
 
 @Component({
   providers: [ BackendService ],
@@ -42,7 +43,8 @@ export class TicketForm {
     {value: 1, viewValue: "Very low"},
   ];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private httpService: BackendService) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private httpService: BackendService,
+              public modalCtrl: ModalController) {
     // If we navigated to this page, we will have an item available as a nav param
     this.selectedItem = navParams.get("item");
 
@@ -89,6 +91,30 @@ export class TicketForm {
       }.bind(this));
 
     // get actors
+    this._getActors();
+
+    // get groups
+    this._getGroups();
+  }
+
+  public openDropdownSelect(itemtype) {
+    const modal = this.modalCtrl.create(DropdownSelect, {itemtype});
+    modal.onDidDismiss(function(data) {
+      if (itemtype === "ITILCategory") {
+        this.selectedItem.itilcategories_id = data.value;
+        this.itilcategories_name = data.viewValue;
+      } else if (itemtype === "RequestType") {
+        this.selectedItem.requesttypes_id = data.value;
+        this.requesttypes_name = data.viewValue;
+      } else if (itemtype === "Location") {
+        this.selectedItem.locations_id = data.value;
+        this.locations_name = data.viewValue;
+      }
+    }.bind(this));
+    modal.present();
+  }
+
+  private _getActors() {
     this.httpService.getPage("Ticket_User", {tickets_id: this.selectedItem.id},
       true, true, false, "0-200")
       .subscribe(function(data) {
@@ -106,8 +132,9 @@ export class TicketForm {
           }
         }
       }.bind(this));
+  }
 
-    // get groups
+  private _getGroups() {
     this.httpService.getPage("Group_Ticket", {tickets_id: this.selectedItem.id},
       true, true, false, "0-200")
       .subscribe(function(data) {

@@ -55,6 +55,12 @@
       </ion-grid>
 
       <ion-item>
+        <ion-label floating>Category</ion-label>
+        <input type="hidden" [(ngModel)]="itilcategories_id" value="0"/>
+        <ion-input type="text" [(ngModel)]="itilcategories_name" (click)="openDropdownSelect('ITILCategory')" [readonly]="true"></ion-input>
+      </ion-item>
+
+      <ion-item>
         <ion-label floating>Title</ion-label>
         <ion-input type="text" value="{{selectedItem.name}}"></ion-input>
       </ion-item>
@@ -70,7 +76,11 @@
     <ion-list *ngSwitchCase="'actors'">
 
       <ion-item-group>
-        <ion-item-divider color="light">Demandeurs</ion-item-divider>
+        <ion-item-divider color="light">Demandeurs
+          <ion-fab right middle>
+            <button ion-fab mini (click)="addRequester()"><ion-icon name="add"></ion-icon></button>
+          </ion-fab>
+        </ion-item-divider>
         <ion-item *ngFor="let item of actors.demandeurs">
           <ion-icon name="person" item-start></ion-icon>
           {{item.users_id}}
@@ -82,7 +92,11 @@
       </ion-item-group>
 
       <ion-item-group>
-        <ion-item-divider color="light">Observateurs</ion-item-divider>
+        <ion-item-divider color="light">Observateurs
+          <ion-fab right middle>
+            <button ion-fab mini (click)="addObserver()"><ion-icon name="add"></ion-icon></button>
+          </ion-fab>
+        </ion-item-divider>
         <ion-item *ngFor="let item of actors.observateurs">
           <ion-icon name="person" item-start></ion-icon>
           {{item.users_id}}
@@ -94,7 +108,11 @@
       </ion-item-group>
 
       <ion-item-group>
-        <ion-item-divider color="light">Assignés</ion-item-divider>
+        <ion-item-divider color="light">Assignés
+          <ion-fab right middle>
+            <button ion-fab mini (click)="addAssigned()"><ion-icon name="add"></ion-icon></button>
+          </ion-fab>
+        </ion-item-divider>
         <ion-item *ngFor="let item of actors.assignes">
           <ion-icon name="person" item-start></ion-icon>
           {{item.users_id}}
@@ -139,6 +157,56 @@
     </ion-list>
 
     <ion-list *ngSwitchCase="'details'">
+      <ion-item>
+        <ion-label floating>Created by</ion-label>
+        <ion-input type="text" value="{{selectedItem.users_id_recipient}}"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Source de la demande</ion-label>
+        <input type="hidden" [(ngModel)]="requesttypes_id" value="0"/>
+        <ion-input type="text" [(ngModel)]="requesttypes_name" (click)="openDropdownSelect('RequestType')" [readonly]="true"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Urgence</ion-label>
+        <ion-select [(ngModel)]="selectedItem.urgency" interface="popover">
+          <ion-option *ngFor="let val of urgencyImpact" [value]="val.value">
+            {{val.viewValue}}
+          </ion-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Impact</ion-label>
+        <ion-select [(ngModel)]="selectedItem.impact" interface="popover">
+          <ion-option *ngFor="let val of urgencyImpact" [value]="val.value">
+            {{val.viewValue}}
+          </ion-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Priorité</ion-label>
+        <ion-select [(ngModel)]="selectedItem.priority" interface="popover">
+          <ion-option *ngFor="let val of priorities" [value]="val.value">
+            {{val.viewValue}}
+          </ion-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Lieu</ion-label>
+        <input type="hidden" [(ngModel)]="locations_id" value="0"/>
+        <ion-input type="text" [(ngModel)]="locations_name" (click)="openDropdownSelect('Location')" [readonly]="true"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Validation</ion-label>
+        //
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Éléments associés</ion-label>
+        //
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Tickets liés</ion-label>
+        //
+      </ion-item>
     </ion-list>
 
     <ion-list *ngSwitchCase="'traitement'">

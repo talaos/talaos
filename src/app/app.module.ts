@@ -6,6 +6,7 @@ import { IonicApp, IonicErrorHandler, IonicModule } from "ionic-angular";
 import { BackendComponent } from "../backend/backend.component";
 import { BackendService } from "../backend/backend.service";
 
+import { DropdownSelect } from "../dropdownselect/dropdownselect";
 import { HomePage } from "../pages/home/home";
 import { LoginPage } from "../pages/login/login";
 import { TicketPage } from "../pages/ticket/ticket";
@@ -27,6 +28,7 @@ import { StatusBar } from "@ionic-native/status-bar";
     TicketPage,
     TicketForm,
     Search,
+    DropdownSelect,
   ],
   entryComponents: [
     MyApp,
@@ -35,6 +37,7 @@ import { StatusBar } from "@ionic-native/status-bar";
     TicketPage,
     TicketForm,
     Search,
+    DropdownSelect,
   ],
   imports: [
     BrowserModule,
