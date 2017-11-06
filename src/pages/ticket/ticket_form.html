@@ -195,6 +195,7 @@
         <input type="hidden" [(ngModel)]="locations_id" value="0"/>
         <ion-input type="text" [(ngModel)]="locations_name" (click)="openDropdownSelect('Location')" [readonly]="true"></ion-input>
       </ion-item>
+      <!--
       <ion-item>
         <ion-label floating>Validation</ion-label>
         //
@@ -207,6 +208,7 @@
         <ion-label floating>Tickets liés</ion-label>
         //
       </ion-item>
+      -->
     </ion-list>
 
     <ion-list *ngSwitchCase="'traitement'">
@@ -222,13 +224,12 @@
 
       <ion-card *ngFor="let item of timeline">
         <ion-item>
-          <ion-icon name="person" item-start large></ion-icon>
+          <ion-icon name="{{item._type}}" item-start large></ion-icon>
           <h2>{{item.users_id}}</h2>
           <p>{{item.date}}</p>
         </ion-item>
 
         <ion-item>
-          <ion-icon name="{{item._type}}" item-start large></ion-icon>
           <p>{{item.content}}</p>
         </ion-item>
 

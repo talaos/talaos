@@ -2,6 +2,7 @@ import { Component } from "@angular/core";
 import { ModalController, NavController, NavParams } from "ionic-angular";
 import { BackendService } from "../../backend/backend.service";
 import { DropdownSelect } from "../../dropdownselect/dropdownselect";
+import * as _ from 'lodash';
 
 @Component({
   providers: [ BackendService ],
@@ -75,6 +76,7 @@ export class TicketForm {
           item._date = myDate.getTime();
           this.timeline.push(item);
         }
+        this.timeline = _.orderBy(this.timeline, "_date", "desc");
       }.bind(this));
 
     // Get tasks
@@ -88,6 +90,7 @@ export class TicketForm {
           item._date = myDate.getTime();
           this.timeline.push(item);
         }
+        this.timeline = _.orderBy(this.timeline, "_date", "desc");
       }.bind(this));
 
     // get actors
