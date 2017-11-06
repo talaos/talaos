@@ -222,16 +222,15 @@
         </ion-fab-list>
       </ion-fab>
 
-      <ion-card *ngFor="let item of timeline">
-        <ion-item>
+      <ion-card *ngFor="let item of timeline" color="{{item._color}}">
+        <ion-item color="{{item._color}}">
           <ion-icon name="{{item._type}}" item-start large></ion-icon>
           <h2>{{item.users_id}}</h2>
-          <p>{{item.date}}</p>
         </ion-item>
 
-        <ion-item>
+        <ion-card-content>
           <p>{{item.content}}</p>
-        </ion-item>
+        </ion-card-content>
 
         <ion-row>
           <ion-col *ngIf="item.private">
@@ -241,9 +240,10 @@
             </button>
           </ion-col>
           <ion-col center text-center>
-            <ion-note>
-              {{item.requesttypes_id}}
-            </ion-note>
+            {{item.requesttypes_id}}
+          </ion-col>
+          <ion-col center text-center>
+            {{item.date}}
           </ion-col>
         </ion-row>
       </ion-card>

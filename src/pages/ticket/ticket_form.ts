@@ -73,6 +73,7 @@ export class TicketForm {
           item.date = item.date.replace(" ", "T");
           const myDate = new Date(item.date);
           item._type = "md-chatboxes";
+          item._color = "ticketfollowup";
           item._date = myDate.getTime();
           this.timeline.push(item);
         }
@@ -87,6 +88,7 @@ export class TicketForm {
           item.date = item.date.replace(" ", "T");
           const myDate = new Date(item.date);
           item._type = "md-checkbox-outline";
+          item._color = "tickettask";
           item._date = myDate.getTime();
           this.timeline.push(item);
         }
