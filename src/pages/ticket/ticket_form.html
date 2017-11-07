@@ -31,7 +31,7 @@
     <ion-list *ngSwitchCase="'summary'">
       <ion-grid>
         <ion-row>
-          <ion-col col-sm-12 col-md-6>
+          <ion-col col-12 col-lg-6>
             <ion-item>
               <ion-label>Type</ion-label>
               <ion-select [(ngModel)]="selectedItem.type" interface="popover">
@@ -41,7 +41,7 @@
               </ion-select>
             </ion-item>
           </ion-col>
-          <ion-col col-sm-12 col-md-6>
+          <ion-col col-12 col-lg-6>
             <ion-item>
               <ion-label>Status</ion-label>
               <ion-select [(ngModel)]="selectedItem.status" interface="popover">
@@ -74,55 +74,61 @@
 
 
     <ion-list *ngSwitchCase="'actors'">
-
-      <ion-item-group>
-        <ion-item-divider color="light">Demandeurs
-          <ion-fab right middle>
-            <button ion-fab mini (click)="addRequester()"><ion-icon name="add"></ion-icon></button>
-          </ion-fab>
-        </ion-item-divider>
-        <ion-item *ngFor="let item of actors.demandeurs">
-          <ion-icon name="person" item-start></ion-icon>
-          {{item.users_id}}
-        </ion-item>
-        <ion-item *ngFor="let item of groups.demandeurs">
-          <ion-icon name="md-people" item-start></ion-icon>
-          {{item.groups_id}}
-        </ion-item>
-      </ion-item-group>
-
-      <ion-item-group>
-        <ion-item-divider color="light">Observateurs
-          <ion-fab right middle>
-            <button ion-fab mini (click)="addObserver()"><ion-icon name="add"></ion-icon></button>
-          </ion-fab>
-        </ion-item-divider>
-        <ion-item *ngFor="let item of actors.observateurs">
-          <ion-icon name="person" item-start></ion-icon>
-          {{item.users_id}}
-        </ion-item>
-        <ion-item *ngFor="let item of groups.observateurs">
-          <ion-icon name="md-people" item-start></ion-icon>
-          {{item.groups_id}}
-        </ion-item>
-      </ion-item-group>
-
-      <ion-item-group>
-        <ion-item-divider color="light">Assignés
-          <ion-fab right middle>
-            <button ion-fab mini (click)="addAssigned()"><ion-icon name="add"></ion-icon></button>
-          </ion-fab>
-        </ion-item-divider>
-        <ion-item *ngFor="let item of actors.assignes">
-          <ion-icon name="person" item-start></ion-icon>
-          {{item.users_id}}
-        </ion-item>
-        <ion-item *ngFor="let item of groups.assignes">
-          <ion-icon name="md-people" item-start></ion-icon>
-          {{item.groups_id}}
-        </ion-item>
-      </ion-item-group>
-
+      <ion-grid>
+        <ion-row>
+          <ion-col col-12 col-lg-4>
+            <ion-item-group>
+              <ion-item-divider color="light">Demandeurs
+                <ion-fab right middle>
+                  <button ion-fab mini (click)="addRequester()"><ion-icon name="add"></ion-icon></button>
+                </ion-fab>
+              </ion-item-divider>
+              <ion-item *ngFor="let item of actors.demandeurs">
+                <ion-icon name="person" item-start></ion-icon>
+                {{item.users_id}}
+              </ion-item>
+              <ion-item *ngFor="let item of groups.demandeurs">
+                <ion-icon name="md-people" item-start></ion-icon>
+                {{item.groups_id}}
+              </ion-item>
+            </ion-item-group>
+          </ion-col>
+          <ion-col col-12 col-lg-4>
+            <ion-item-group>
+              <ion-item-divider color="light">Observateurs
+                <ion-fab right middle>
+                  <button ion-fab mini (click)="addObserver()"><ion-icon name="add"></ion-icon></button>
+                </ion-fab>
+              </ion-item-divider>
+              <ion-item *ngFor="let item of actors.observateurs">
+                <ion-icon name="person" item-start></ion-icon>
+                {{item.users_id}}
+              </ion-item>
+              <ion-item *ngFor="let item of groups.observateurs">
+                <ion-icon name="md-people" item-start></ion-icon>
+                {{item.groups_id}}
+              </ion-item>
+            </ion-item-group>
+          </ion-col>
+          <ion-col col-12 col-lg-4>
+            <ion-item-group>
+              <ion-item-divider color="light">Assignés
+                <ion-fab right middle>
+                  <button ion-fab mini (click)="addAssigned()"><ion-icon name="add"></ion-icon></button>
+                </ion-fab>
+              </ion-item-divider>
+              <ion-item *ngFor="let item of actors.assignes">
+                <ion-icon name="person" item-start></ion-icon>
+                {{item.users_id}}
+              </ion-item>
+              <ion-item *ngFor="let item of groups.assignes">
+                <ion-icon name="md-people" item-start></ion-icon>
+                {{item.groups_id}}
+              </ion-item>
+            </ion-item-group>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
     </ion-list>
 
     <ion-list *ngSwitchCase="'dates'">
@@ -159,7 +165,7 @@
     <ion-list *ngSwitchCase="'details'">
       <ion-item>
         <ion-label floating>Created by</ion-label>
-        <ion-input type="text" value="{{selectedItem.users_id_recipient}}"></ion-input>
+        <ion-input type="text" value="{{selectedItem.users_id_recipient}}" [readonly]="true"></ion-input>
       </ion-item>
       <ion-item>
         <ion-label floating>Source de la demande</ion-label>

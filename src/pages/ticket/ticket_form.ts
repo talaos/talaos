@@ -1,8 +1,8 @@
 import { Component } from "@angular/core";
 import { ModalController, NavController, NavParams } from "ionic-angular";
+import * as _ from "lodash";
 import { BackendService } from "../../backend/backend.service";
 import { DropdownSelect } from "../../dropdownselect/dropdownselect";
-import * as _ from 'lodash';
 
 @Component({
   providers: [ BackendService ],
