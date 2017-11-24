@@ -43,6 +43,14 @@ export class TicketForm {
     {value: 2, viewValue: "Low"},
     {value: 1, viewValue: "Very low"},
   ];
+  public addActors = {
+    groups_id: 0,
+    groups_name: "",
+    showGroup: false,
+    showUser: false,
+    users_id: 0,
+    users_name: "",
+  };
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private httpService: BackendService,
               public modalCtrl: ModalController) {
@@ -50,56 +58,63 @@ export class TicketForm {
     this.selectedItem = navParams.get("item");
 
     // Get the ticket
-    this.httpService.getItem("Ticket", this.selectedItem.id)
-      .subscribe(function(data) {
-        data.date = data.date.replace(" ", "T");
-        data.date_mod = data.date_mod.replace(" ", "T");
-        if (data.solvedate != null) {
-          data.solvedate = data.solvedate.replace(" ", "T");
-        }
-        if (data.closedate != null) {
-          data.closedate = data.closedate.replace(" ", "T");
-        }
-        this.selectedItem = data;
-      }.bind(this));
-
     this.timeline = [];
-    // Get followups
-    this.httpService.getPage("TicketFollowup", {tickets_id: this.selectedItem.id},
-      true, true, false, "0-200")
-      .subscribe(function(data) {
-        this.followups = data;
-        for (const item of data) {
-          item.date = item.date.replace(" ", "T");
-          const myDate = new Date(item.date);
-          item._type = "md-chatboxes";
-          item._color = "ticketfollowup";
-          item._date = myDate.getTime();
-          this.timeline.push(item);
-        }
-        this.timeline = _.orderBy(this.timeline, "_date", "desc");
-      }.bind(this));
+    this.actors = {};
+    this.groups = {};
 
-    // Get tasks
-    this.httpService.getPage("TicketTask", {tickets_id: this.selectedItem.id},
-      true, true, false, "0-200")
-      .subscribe(function(data) {
-        for (const item of data) {
-          item.date = item.date.replace(" ", "T");
-          const myDate = new Date(item.date);
-          item._type = "md-checkbox-outline";
-          item._color = "tickettask";
-          item._date = myDate.getTime();
-          this.timeline.push(item);
-        }
-        this.timeline = _.orderBy(this.timeline, "_date", "desc");
-      }.bind(this));
+    if (this.selectedItem.id > 0) {
+      this.httpService.getItem("Ticket", this.selectedItem.id)
+        .subscribe(function (data) {
+          data.date = data.date.replace(" ", "T");
+          data.date_mod = data.date_mod.replace(" ", "T");
+          if (data.solvedate != null) {
+            data.solvedate = data.solvedate.replace(" ", "T");
+          }
+          if (data.closedate != null) {
+            data.closedate = data.closedate.replace(" ", "T");
+          }
+          this.selectedItem = data;
+        }.bind(this));
 
-    // get actors
-    this._getActors();
+      // Get followups
+      this.httpService.getPage("TicketFollowup", {tickets_id: this.selectedItem.id},
+        true, true, false, "0-200")
+        .subscribe(function (data) {
+          this.followups = data;
+          for (const item of data) {
+            item.date = item.date.replace(" ", "T");
+            const myDate = new Date(item.date);
+            item._type = "md-chatboxes";
+            item._color = "ticketfollowup";
+            item._date = myDate.getTime();
+            this.timeline.push(item);
+          }
+          this.timeline = _.orderBy(this.timeline, "_date", "desc");
+        }.bind(this));
 
-    // get groups
-    this._getGroups();
+      // Get tasks
+      this.httpService.getPage("TicketTask", {tickets_id: this.selectedItem.id},
+        true, true, false, "0-200")
+        .subscribe(function (data) {
+          for (const item of data) {
+            item.date = item.date.replace(" ", "T");
+            const myDate = new Date(item.date);
+            item._type = "md-checkbox-outline";
+            item._color = "tickettask";
+            item._date = myDate.getTime();
+            this.timeline.push(item);
+          }
+          this.timeline = _.orderBy(this.timeline, "_date", "desc");
+        }.bind(this));
+
+      // get actors
+      this._getActors();
+
+      // get groups
+      this._getGroups();
+    } else {
+      this.selectedItem.type = 1;
+    }
   }
 
   public openDropdownSelect(itemtype) {

@@ -1,7 +1,8 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Ticket #{{selectedItem.id}} - {{selectedItem.name}}</ion-title>
+    <ion-title *ngIf="selectedItem.id>0">Ticket #{{selectedItem.id}} - {{selectedItem.name}}</ion-title>
+    <ion-title *ngIf="selectedItem.id==0">New ticket</ion-title>
   </ion-navbar>
 
   <ion-toolbar no-border-top>
@@ -80,9 +81,26 @@
             <ion-item-group>
               <ion-item-divider color="light">Demandeurs
                 <ion-fab right middle>
-                  <button ion-fab mini (click)="addRequester()"><ion-icon name="add"></ion-icon></button>
+                  <button ion-fab mini><ion-icon name="add"></ion-icon></button>
+                  <ion-fab-list side="left">
+                    <button ion-fab (click)="addActors.showUser=true"><ion-icon name="person"></ion-icon></button>
+                    <button ion-fab (click)="addActors.showGroup=true"><ion-icon name="md-people"></ion-icon></button>
+                  </ion-fab-list>
                 </ion-fab>
               </ion-item-divider>
+
+              <ion-item *ngIf="addActors.showUser">
+                <ion-label floating>Utilisateur</ion-label>
+                <input type="hidden" [(ngModel)]="addActors.users_id" value="0"/>
+                <ion-input type="text" [(ngModel)]="addActors.users_name" (click)="openDropdownSelect('User')" [readonly]="true"></ion-input>
+              </ion-item>
+
+              <ion-item *ngIf="addActors.showGroup">
+                <ion-label floating>Groupe</ion-label>
+                <input type="hidden" [(ngModel)]="addActors.groups_id" value="0"/>
+                <ion-input type="text" [(ngModel)]="addActors.groups_name" (click)="openDropdownSelect('Group')" [readonly]="true"></ion-input>
+              </ion-item>
+
               <ion-item *ngFor="let item of actors.demandeurs">
                 <ion-icon name="person" item-start></ion-icon>
                 {{item.users_id}}

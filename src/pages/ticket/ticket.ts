@@ -49,9 +49,11 @@ export class TicketPage {
   public openModal(characterNum) {
     const modal = this.modalCtrl.create(Search, {itemtype: "Ticket"});
     modal.onDidDismiss(function(data) {
-      this.criteria = data.criteria;
-      this.forcedisplaySup = data.forcedisplay;
-      this.page(0, 10);
+      if (data !== null) {
+        this.criteria = data.criteria;
+        this.forcedisplaySup = data.forcedisplay;
+        this.page(0, 10);
+      }
     }.bind(this));
     modal.present();
   }
@@ -158,6 +160,10 @@ export class TicketPage {
   }
 
   public itemTapped(event, item) {
+    if (item === undefined) {
+      item = {id: 0};
+    }
+
     // That's right, we're pushing to ourselves!
     this.navCtrl.push(TicketForm, {
       item,
