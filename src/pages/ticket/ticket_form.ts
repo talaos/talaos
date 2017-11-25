@@ -13,6 +13,8 @@ export class TicketForm {
   public selectedItem: any;
   public followups: any;
   public timeline: any;
+  public changed: boolean;
+  public changedFields = [];
   public actors: {};
   public groups: {};
   public ticketzone: string = "summary";
@@ -58,13 +60,15 @@ export class TicketForm {
     this.selectedItem = navParams.get("item");
 
     // Get the ticket
+    this.changed = false;
     this.timeline = [];
     this.actors = {};
     this.groups = {};
+    this.changedFields = [];
 
     if (this.selectedItem.id > 0) {
       this.httpService.getItem("Ticket", this.selectedItem.id)
-        .subscribe(function (data) {
+        .subscribe(function(data) {
           data.date = data.date.replace(" ", "T");
           data.date_mod = data.date_mod.replace(" ", "T");
           if (data.solvedate != null) {
@@ -79,7 +83,7 @@ export class TicketForm {
       // Get followups
       this.httpService.getPage("TicketFollowup", {tickets_id: this.selectedItem.id},
         true, true, false, "0-200")
-        .subscribe(function (data) {
+        .subscribe(function(data) {
           this.followups = data;
           for (const item of data) {
             item.date = item.date.replace(" ", "T");
@@ -95,7 +99,7 @@ export class TicketForm {
       // Get tasks
       this.httpService.getPage("TicketTask", {tickets_id: this.selectedItem.id},
         true, true, false, "0-200")
-        .subscribe(function (data) {
+        .subscribe(function(data) {
           for (const item of data) {
             item.date = item.date.replace(" ", "T");
             const myDate = new Date(item.date);
@@ -120,6 +124,7 @@ export class TicketForm {
   public openDropdownSelect(itemtype) {
     const modal = this.modalCtrl.create(DropdownSelect, {itemtype});
     modal.onDidDismiss(function(data) {
+      this.changed = true;
       if (itemtype === "ITILCategory") {
         this.selectedItem.itilcategories_id = data.value;
         this.itilcategories_name = data.viewValue;
@@ -132,6 +137,23 @@ export class TicketForm {
       }
     }.bind(this));
     modal.present();
+  }
+
+  public updateItem() {
+    const input = {};
+    for (const item of this.changedFields) {
+      input[item] = this.selectedItem[item];
+    }
+    this.httpService.saveItem("Ticket", this.selectedItem.id, input)
+      .subscribe(function(data) {
+        this.changed = false;
+        this.changedFields = [];
+      }.bind(this));
+  }
+
+  public changeField(field) {
+    this.changed = true;
+    this.changedFields.push(field);
   }
 
   private _getActors() {

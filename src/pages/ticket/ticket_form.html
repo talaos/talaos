@@ -3,6 +3,12 @@
   <ion-navbar>
     <ion-title *ngIf="selectedItem.id>0">Ticket #{{selectedItem.id}} - {{selectedItem.name}}</ion-title>
     <ion-title *ngIf="selectedItem.id==0">New ticket</ion-title>
+    <ion-buttons end *ngIf="changed">
+      <button ion-button icon-end solid color="danger" (click)="updateItem()">
+        <ion-icon name="md-send"></ion-icon>
+        Save modifications
+      </button>
+    </ion-buttons>
   </ion-navbar>
 
   <ion-toolbar no-border-top>
@@ -57,18 +63,18 @@
 
       <ion-item>
         <ion-label floating>Category</ion-label>
-        <input type="hidden" [(ngModel)]="itilcategories_id" value="0"/>
+        <input type="hidden" [(ngModel)]="itilcategories_id" value="0" />
         <ion-input type="text" [(ngModel)]="itilcategories_name" (click)="openDropdownSelect('ITILCategory')" [readonly]="true"></ion-input>
       </ion-item>
 
       <ion-item>
         <ion-label floating>Title</ion-label>
-        <ion-input type="text" value="{{selectedItem.name}}"></ion-input>
+        <ion-input type="text" [(ngModel)]="selectedItem.name" value="{{selectedItem.name}}" (input)="changeField('name')"></ion-input>
       </ion-item>
 
       <ion-item>
         <ion-label floating>Description</ion-label>
-        <ion-textarea type="text" value="{{selectedItem.content}}" [attr.rows]="25"></ion-textarea>
+        <ion-textarea type="text" [(ngModel)]="selectedItem.content" value="{{selectedItem.content}}" [attr.rows]="25" (input)="changeField('content')"></ion-textarea>
       </ion-item>
     </ion-list>
 
