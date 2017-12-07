@@ -194,6 +194,16 @@ export class TicketForm {
       .subscribe(function(data) {
         this.changed = false;
         this.changedFields = [];
+        // only in case new ticket
+        if (this.selectedItem.id === 0) {
+          const item = {id: data.id};
+          const currentpage = this.navCtrl.last();
+          this.navCtrl
+            .push(TicketForm, {
+              item,
+            });
+          this.navCtrl.remove(this.navCtrl.indexOf(currentpage));
+        }
       }.bind(this));
   }
 
