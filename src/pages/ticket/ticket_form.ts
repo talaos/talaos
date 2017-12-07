@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { ModalController, NavController, NavParams } from "ionic-angular";
+import { FabContainer, ModalController, NavController, NavParams } from "ionic-angular";
 import * as _ from "lodash";
 import { BackendService } from "../../backend/backend.service";
 import { DropdownSelect } from "../../dropdownselect/dropdownselect";
@@ -11,6 +11,8 @@ import { DropdownSelect } from "../../dropdownselect/dropdownselect";
 })
 export class TicketForm {
   public selectedItem: any;
+  public newfollowup: any;
+  public newtask: any;
   public followups: any;
   public timeline: any;
   public changed: boolean;
@@ -65,6 +67,8 @@ export class TicketForm {
     this.actors = {};
     this.groups = {};
     this.changedFields = [];
+    this.newfollowup = {};
+    this.newtask = {};
 
     if (this.selectedItem.id > 0) {
       this.httpService.getItem("Ticket", this.selectedItem.id)
@@ -80,36 +84,7 @@ export class TicketForm {
           this.selectedItem = data;
         }.bind(this));
 
-      // Get followups
-      this.httpService.getPage("TicketFollowup", {tickets_id: this.selectedItem.id},
-        true, true, false, "0-200")
-        .subscribe(function(data) {
-          this.followups = data;
-          for (const item of data) {
-            item.date = item.date.replace(" ", "T");
-            const myDate = new Date(item.date);
-            item._type = "md-chatboxes";
-            item._color = "ticketfollowup";
-            item._date = myDate.getTime();
-            this.timeline.push(item);
-          }
-          this.timeline = _.orderBy(this.timeline, "_date", "desc");
-        }.bind(this));
-
-      // Get tasks
-      this.httpService.getPage("TicketTask", {tickets_id: this.selectedItem.id},
-        true, true, false, "0-200")
-        .subscribe(function(data) {
-          for (const item of data) {
-            item.date = item.date.replace(" ", "T");
-            const myDate = new Date(item.date);
-            item._type = "md-checkbox-outline";
-            item._color = "tickettask";
-            item._date = myDate.getTime();
-            this.timeline.push(item);
-          }
-          this.timeline = _.orderBy(this.timeline, "_date", "desc");
-        }.bind(this));
+      this.loadTimeline();
 
       // get actors
       this._getActors();
@@ -121,20 +96,68 @@ export class TicketForm {
     }
   }
 
-  public openDropdownSelect(itemtype) {
+  public loadTimeline() {
+    this.timeline = [];
+
+    // Get followups
+    this.httpService.getPage("TicketFollowup", {tickets_id: this.selectedItem.id},
+      true, true, false, "0-200")
+      .subscribe(function(data) {
+        this.followups = data;
+        for (const item of data) {
+          const myDate = new Date(item.date.replace(" ", "T"));
+          if (item.requesttypes_id === 0) {
+            item.requesttypes_id = "";
+          }
+          item._type = "md-chatboxes";
+          item._color = "ticketfollowup";
+          item._date = myDate.getTime();
+          this.timeline.push(item);
+        }
+        this.timeline = _.orderBy(this.timeline, "_date", "desc");
+      }.bind(this));
+
+    // Get tasks
+    this.httpService.getPage("TicketTask", {tickets_id: this.selectedItem.id},
+      true, true, false, "0-200")
+      .subscribe(function(data) {
+        for (const item of data) {
+          item.date = item.date.replace(" ", "T");
+          const myDate = new Date(item.date);
+          item._type = "md-checkbox-outline";
+          item._color = "tickettask";
+          item._date = myDate.getTime();
+          this.timeline.push(item);
+        }
+        this.timeline = _.orderBy(this.timeline, "_date", "desc");
+      }.bind(this));
+  }
+
+  public openDropdownSelect(itemtype, ticketitself: boolean, destination: string = "") {
     const modal = this.modalCtrl.create(DropdownSelect, {itemtype});
     modal.onDidDismiss(function(data) {
-      this.changed = true;
-      if (itemtype === "ITILCategory") {
-        this.selectedItem.itilcategories_id = data.value;
-        this.itilcategories_name = data.viewValue;
-      } else if (itemtype === "RequestType") {
+      if (ticketitself) {
+        this.changed = true;
+      }
+      if (itemtype === "RequestType") {
         this.selectedItem.requesttypes_id = data.value;
         this.requesttypes_name = data.viewValue;
       } else if (itemtype === "Location") {
         this.selectedItem.locations_id = data.value;
         this.locations_name = data.viewValue;
       }
+
+      if (destination === "taskusertech") {
+        this.newtask.users_id_tech = data.value;
+        this.newtask.users_tech_name = data.viewValue;
+      } else if (destination === "taskgrouptech") {
+        this.newtask.groups_id_tech = data.value;
+        this.newtask.groups_tech_name = data.viewValue;
+      } else if (destination === "ticketcategory") {
+        this.selectedItem.itilcategories_id = data.value;
+        this.itilcategories_name = data.viewValue;
+      }
+
     }.bind(this));
     modal.present();
   }
@@ -154,6 +177,47 @@ export class TicketForm {
   public changeField(field) {
     this.changed = true;
     this.changedFields.push(field);
+  }
+
+  public displayForm(type: string, fab: FabContainer) {
+    fab.close();
+    if (type === "followup") {
+      this.newfollowup.content = "";
+      this.newfollowup.requesttypes_id = 0;
+      this.newfollowup.is_private = false;
+    } else if (type === "task") {
+      this.newtask.content = "";
+      this.newtask.users_id_tech = 0;
+      this.newtask.groups_id_tech = 0;
+    }
+  }
+
+  public addFollowup() {
+    const input = {
+      content: this.newfollowup.content,
+      is_private: this.newfollowup.is_private,
+      requesttypes_id: this.newfollowup.requesttypes_id,
+      tickets_id: this.selectedItem.id,
+    };
+    this.httpService.saveItem("TicketFollowup", 0, input)
+      .subscribe(function(data) {
+        this.newfollowup.content = null;
+        this.loadTimeline();
+      }.bind(this));
+  }
+
+  public addTask() {
+    const input = {
+      content: this.newtask.content,
+      groups_id_tech: this.newtask.groups_id_tech,
+      tickets_id: this.selectedItem.id,
+      users_id_tech: this.newtask.users_id_tech,
+    };
+    this.httpService.saveItem("TicketTask", 0, input)
+      .subscribe(function(data) {
+        this.newtask.content = null;
+        this.loadTimeline();
+      }.bind(this));
   }
 
   private _getActors() {

@@ -64,7 +64,7 @@
       <ion-item>
         <ion-label floating>Category</ion-label>
         <input type="hidden" [(ngModel)]="itilcategories_id" value="0" />
-        <ion-input type="text" [(ngModel)]="itilcategories_name" (click)="openDropdownSelect('ITILCategory')" [readonly]="true"></ion-input>
+        <ion-input type="text" [(ngModel)]="itilcategories_name" (click)="openDropdownSelect('ITILCategory', true, 'ticketcategory')" [readonly]="true"></ion-input>
       </ion-item>
 
       <ion-item>
@@ -98,13 +98,13 @@
               <ion-item *ngIf="addActors.showUser">
                 <ion-label floating>Utilisateur</ion-label>
                 <input type="hidden" [(ngModel)]="addActors.users_id" value="0"/>
-                <ion-input type="text" [(ngModel)]="addActors.users_name" (click)="openDropdownSelect('User')" [readonly]="true"></ion-input>
+                <ion-input type="text" [(ngModel)]="addActors.users_name" (click)="openDropdownSelect('User', true)" [readonly]="true"></ion-input>
               </ion-item>
 
               <ion-item *ngIf="addActors.showGroup">
                 <ion-label floating>Groupe</ion-label>
                 <input type="hidden" [(ngModel)]="addActors.groups_id" value="0"/>
-                <ion-input type="text" [(ngModel)]="addActors.groups_name" (click)="openDropdownSelect('Group')" [readonly]="true"></ion-input>
+                <ion-input type="text" [(ngModel)]="addActors.groups_name" (click)="openDropdownSelect('Group', true)" [readonly]="true"></ion-input>
               </ion-item>
 
               <ion-item *ngFor="let item of actors.demandeurs">
@@ -194,7 +194,7 @@
       <ion-item>
         <ion-label floating>Source de la demande</ion-label>
         <input type="hidden" [(ngModel)]="requesttypes_id" value="0"/>
-        <ion-input type="text" [(ngModel)]="requesttypes_name" (click)="openDropdownSelect('RequestType')" [readonly]="true"></ion-input>
+        <ion-input type="text" [(ngModel)]="requesttypes_name" (click)="openDropdownSelect('RequestType', true)" [readonly]="true"></ion-input>
       </ion-item>
       <ion-item>
         <ion-label floating>Urgence</ion-label>
@@ -223,7 +223,7 @@
       <ion-item>
         <ion-label floating>Lieu</ion-label>
         <input type="hidden" [(ngModel)]="locations_id" value="0"/>
-        <ion-input type="text" [(ngModel)]="locations_name" (click)="openDropdownSelect('Location')" [readonly]="true"></ion-input>
+        <ion-input type="text" [(ngModel)]="locations_name" (click)="openDropdownSelect('Location', true)" [readonly]="true"></ion-input>
       </ion-item>
       <!--
       <ion-item>
@@ -242,15 +242,62 @@
     </ion-list>
 
     <ion-list *ngSwitchCase="'traitement'">
-      <ion-fab left bottom>
+      <ion-fab right top #fabtraitement>
         <button ion-fab><ion-icon name="add"></ion-icon></button>
-        <ion-fab-list side="top">
-          <button ion-fab><ion-icon name="md-chatboxes"></ion-icon></button>
-          <button ion-fab><ion-icon name="md-checkbox-outline"></ion-icon></button>
-          <button ion-fab><ion-icon name="md-document"></ion-icon></button>
-          <button ion-fab><ion-icon name="md-checkmark"></ion-icon></button>
+        <ion-fab-list side="bottom">
+          <button ion-fab color="ticketfollowup" (click)="displayForm('followup', fabtraitement)"><ion-icon name="md-chatboxes"></ion-icon></button>
+          <button ion-fab color="tickettask" (click)="displayForm('task', fabtraitement)"><ion-icon name="md-checkbox-outline"></ion-icon></button>
+          <button ion-fab color="ticketdocument"><ion-icon name="md-document"></ion-icon></button>
+          <button ion-fab color="ticketsolution"><ion-icon name="md-checkmark"></ion-icon></button>
         </ion-fab-list>
       </ion-fab>
+
+      <!-- New followup form -->
+      <ion-card *ngIf="newfollowup.content != null" color="ticketfollowup">
+        <ion-card-header>
+          Nouveau suivi
+        </ion-card-header>
+        <ion-list>
+          <ion-item>
+            <ion-label floating>Description</ion-label>
+            <ion-textarea type="text" [(ngModel)]="newfollowup.content" value="{{newfollowup.content}}" [attr.rows]="25"></ion-textarea>
+          </ion-item>
+          <ion-item>
+            <ion-label floating>Source du suivi</ion-label>
+            <input type="hidden" [(ngModel)]="newfollowup.requesttypes_id" value="0"/>
+            <ion-input type="text" [(ngModel)]="newfollowup.requesttypes_name" (click)="openDropdownSelect('RequestType', false)" [readonly]="true"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label>Privé</ion-label>
+            <ion-toggle [(ngModel)]="newfollowup.is_private" color="danger"></ion-toggle>
+          </ion-item>
+        </ion-list>
+        <button ion-button full (click)="addFollowup()">Create the followup</button>
+      </ion-card>
+
+      <!-- New task form -->
+      <ion-card *ngIf="newtask.content != null" color="tickettask">
+        <ion-card-header>
+          Nouvelle tâche
+        </ion-card-header>
+        <ion-list>
+          <ion-item>
+            <ion-label floating>Description</ion-label>
+            <ion-textarea type="text" [(ngModel)]="newtask.content" value="{{newtask.content}}" [attr.rows]="25"></ion-textarea>
+          </ion-item>
+          <ion-item>
+            <ion-label floating>Utilisateur</ion-label>
+            <input type="hidden" [(ngModel)]="newtask.users_id_tech" value="0"/>
+            <ion-input type="text" [(ngModel)]="newtask.users_tech_name" (click)="openDropdownSelect('User', false, 'taskusertech')" [readonly]="true"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label floating>Groupe</ion-label>
+            <input type="hidden" [(ngModel)]="newtask.groups_id_tech" value="0"/>
+            <ion-input type="text" [(ngModel)]="newtask.groups_tech_name" (click)="openDropdownSelect('Group', false, 'taskgrouptech')" [readonly]="true"></ion-input>
+          </ion-item>
+        </ion-list>
+        <button ion-button full (click)="addTask()">Create the task</button>
+      </ion-card>
 
       <ion-card *ngFor="let item of timeline" color="{{item._color}}">
         <ion-item color="{{item._color}}">
@@ -263,10 +310,9 @@
         </ion-card-content>
 
         <ion-row>
-          <ion-col *ngIf="item.private">
+          <ion-col *ngIf="item.is_private">
             <button ion-button icon-left clear small>
-              <ion-icon name="md-lock"></ion-icon>
-              <div>Private</div>
+              <ion-icon name="md-lock" color="danger"> privé</ion-icon>
             </button>
           </ion-col>
           <ion-col center text-center>

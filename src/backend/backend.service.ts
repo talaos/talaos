@@ -212,10 +212,17 @@ export class BackendService {
         headers.append("App-Token", this.apptoken);
         headers.append("Session-Token", this.token);
 
-        return this.http.put(this.glpiurl + "/" + itemtype + "/" + itemId, {input}, {headers})
+        if (itemId === 0) {
+          return this.http.post(this.glpiurl + "/" + itemtype, {input}, {headers})
             .map(function convert(res) {
               return res.json();
             });
+        } else {
+          return this.http.put(this.glpiurl + "/" + itemtype + "/" + itemId, {input}, {headers})
+            .map(function convert(res) {
+              return res.json();
+            });
+        }
     }
 
     public manageError(error) {
