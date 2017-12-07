@@ -1,7 +1,12 @@
 import { ErrorHandler, NgModule } from "@angular/core";
-import { HttpModule } from "@angular/http";
+import { Http, HttpModule } from "@angular/http";
 import { BrowserModule } from "@angular/platform-browser";
 import { IonicApp, IonicErrorHandler, IonicModule } from "ionic-angular";
+
+// Multilanguage
+import { TranslateLoader, TranslateModule } from "@ngx-translate/core";
+import { TranslateHttpLoader } from "@ngx-translate/http-loader";
+import "rxjs/add/operator/map";
 
 import { BackendComponent } from "../backend/backend.component";
 import { BackendService } from "../backend/backend.service";
@@ -17,6 +22,10 @@ import { TicketForm } from "../pages/ticket/ticket_form";
 
 import { SplashScreen } from "@ionic-native/splash-screen";
 import { StatusBar } from "@ionic-native/status-bar";
+
+export function createTranslateLoader(http: Http) {
+  return new TranslateHttpLoader(http, "./assets/i18n/", ".json");
+}
 
 @NgModule({
   bootstrap: [IonicApp],
@@ -43,6 +52,13 @@ import { StatusBar } from "@ionic-native/status-bar";
     BrowserModule,
     IonicModule.forRoot(MyApp),
     HttpModule,
+    TranslateModule.forRoot({
+      loader: {
+        deps: [Http],
+        provide: TranslateLoader,
+        useFactory: (createTranslateLoader),
+      },
+    }),
   ],
   providers: [
     StatusBar,

@@ -3,12 +3,12 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>GLPI - homepage</ion-title>
+    <ion-title>GLPI - {{ "Homepage" | translate }}</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
   <h3>Homepage</h3>
-
-  <button ion-button secondary menuToggle>Menu</button>
+  {{ 'Hello' | translate }}
+  <button ion-button secondary menuToggle>{{ "Menu" | translate }}</button>
 </ion-content>

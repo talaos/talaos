@@ -43,6 +43,17 @@ export class BackendService {
             }.bind(this));
     }
 
+    public getFullSession() {
+      const headers = new Headers();
+      headers.append("App-Token", this.apptoken);
+      headers.append("Session-Token", this.token);
+
+      return this.http.get(this.glpiurl + "/getFullSession", {headers})
+        .map(function convert(res) {
+          return res.json();
+        });
+    }
+
     public getItem(itemtype, itemId, expand: boolean = true) {
         const headers = new Headers();
         headers.append("App-Token", this.apptoken);

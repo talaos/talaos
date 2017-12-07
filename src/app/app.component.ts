@@ -4,11 +4,16 @@ import { Component, ViewChild } from "@angular/core";
 import { SplashScreen } from "@ionic-native/splash-screen";
 import { StatusBar } from "@ionic-native/status-bar";
 
+import { TranslateService } from "@ngx-translate/core";
+
+import { BackendService } from "../backend/backend.service";
+
 import { HomePage } from "../pages/home/home";
 import { LoginPage } from "../pages/login/login";
 import { TicketPage } from "../pages/ticket/ticket";
 
 @Component({
+  providers: [ BackendService ],
   templateUrl: "app.html",
 })
 export class MyApp {
@@ -17,24 +22,34 @@ export class MyApp {
   public pages: Array<{title: string, component: any}>;
 
   constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen,
-              public events: Events) {
+              public events: Events, translate: TranslateService, private httpService: BackendService) {
 
     this.initializeApp();
 
     // used for an example of ngFor and navigation
     this.pages = [
-      { title: "Home", component: HomePage },
-      { title: "Ticket", component: TicketPage },
+      {title: "Home", component: HomePage},
+      {title: "Ticket", component: TicketPage},
     ];
 
     events.subscribe("login:successful", () => {
-      this.openPage({ title: "Home", component: HomePage });
+      this.openPage({title: "Home", component: HomePage});
     });
 
     events.subscribe("login:new", () => {
-      this.openPage({ title: "Login", component: LoginPage });
+      this.openPage({title: "Login", component: LoginPage});
     });
 
+    translate.setDefaultLang("en");
+    translate.use("en");
+
+    // Use language from GLPI session
+    this.httpService.getFullSession()
+      .subscribe(function(data) {
+        if (data.session.glpilanguage === "fr_FR") {
+          translate.use("fr_FR");
+        }
+      });
   }
 
   public openPage(page) {
