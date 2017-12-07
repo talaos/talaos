@@ -43,13 +43,15 @@ export class BackendService {
             }.bind(this));
     }
 
-    public getItem(itemtype, itemId) {
+    public getItem(itemtype, itemId, expand: boolean = true) {
         const headers = new Headers();
         headers.append("App-Token", this.apptoken);
         headers.append("Session-Token", this.token);
 
         const params: URLSearchParams = new URLSearchParams();
-        params.set("expand_dropdowns", "1");
+        if (expand) {
+          params.set("expand_dropdowns", "1");
+        }
 
         return this.http.get(this.glpiurl + "/" + itemtype + "/" + itemId, {headers, search: params})
             .map(function convert(res) {

@@ -82,6 +82,27 @@ export class TicketForm {
             data.closedate = data.closedate.replace(" ", "T");
           }
           this.selectedItem = data;
+          this.httpService.getItem("Ticket", this.selectedItem.id, false)
+            .subscribe(function(dataNotExp) {
+              if (dataNotExp.itilcategories_id === 0) {
+                this.selectedItem.itilcategories_id = 0;
+              } else {
+                this.selectedItem.itilcategories_name = this.selectedItem.itilcategories_id;
+                this.selectedItem.itilcategories_id = dataNotExp.itilcategories_id;
+              }
+              if (dataNotExp.requesttypes_id === 0) {
+                this.selectedItem.requesttypes_id = 0;
+              } else {
+                this.selectedItem.requesttypes_name = this.selectedItem.requesttypes_id;
+                this.selectedItem.requesttypes_id = dataNotExp.requesttypes_id;
+              }
+              if (dataNotExp.locations_id === 0) {
+                this.selectedItem.locations_id = 0;
+              } else {
+                this.selectedItem.locations_name = this.selectedItem.locations_id;
+                this.selectedItem.locations_id = dataNotExp.locations_id;
+              }
+            }.bind(this));
         }.bind(this));
 
       this.loadTimeline();
@@ -139,13 +160,6 @@ export class TicketForm {
       if (ticketitself) {
         this.changed = true;
       }
-      if (itemtype === "RequestType") {
-        this.selectedItem.requesttypes_id = data.value;
-        this.requesttypes_name = data.viewValue;
-      } else if (itemtype === "Location") {
-        this.selectedItem.locations_id = data.value;
-        this.locations_name = data.viewValue;
-      }
 
       if (destination === "taskusertech") {
         this.newtask.users_id_tech = data.value;
@@ -155,7 +169,16 @@ export class TicketForm {
         this.newtask.groups_tech_name = data.viewValue;
       } else if (destination === "ticketcategory") {
         this.selectedItem.itilcategories_id = data.value;
-        this.itilcategories_name = data.viewValue;
+        this.selectedItem.itilcategories_name = data.viewValue;
+        this.changeField("itilcategories_id");
+      } else if (destination === "ticketrequesttype") {
+        this.selectedItem.requesttypes_id = data.value;
+        this.selectedItem.requesttypes_name = data.viewValue;
+        this.changeField("requesttypes_id");
+      } else if (destination === "ticketlocation") {
+        this.selectedItem.locations_id = data.value;
+        this.selectedItem.locations_name = data.viewValue;
+        this.changeField("locations_id");
       }
 
     }.bind(this));
