@@ -25,19 +25,20 @@ export class MyApp {
               public events: Events, translate: TranslateService, private httpService: BackendService) {
 
     this.initializeApp();
+    const valueFieldName = "value";
 
     // used for an example of ngFor and navigation
     this.pages = [
-      {title: "Home", component: HomePage},
-      {title: "Ticket", component: TicketPage},
+      {title: translate.get("Home")[valueFieldName], component: HomePage},
+      {title: translate.get("Ticket")[valueFieldName], component: TicketPage},
     ];
 
     events.subscribe("login:successful", () => {
-      this.openPage({title: "Home", component: HomePage});
+      this.openPage({title: translate.get("Home")[valueFieldName], component: HomePage});
     });
 
     events.subscribe("login:new", () => {
-      this.openPage({title: "Login", component: LoginPage});
+      this.openPage({title: translate.get("Login")[valueFieldName], component: LoginPage});
     });
 
     translate.setDefaultLang("en");

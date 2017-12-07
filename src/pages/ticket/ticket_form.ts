@@ -4,6 +4,8 @@ import * as _ from "lodash";
 import { BackendService } from "../../backend/backend.service";
 import { DropdownSelect } from "../../dropdownselect/dropdownselect";
 
+import { TranslateService } from "@ngx-translate/core";
+
 @Component({
   providers: [ BackendService ],
   selector: "ticket_form",
@@ -20,33 +22,10 @@ export class TicketForm {
   public actors: {};
   public groups: {};
   public ticketzone: string = "summary";
-  public types = [
-    {value: 1, viewValue: "Incident"},
-    {value: 2, viewValue: "Request"},
-  ];
-  public status = [
-    {value: 1, viewValue: "New"},
-    {value: 2, viewValue: "Processing (assigned)"},
-    {value: 3, viewValue: "Processing (planned)"},
-    {value: 4, viewValue: "Pending"},
-    {value: 5, viewValue: "Solved"},
-    {value: 6, viewValue: "Closed"},
-  ];
-  public priorities = [
-    {value: 6, viewValue: "Major"},
-    {value: 5, viewValue: "Very high"},
-    {value: 4, viewValue: "High"},
-    {value: 3, viewValue: "Medium"},
-    {value: 2, viewValue: "Low"},
-    {value: 1, viewValue: "Very low"},
-  ];
-  public urgencyImpact = [
-    {value: 5, viewValue: "Very high"},
-    {value: 4, viewValue: "High"},
-    {value: 3, viewValue: "Medium"},
-    {value: 2, viewValue: "Low"},
-    {value: 1, viewValue: "Very low"},
-  ];
+  public types = [];
+  public status = [];
+  public priorities = [];
+  public urgencyImpact = [];
   public addActors = {
     groups_id: 0,
     groups_name: "",
@@ -57,7 +36,38 @@ export class TicketForm {
   };
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private httpService: BackendService,
-              public modalCtrl: ModalController) {
+              public modalCtrl: ModalController, translate: TranslateService) {
+
+    const valueFieldName = "value";
+    this.types = [
+      {value: 1, viewValue: translate.get("Incident")[valueFieldName]},
+      {value: 2, viewValue: translate.get("Request")[valueFieldName]},
+    ];
+    this.status = [
+      {value: 1, viewValue: translate.get("New")[valueFieldName]},
+      {value: 2, viewValue: translate.get("Processing (assigned)")[valueFieldName]},
+      {value: 3, viewValue: translate.get("Processing (planned)")[valueFieldName]},
+      {value: 4, viewValue: translate.get("Pending")[valueFieldName]},
+      {value: 5, viewValue: translate.get("Solved")[valueFieldName]},
+      {value: 6, viewValue: translate.get("Closed")[valueFieldName]},
+    ];
+
+    this.priorities = [
+      {value: 6, viewValue: translate.get("Major")[valueFieldName]},
+      {value: 5, viewValue: translate.get("Very high")[valueFieldName]},
+      {value: 4, viewValue: translate.get("High")[valueFieldName]},
+      {value: 3, viewValue: translate.get("Medium")[valueFieldName]},
+      {value: 2, viewValue: translate.get("Low")[valueFieldName]},
+      {value: 1, viewValue: translate.get("Very low")[valueFieldName]},
+    ];
+    this.urgencyImpact = [
+      {value: 5, viewValue: translate.get("Very high")[valueFieldName]},
+      {value: 4, viewValue: translate.get("High")[valueFieldName]},
+      {value: 3, viewValue: translate.get("Medium")[valueFieldName]},
+      {value: 2, viewValue: translate.get("Low")[valueFieldName]},
+      {value: 1, viewValue: translate.get("Very low")[valueFieldName]},
+    ];
+
     // If we navigated to this page, we will have an item available as a nav param
     this.selectedItem = navParams.get("item");
 
@@ -117,6 +127,7 @@ export class TicketForm {
       this.selectedItem.priority = 3;
       this.selectedItem.urgency = 3;
       this.selectedItem.impact = 3;
+      this.selectedItem.status = 1;
     }
   }
 

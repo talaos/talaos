@@ -39,5 +39,19 @@
   "Ticket": "Ticket",
   "Login": "Authentification",
   "Homepage": "Page d'accueil",
-  "Menu": "Menu"
+  "Menu": "Menu",
+  "Major": "Majeur",
+  "Very high": "Très haut",
+  "High": "Haut",
+  "Medium": "Moyen",
+  "Low": "Bas",
+  "Very low": "Très bas",
+  "Incident": "Incident",
+  "Request": "Demande",
+  "New": "Nouveau",
+  "Processing (assigned)": "Attribué (assigné)",
+  "Processing (planned)": "Attribué (planifié)",
+  "Pending": "En attente",
+  "Solved": "Résolu",
+  "Closed": "Clos"
 }

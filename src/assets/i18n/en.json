@@ -39,5 +39,19 @@
   "Ticket": "Ticket",
   "Login": "Login",
   "Homepage": "Homepage",
-  "Menu": "Menu"
+  "Menu": "Menu",
+  "Major": "Major",
+  "Very high": "Very high",
+  "High": "High",
+  "Medium": "Medium",
+  "Low": "Low",
+  "Very low": "Very low",
+  "Incident": "Incident",
+  "Request": "Request",
+  "New": "New",
+  "Processing (assigned)": "Processing (assigned)",
+  "Processing (planned)": "Processing (planned)",
+  "Pending": "Pending",
+  "Solved": "Solved",
+  "Closed": "Closed"
 }
