@@ -114,6 +114,9 @@ export class TicketForm {
       this._getGroups();
     } else {
       this.selectedItem.type = 1;
+      this.selectedItem.priority = 3;
+      this.selectedItem.urgency = 3;
+      this.selectedItem.impact = 3;
     }
   }
 
