@@ -9,9 +9,9 @@ import { BackendService } from "../../backend/backend.service";
 })
 export class LoginPage {
     public glpiurl: string;
-    public glpiurlf: string = ""; // http://theoule/glpi/apirest.php';
+    public glpiurlf: string = "";
     public apptoken: string;
-    public apptokenf: string = ""; // 'wmpjzyf2lrmlnjb4pvor30hoytlig618t8l19xxq';
+    public apptokenf: string = "";
     public username: string = "";
     public password: string = "";
 
