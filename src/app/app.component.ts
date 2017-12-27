@@ -8,6 +8,8 @@ import { TranslateService } from "@ngx-translate/core";
 
 import { BackendService } from "../backend/backend.service";
 
+import { GlobalVars } from "../app/globalvars";
+
 import { HomePage } from "../pages/home/home";
 import { LoginPage } from "../pages/login/login";
 import { TicketPage } from "../pages/ticket/ticket";
@@ -22,7 +24,8 @@ export class MyApp {
   public pages: Array<{title: string, component: any}>;
 
   constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen,
-              public events: Events, translate: TranslateService, private httpService: BackendService) {
+              public events: Events, translate: TranslateService, private httpService: BackendService,
+              private globalVars: GlobalVars) {
 
     this.initializeApp();
     const valueFieldName = "value";
@@ -50,6 +53,8 @@ export class MyApp {
         if (data.session.glpilanguage === "fr_FR") {
           translate.use("fr_FR");
         }
+        globalVars.session = data.session;
+        globalVars.username = data.session.glpifirstname + " " + data.session.glpirealname;
       });
   }
 

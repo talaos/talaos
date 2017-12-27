@@ -8,6 +8,7 @@ import { TranslateLoader, TranslateModule } from "@ngx-translate/core";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
 import "rxjs/add/operator/map";
 
+import { GlobalVars } from "../app/globalvars";
 import { BackendComponent } from "../backend/backend.component";
 import { BackendService } from "../backend/backend.service";
 
@@ -64,6 +65,7 @@ export function createTranslateLoader(http: Http) {
     StatusBar,
     SplashScreen,
     BackendService,
+    GlobalVars,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
   ],
 })

@@ -37,6 +37,7 @@
   "is": "is",
   "Value": "Value",
   "Ticket": "Ticket",
+  "Tickets": "Tickets",
   "Login": "Login",
   "Homepage": "Homepage",
   "Menu": "Menu",
@@ -53,5 +54,6 @@
   "Processing (planned)": "Processing (planned)",
   "Pending": "Pending",
   "Solved": "Solved",
-  "Closed": "Closed"
+  "Closed": "Closed",
+  "Tickets to manage": "Tickets to manage"
 }

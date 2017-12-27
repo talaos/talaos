@@ -4,12 +4,125 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>GLPI - {{ "Homepage" | translate }}</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only>
+        <ion-icon name="md-settings"></ion-icon>
+        <div>{{globalVars.username}}</div>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  <h3>{{ "Homepage" | translate }}</h3>
-  {{ 'Hello' | translate }}
+  <h3>{{ 'Hello' | translate }} {{globalVars.username}}</h3>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col col-sm-12 col-md-2>
+        <ion-card [ngClass]="ticketProcessingClass">
+          <ion-card-header>
+            <ion-icon name="md-information-circle"></ion-icon>
+          </ion-card-header>
+          <ion-card-content center text-center>
+            <p>Tickets en cours</p>
+            <h1>{{ticketProcessing}}</h1>
+          </ion-card-content>
+          <ion-item>
+            <button ion-button icon-left clear item-end *ngIf="ticketProcessing > 0">
+              <ion-icon name="chatbubbles"></ion-icon>
+              Go to list
+            </button>
+          </ion-item>
+        </ion-card>
+      </ion-col>
+      <ion-col col-sm-12 col-md-2>
+        <ion-card [ngClass]="ticketLateClass">
+          <ion-card-header>
+            <ion-icon name="md-information-circle"></ion-icon>
+          </ion-card-header>
+          <ion-card-content center text-center>
+            <p>Tickets en retard</p>
+            <h1>{{ticketLate}}</h1>
+          </ion-card-content>
+          <ion-item>
+            <button ion-button icon-left clear item-end *ngIf="ticketLate > 0">
+              <ion-icon name="chatbubbles"></ion-icon>
+              Go to list
+            </button>
+          </ion-item>
+        </ion-card>
+      </ion-col>
+      <ion-col col-sm-12 col-md-2>
+        <ion-card [ngClass]="ticketNewClass">
+          <ion-card-header>
+            <ion-icon name="md-information-circle"></ion-icon>
+          </ion-card-header>
+          <ion-card-content center text-center>
+            <p>Tickets nouveaux
+              Tickets non assignés</p>
+            <h1>{{ticketNew}}</h1>
+          </ion-card-content>
+          <ion-item>
+            <button ion-button icon-left clear item-end *ngIf="ticketNew > 0">
+              <ion-icon name="chatbubbles"></ion-icon>
+              Go to list
+            </button>
+          </ion-item>
+        </ion-card>
+      </ion-col>
+      <ion-col col-sm-12 col-md-2>
+        <ion-card [ngClass]="ticketTovalidateClass">
+          <ion-card-header>
+            <ion-icon name="md-information-circle"></ion-icon>
+          </ion-card-header>
+          <ion-card-content center text-center>
+            <p>Tickets à valider</p>
+            <h1>{{ticketTovalidate}}</h1>
+          </ion-card-content>
+          <ion-item>
+            <button ion-button icon-left clear item-end *ngIf="ticketTovalidate > 0">
+              <ion-icon name="chatbubbles"></ion-icon>
+              Go to list
+            </button>
+          </ion-item>
+        </ion-card>
+      </ion-col>
+      <ion-col col-sm-12 col-md-2>
+        <ion-card [ngClass]="ticketSatisfactionClass">
+          <ion-card-header>
+            <ion-icon name="md-information-circle"></ion-icon>
+          </ion-card-header>
+          <ion-card-content center text-center>
+            <p>Enquête de satisfaction</p>
+            <h1>{{ticketSatisfaction}}</h1>
+          </ion-card-content>
+          <ion-item>
+            <button ion-button icon-left clear item-end *ngIf="ticketSatisfaction > 0">
+              <ion-icon name="chatbubbles"></ion-icon>
+              Go to list
+            </button>
+          </ion-item>
+        </ion-card>
+      </ion-col>
+      <ion-col col-sm-12 col-md-2>
+        <ion-card [ngClass]="ticketTasktodoClass">
+          <ion-card-header>
+            <ion-icon name="md-information-circle"></ion-icon>
+          </ion-card-header>
+          <ion-card-content center text-center>
+            <p>Tâches de tickets à faire</p>
+            <h1>{{ticketTasktodo}}</h1>
+          </ion-card-content>
+          <ion-item>
+            <button ion-button icon-left clear item-end *ngIf="ticketTasktodo > 0">
+              <ion-icon name="chatbubbles"></ion-icon>
+              Go to list
+            </button>
+          </ion-item>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
 
 <ion-footer>
