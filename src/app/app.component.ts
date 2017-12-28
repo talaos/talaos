@@ -54,7 +54,7 @@ export class MyApp {
           translate.use("fr_FR");
         }
         globalVars.session = data.session;
-        globalVars.username = data.session.glpifirstname + " " + data.session.glpirealname;
+        globalVars.setUsername(data.session.glpifirstname + " " + data.session.glpirealname);
       });
   }
 

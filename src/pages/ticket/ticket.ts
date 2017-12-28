@@ -36,7 +36,12 @@ export class TicketPage {
   constructor(public navCtrl: NavController, public navParams: NavParams, private httpService: BackendService,
               public modalCtrl: ModalController, public loadingCtrl: LoadingController) {
     // If we navigated to this page, we will have an item available as a nav param
-    this.criteria = [ { field: 12, searchtype: "equals", value: "notold" }];
+    const criteria = navParams.get("criteria");
+    if (criteria === "undefined") {
+      this.criteria = [{field: 12, searchtype: "equals", value: "notold"}];
+    } else {
+      this.criteria = criteria;
+    }
     this.forcedisplayBase = [1, 2, 80, 12, 19, 14, 7, 82];
     this.forcedisplaySup = [];
     this.selectedItem = navParams.get("item");

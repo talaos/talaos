@@ -28,7 +28,7 @@
             <h1>{{ticketProcessing}}</h1>
           </ion-card-content>
           <ion-item>
-            <button ion-button icon-left clear item-end *ngIf="ticketProcessing > 0">
+            <button ion-button icon-left clear item-end *ngIf="ticketProcessing > 0" (click)="goTicketList('ticketProcessing')">
               <ion-icon name="chatbubbles"></ion-icon>
               Go to list
             </button>
@@ -45,7 +45,7 @@
             <h1>{{ticketLate}}</h1>
           </ion-card-content>
           <ion-item>
-            <button ion-button icon-left clear item-end *ngIf="ticketLate > 0">
+            <button ion-button icon-left clear item-end *ngIf="ticketLate > 0" (click)="goTicketList('ticketLate')">
               <ion-icon name="chatbubbles"></ion-icon>
               Go to list
             </button>
@@ -63,7 +63,7 @@
             <h1>{{ticketNew}}</h1>
           </ion-card-content>
           <ion-item>
-            <button ion-button icon-left clear item-end *ngIf="ticketNew > 0">
+            <button ion-button icon-left clear item-end *ngIf="ticketNew > 0" (click)="goTicketList('ticketNew')">
               <ion-icon name="chatbubbles"></ion-icon>
               Go to list
             </button>
@@ -80,7 +80,7 @@
             <h1>{{ticketTovalidate}}</h1>
           </ion-card-content>
           <ion-item>
-            <button ion-button icon-left clear item-end *ngIf="ticketTovalidate > 0">
+            <button ion-button icon-left clear item-end *ngIf="ticketTovalidate > 0" (click)="goTicketList('ticketTovalidate')">
               <ion-icon name="chatbubbles"></ion-icon>
               Go to list
             </button>
@@ -97,7 +97,7 @@
             <h1>{{ticketSatisfaction}}</h1>
           </ion-card-content>
           <ion-item>
-            <button ion-button icon-left clear item-end *ngIf="ticketSatisfaction > 0">
+            <button ion-button icon-left clear item-end *ngIf="ticketSatisfaction > 0" (click)="goTicketList('ticketSatisfaction')">
               <ion-icon name="chatbubbles"></ion-icon>
               Go to list
             </button>
@@ -114,7 +114,7 @@
             <h1>{{ticketTasktodo}}</h1>
           </ion-card-content>
           <ion-item>
-            <button ion-button icon-left clear item-end *ngIf="ticketTasktodo > 0">
+            <button ion-button icon-left clear item-end *ngIf="ticketTasktodo > 0" (click)="goTicketList('ticketTasktodo')">
               <ion-icon name="chatbubbles"></ion-icon>
               Go to list
             </button>
