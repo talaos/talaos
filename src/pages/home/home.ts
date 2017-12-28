@@ -11,6 +11,7 @@ import { TicketPage } from "../ticket/ticket";
 })
 export class HomePage {
   private glpiid = "glpiID";
+  private username = "";
 
   private ticketProcessing = 0;
   private ticketLate = 0;
@@ -36,7 +37,10 @@ export class HomePage {
   private subscription: Subscription;
 
   constructor(public navCtrl: NavController, private globalVars: GlobalVars, private httpService: BackendService) {
-    this.subscription = this.globalVars.getUsername().subscribe(username => { this.loadDashboard(); });
+    this.subscription = this.globalVars.getUsername().subscribe(username => {
+      this.loadDashboard();
+      this.username = username;
+    });
   }
 
   public goTicketList(type) {

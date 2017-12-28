@@ -16,14 +16,14 @@
       <ion-segment-button value="summary">
         <ion-icon name="md-information-circle"></ion-icon>
       </ion-segment-button>
+      <ion-segment-button value="details">
+        <ion-icon name="md-filing"></ion-icon>
+      </ion-segment-button>
       <ion-segment-button value="actors">
         <ion-icon name="md-contacts"></ion-icon>
       </ion-segment-button>
       <ion-segment-button value="dates">
         <ion-icon name="md-time"></ion-icon>
-      </ion-segment-button>
-      <ion-segment-button value="details">
-        <ion-icon name="md-filing"></ion-icon>
       </ion-segment-button>
       <ion-segment-button value="traitement">
         <ion-icon name="md-chatbubbles"></ion-icon>
@@ -38,34 +38,35 @@
     <ion-list *ngSwitchCase="'summary'">
       <ion-grid>
         <ion-row>
-          <ion-col col-12 col-lg-6>
+          <ion-col col-12 col-lg-4>
             <ion-item>
               <ion-label>{{ "Type" | translate }}</ion-label>
-              <ion-select [(ngModel)]="selectedItem.type" interface="popover">
+              <ion-select [(ngModel)]="selectedItem.type" interface="popover" (ionChange)="changeField('type')">
                 <ion-option *ngFor="let type of types" [value]="type.value">
                   {{type.viewValue}}
                 </ion-option>
               </ion-select>
             </ion-item>
           </ion-col>
-          <ion-col col-12 col-lg-6>
+          <ion-col col-12 col-lg-4>
             <ion-item>
               <ion-label>{{ "Status" | translate }}</ion-label>
-              <ion-select [(ngModel)]="selectedItem.status" interface="popover">
+              <ion-select [(ngModel)]="selectedItem.status" interface="popover" (ionChange)="changeField('status')">
                 <ion-option *ngFor="let st of status" [value]="st.value">
                   {{st.viewValue}}
                 </ion-option>
               </ion-select>
             </ion-item>
           </ion-col>
+          <ion-col col-12 col-lg-4>
+            <ion-item>
+              <ion-label>{{ "Category" | translate }}</ion-label>
+              <input type="hidden" [(ngModel)]="selectedItem.itilcategories_id" value="0" (input)="changeField('itilcategories_id')"/>
+              <ion-input type="text" [(ngModel)]="selectedItem.itilcategories_name" (click)="openDropdownSelect('ITILCategory', true, 'ticketcategory')" [readonly]="true"></ion-input>
+            </ion-item>
+          </ion-col>
         </ion-row>
       </ion-grid>
-
-      <ion-item>
-        <ion-label floating>{{ "Category" | translate }}</ion-label>
-        <input type="hidden" [(ngModel)]="selectedItem.itilcategories_id" value="0" />
-        <ion-input type="text" [(ngModel)]="selectedItem.itilcategories_name" (click)="openDropdownSelect('ITILCategory', true, 'ticketcategory')" [readonly]="true"></ion-input>
-      </ion-item>
 
       <ion-item>
         <ion-label floating>{{ "Title" | translate }}</ion-label>
@@ -198,7 +199,7 @@
       </ion-item>
       <ion-item>
         <ion-label floating>{{ "Urgency" | translate }}</ion-label>
-        <ion-select [(ngModel)]="selectedItem.urgency" interface="popover">
+        <ion-select [(ngModel)]="selectedItem.urgency" interface="popover" (ionChange)="changeField('urgency')">
           <ion-option *ngFor="let val of urgencyImpact" [value]="val.value">
             {{val.viewValue}}
           </ion-option>
@@ -206,7 +207,7 @@
       </ion-item>
       <ion-item>
         <ion-label floating>{{ "Impact" | translate }}</ion-label>
-        <ion-select [(ngModel)]="selectedItem.impact" interface="popover">
+        <ion-select [(ngModel)]="selectedItem.impact" interface="popover" (ionChange)="changeField('impact')">
           <ion-option *ngFor="let val of urgencyImpact" [value]="val.value">
             {{val.viewValue}}
           </ion-option>
@@ -214,7 +215,7 @@
       </ion-item>
       <ion-item>
         <ion-label floating>{{ "Priority" | translate }}</ion-label>
-        <ion-select [(ngModel)]="selectedItem.priority" interface="popover">
+        <ion-select [(ngModel)]="selectedItem.priority" interface="popover" (ionChange)="changeField('priority')">
           <ion-option *ngFor="let val of priorities" [value]="val.value">
             {{val.viewValue}}
           </ion-option>
@@ -222,7 +223,7 @@
       </ion-item>
       <ion-item>
         <ion-label floating>{{ "Location" | translate }}</ion-label>
-        <input type="hidden" [(ngModel)]="selectedItem.locations_id" value="0"/>
+        <input type="hidden" [(ngModel)]="selectedItem.locations_id" value="0" (input)="changeField('locations_id')"/>
         <ion-input type="text" [(ngModel)]="selectedItem.locations_name" (click)="openDropdownSelect('Location', true, 'ticketlocation')" [readonly]="true"></ion-input>
       </ion-item>
       <!--
