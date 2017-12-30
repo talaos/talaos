@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { FabContainer, ModalController, NavController, NavParams } from "ionic-angular";
+import { FabContainer, ModalController, NavController, NavParams, ToastController } from "ionic-angular";
 import * as _ from "lodash";
 import { BackendService } from "../../backend/backend.service";
 import { DropdownSelect } from "../../dropdownselect/dropdownselect";
@@ -34,9 +34,10 @@ export class TicketForm {
     users_id: 0,
     users_name: "",
   };
+  private disablechanges: boolean;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private httpService: BackendService,
-              public modalCtrl: ModalController, translate: TranslateService) {
+              public modalCtrl: ModalController, translate: TranslateService, public toastCtrl: ToastController) {
 
     const valueFieldName = "value";
     this.types = [
@@ -71,6 +72,8 @@ export class TicketForm {
     // If we navigated to this page, we will have an item available as a nav param
     this.selectedItem = navParams.get("item");
 
+    this.disablechanges = false;
+
     // Get the ticket
     this.changed = false;
     this.timeline = [];
@@ -83,6 +86,7 @@ export class TicketForm {
     if (this.selectedItem.id > 0) {
       this.httpService.getItem("Ticket", this.selectedItem.id)
         .subscribe(function(data) {
+          this.disablechanges = true;
           data.date = data.date.replace(" ", "T");
           data.date_mod = data.date_mod.replace(" ", "T");
           if (data.solvedate != null) {
@@ -112,6 +116,7 @@ export class TicketForm {
                 this.selectedItem.locations_name = this.selectedItem.locations_id;
                 this.selectedItem.locations_id = dataNotExp.locations_id;
               }
+              this.disablechanges = false;
             }.bind(this));
         }.bind(this));
 
@@ -218,12 +223,19 @@ export class TicketForm {
             });
           this.navCtrl.remove(this.navCtrl.indexOf(currentpage));
         }
+        const toast = this.toastCtrl.create({
+          duration: 3000,
+          message: "Saved",
+        });
+        toast.present();
       }.bind(this));
   }
 
   public changeField(field) {
-    this.changed = true;
-    this.changedFields.push(field);
+    if (!this.disablechanges) {
+      this.changed = true;
+      this.changedFields.push(field);
+    }
   }
 
   public displayForm(type: string, fab: FabContainer) {
