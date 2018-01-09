@@ -87,7 +87,10 @@ export class HomePage {
         {link: "AND", field: 82, searchtype: "equals", value: "1"}];
     this.ticketNewCriteria = [{field: 12, searchtype: "equals", value: "1"}];
     this.ticketTovalidateCriteria = [{field: 7, searchtype: "equals", value: this.globalVars.session[this.glpiid]}];
-    this.ticketSatisfactionCriteria = [];
+    this.ticketSatisfactionCriteria = [{field: 12, searchtype: "equals", value: '6'},
+      {link: "AND", field: 60, searchtype: "contains", value: "^"},
+      {link: "AND", field: 61, searchtype: "contains", value: "NULL"},
+      {link: "AND", field: 22, searchtype: "equals", value: this.globalVars.session[this.glpiid]}];
     this.ticketTasktodoCriteria = [{field: 95, searchtype: "equals", value: this.globalVars.session[this.glpiid]},
         {link: "AND", field: 12, searchtype: "equals", value: "notold"},
         {link: "AND", field: 33, searchtype: "equals", value: "1"}];
@@ -133,6 +136,15 @@ export class HomePage {
       }.bind(this));
 
     // Tickets to fill survey...
+    this.httpService.search("Ticket", [1, 2, 80],
+      this.ticketSatisfactionCriteria, "0-1")
+      .subscribe(function(data) {
+        this.ticketSatisfaction = data.totalcount;
+        if (this.ticketSatisfaction > 0) {
+          this.ticketSatisfactionClass = ["dashboard"];
+        }
+      }.bind(this));
+
 
     // Tickets task to do...
     this.httpService.search("Ticket", [1, 2, 80],
