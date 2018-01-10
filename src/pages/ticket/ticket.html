@@ -4,13 +4,14 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>
-      <button ion-button (click)="openModal()">
-      <ion-icon name="md-search"></ion-icon>
-    </button>
-      {{ "Ticket" | translate }}</ion-title>
-    <ion-fab right middle>
-      <button ion-fab mini (click)="itemTapped($event)"><ion-icon name="add"></ion-icon></button>
-    </ion-fab>
+      {{ "Ticket" | translate }}
+    </ion-title>
+    <ion-buttons start>
+      <button ion-fab mini (click)="openModal()"><ion-icon name="md-search"></ion-icon></button>
+    </ion-buttons>
+    <ion-buttons end>
+      <button ion-fab mini (click)="itemTapped($event)" color="danger"><ion-icon name="add"></ion-icon></button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
