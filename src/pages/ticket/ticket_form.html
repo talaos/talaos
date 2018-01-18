@@ -34,64 +34,64 @@
 
 
 <ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col col-12 col-lg-4>
+        <ion-item>
+          <ion-label>{{ "Type" | translate }}</ion-label>
+          <ion-select [(ngModel)]="selectedItem.type" interface="popover" (ionChange)="changeField('type')">
+            <ion-option *ngFor="let type of types" [value]="type.value">
+              {{type.viewValue}}
+            </ion-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+      <ion-col col-12 col-lg-4>
+        <ion-item>
+          <ion-label>{{ "Category" | translate }}</ion-label>
+          <input type="hidden" [(ngModel)]="selectedItem.itilcategories_id" value="0" (input)="changeField('itilcategories_id')"/>
+          <ion-input type="text" [(ngModel)]="selectedItem.itilcategories_name" (click)="openDropdownSelect('ITILCategory', true, 'ticketcategory')" [readonly]="true"></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col col-12 col-lg-4>
+        <ion-item *ngIf="!hiddenItem.id12">
+          <ion-label>{{ "Status" | translate }}</ion-label>
+          <ion-select [(ngModel)]="selectedItem.status" interface="popover" (ionChange)="changeField('status')">
+            <ion-option *ngFor="let st of status" [value]="st.value">
+              {{st.viewValue}}
+            </ion-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <br>
+
   <div [ngSwitch]="ticketzone">
     <ion-list *ngSwitchCase="'summary'">
-      <ion-grid>
-        <ion-row>
-          <ion-col col-12 col-lg-4>
-            <ion-item>
-              <ion-label>{{ "Type" | translate }}</ion-label>
-              <ion-select [(ngModel)]="selectedItem.type" interface="popover" (ionChange)="changeField('type')">
-                <ion-option *ngFor="let type of types" [value]="type.value">
-                  {{type.viewValue}}
-                </ion-option>
-              </ion-select>
-            </ion-item>
-          </ion-col>
-          <ion-col col-12 col-lg-4>
-            <ion-item>
-              <ion-label>{{ "Status" | translate }}</ion-label>
-              <ion-select [(ngModel)]="selectedItem.status" interface="popover" (ionChange)="changeField('status')">
-                <ion-option *ngFor="let st of status" [value]="st.value">
-                  {{st.viewValue}}
-                </ion-option>
-              </ion-select>
-            </ion-item>
-          </ion-col>
-          <ion-col col-12 col-lg-4>
-            <ion-item>
-              <ion-label>{{ "Category" | translate }}</ion-label>
-              <input type="hidden" [(ngModel)]="selectedItem.itilcategories_id" value="0" (input)="changeField('itilcategories_id')"/>
-              <ion-input type="text" [(ngModel)]="selectedItem.itilcategories_name" (click)="openDropdownSelect('ITILCategory', true, 'ticketcategory')" [readonly]="true"></ion-input>
-            </ion-item>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-
-      <ion-item>
+      <ion-item *ngIf="!hiddenItem.id1">
         <ion-label floating>{{ "Title" | translate }}</ion-label>
         <ion-input type="text" [(ngModel)]="selectedItem.name" value="{{selectedItem.name}}" (input)="changeField('name')"></ion-input>
       </ion-item>
 
-      <ion-item>
+      <ion-item *ngIf="!hiddenItem.id21">
         <ion-label floating>{{ "Description" | translate }}</ion-label>
         <ion-textarea type="text" [(ngModel)]="selectedItem.content" value="{{selectedItem.content}}" [attr.rows]="25" (input)="changeField('content')"></ion-textarea>
       </ion-item>
     </ion-list>
 
 
-
     <ion-list *ngSwitchCase="'actors'">
       <ion-grid>
         <ion-row>
           <ion-col col-12 col-lg-4>
-            <ion-item-group>
+            <ion-item-group *ngIf="!hiddenItem.id4 || !hiddenItem.id71">
               <ion-item-divider color="light">{{ "Requesters" | translate }}
                 <ion-fab right middle>
                   <button ion-fab mini><ion-icon name="add"></ion-icon></button>
                   <ion-fab-list side="left">
-                    <button ion-fab (click)="addActors.showUser=true"><ion-icon name="person"></ion-icon></button>
-                    <button ion-fab (click)="addActors.showGroup=true"><ion-icon name="md-people"></ion-icon></button>
+                    <button ion-fab (click)="addActors.showUser=true" *ngIf="!hiddenItem.id4"><ion-icon name="person"></ion-icon></button>
+                    <button ion-fab (click)="addActors.showGroup=true" *ngIf="!hiddenItem.id71"><ion-icon name="md-people"></ion-icon></button>
                   </ion-fab-list>
                 </ion-fab>
               </ion-item-divider>
@@ -120,7 +120,7 @@
           </ion-col>
 
           <ion-col col-12 col-lg-4>
-            <ion-item-group>
+            <ion-item-group *ngIf="!hiddenItem.id65 || !hiddenItem.id66">
               <ion-item-divider color="light">{{ "Observers" | translate }}
                 <ion-fab right middle>
                   <button ion-fab mini (click)="addObserver()"><ion-icon name="add"></ion-icon></button>
@@ -138,7 +138,7 @@
           </ion-col>
 
           <ion-col col-12 col-lg-4>
-            <ion-item-group>
+            <ion-item-group *ngIf="!hiddenItem.id5 || !hiddenItem.id6 || !hiddenItem.id8">
               <ion-item-divider color="light">{{ "Assigned" | translate }}
                 <ion-fab right middle>
                   <button ion-fab mini (click)="addAssigned()"><ion-icon name="add"></ion-icon></button>
@@ -175,25 +175,25 @@
       <ion-grid>
         <ion-row>
           <ion-col col-sm-12 col-md-3>
-            <ion-item>
+            <ion-item *ngIf="!hiddenItem.id15">
               <ion-label floating>{{ "Opening date" | translate }}</ion-label>
               <ion-datetime displayFormat="YYYY-MM-DD HH:mm:ss" [(ngModel)]="selectedItem.date"></ion-datetime>
             </ion-item>
           </ion-col>
           <ion-col col-sm-12 col-md-3>
-            <ion-item>
+            <ion-item *ngIf="!hiddenItem.id19">
               <ion-label floating>{{ "Last modification" | translate }}</ion-label>
               <ion-datetime displayFormat="YYYY-MM-DD HH:mm:ss" [(ngModel)]="selectedItem.date_mod"></ion-datetime>
             </ion-item>
           </ion-col>
           <ion-col col-sm-12 col-md-3>
-            <ion-item>
+            <ion-item *ngIf="!hiddenItem.id17">
               <ion-label floating>{{ "solve date" | translate }}</ion-label>
               <ion-datetime displayFormat="YYYY-MM-DD HH:mm:ss" [(ngModel)]="selectedItem.solvedate"></ion-datetime>
             </ion-item>
           </ion-col>
           <ion-col col-sm-12 col-md-3>
-            <ion-item>
+            <ion-item *ngIf="!hiddenItem.id16">
               <ion-label floating>{{ "Close date" | translate }}</ion-label>
               <ion-datetime displayFormat="YYYY-MM-DD HH:mm:ss" [(ngModel)]="selectedItem.closedate"></ion-datetime>
             </ion-item>
@@ -203,16 +203,16 @@
     </ion-list>
 
     <ion-list *ngSwitchCase="'details'">
-      <ion-item>
+      <ion-item *ngIf="!hiddenItem.id22">
         <ion-label floating>{{ "Created by" | translate }}</ion-label>
         <ion-input type="text" value="{{selectedItem.users_id_recipient}}" [readonly]="true"></ion-input>
       </ion-item>
-      <ion-item>
+      <ion-item *ngIf="!hiddenItem.id29">
         <ion-label floating>{{ "Request type" | translate }}</ion-label>
         <input type="hidden" [(ngModel)]="selectedItem.requesttypes_id" value="0"/>
         <ion-input type="text" [(ngModel)]="selectedItem.requesttypes_name" (click)="openDropdownSelect('RequestType', true, 'ticketrequesttype')" [readonly]="true"></ion-input>
       </ion-item>
-      <ion-item>
+      <ion-item *ngIf="!hiddenItem.id10">
         <ion-label floating>{{ "Urgency" | translate }}</ion-label>
         <ion-select [(ngModel)]="selectedItem.urgency" interface="popover" (ionChange)="changeField('urgency')">
           <ion-option *ngFor="let val of urgencyImpact" [value]="val.value">
@@ -220,7 +220,7 @@
           </ion-option>
         </ion-select>
       </ion-item>
-      <ion-item>
+      <ion-item *ngIf="!hiddenItem.id11">
         <ion-label floating>{{ "Impact" | translate }}</ion-label>
         <ion-select [(ngModel)]="selectedItem.impact" interface="popover" (ionChange)="changeField('impact')">
           <ion-option *ngFor="let val of urgencyImpact" [value]="val.value">
@@ -228,7 +228,7 @@
           </ion-option>
         </ion-select>
       </ion-item>
-      <ion-item>
+      <ion-item *ngIf="!hiddenItem.id3">
         <ion-label floating>{{ "Priority" | translate }}</ion-label>
         <ion-select [(ngModel)]="selectedItem.priority" interface="popover" (ionChange)="changeField('priority')">
           <ion-option *ngFor="let val of priorities" [value]="val.value">
@@ -236,7 +236,7 @@
           </ion-option>
         </ion-select>
       </ion-item>
-      <ion-item>
+      <ion-item *ngIf="!hiddenItem.id83">
         <ion-label floating>{{ "Location" | translate }}</ion-label>
         <input type="hidden" [(ngModel)]="selectedItem.locations_id" value="0" (input)="changeField('locations_id')"/>
         <ion-input type="text" [(ngModel)]="selectedItem.locations_name" (click)="openDropdownSelect('Location', true, 'ticketlocation')" [readonly]="true"></ion-input>

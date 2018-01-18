@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 import { FabContainer, ModalController, NavController, NavParams, ToastController } from "ionic-angular";
 import * as _ from "lodash";
+import { GlobalVars } from "../../app/globalvars";
 import { BackendService } from "../../backend/backend.service";
 import { DropdownSelect } from "../../dropdownselect/dropdownselect";
 
@@ -13,6 +14,7 @@ import { TranslateService } from "@ngx-translate/core";
 })
 export class TicketForm {
   public selectedItem: any;
+  public hiddenItem: any;
   public newfollowup: any;
   public newtask: any;
   public followups: any;
@@ -39,7 +41,8 @@ export class TicketForm {
   private disablechanges: boolean;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private httpService: BackendService,
-              public modalCtrl: ModalController, translate: TranslateService, public toastCtrl: ToastController) {
+              public modalCtrl: ModalController, translate: TranslateService, public toastCtrl: ToastController,
+              private globalVars: GlobalVars) {
 
     const valueFieldName = "value";
     this.types = [
@@ -73,6 +76,7 @@ export class TicketForm {
 
     // If we navigated to this page, we will have an item available as a nav param
     this.selectedItem = navParams.get("item");
+    this.hiddenItem = {};
 
     this.disablechanges = false;
 
@@ -118,6 +122,7 @@ export class TicketForm {
                 this.selectedItem.locations_name = this.selectedItem.locations_id;
                 this.selectedItem.locations_id = dataNotExp.locations_id;
               }
+              this.SetAllItemVisible();
               this.disablechanges = false;
             }.bind(this));
         }.bind(this));
@@ -135,6 +140,7 @@ export class TicketForm {
       this.selectedItem.urgency = 3;
       this.selectedItem.impact = 3;
       this.selectedItem.status = 1;
+      this.SetAllItemVisible();
     }
   }
 
@@ -237,7 +243,55 @@ export class TicketForm {
     if (!this.disablechanges) {
       this.changed = true;
       this.changedFields.push(field);
+
+      // Manage the ticket template
+      if (field === "itilcategories_id" || field === "type") {
+        this.loadTemplate();
+      }
     }
+  }
+
+  public loadTemplate() {
+    // get the template for the category
+    this.httpService.getItem("ITILCategory", this.selectedItem.itilcategories_id, false)
+      .subscribe(function(data) {
+        let templateId = 0;
+        if (this.selectedItem.type === 1) {
+          templateId = data.tickettemplates_id_incident;
+        } else {
+          templateId = data.tickettemplates_id_demand;
+        }
+        if (templateId === 0) {
+          // load from entity
+
+        }
+        this.SetAllItemVisible();
+      // Load the mandatory fields of the template TicketTemplateMandatoryField
+        this.httpService.getPage("TicketTemplateMandatoryField", {tickettemplates_id: "^" + templateId + "$"},
+          false, false, false, "0-200")
+          .subscribe((data2) => {
+            // console.log(data2);
+          });
+
+      // load the predefined fields TicketTemplatePredefinedField
+        this.httpService.getPage("TicketTemplatePredefinedField", {tickettemplates_id: "^" + templateId + "$"},
+          false, false, false, "0-200")
+          .subscribe((data2) => {
+            // console.log(data2);
+          });
+
+      // load the hidden fields TicketTemplateHiddenField
+        this.httpService.getPage("TicketTemplateHiddenField", {tickettemplates_id: "^" + templateId + "$"},
+          false, false, false, "0-200")
+          .subscribe(function(data2) {
+            for (const item of data2) {
+              if (item.num && item.num !== "undefined") {
+                this.hiddenItem["id" + this.globalVars.searchOptions.ticket[item.num].id] = true;
+              }
+            }
+          }.bind(this));
+
+    }.bind(this));
   }
 
   public displayForm(type: string, fab: FabContainer) {
@@ -319,5 +373,11 @@ export class TicketForm {
           }
         }
       }.bind(this));
+  }
+
+  private SetAllItemVisible() {
+    for (const item of this.selectedItem) {
+      this.hiddenItem[item] = false;
+    }
   }
 }

@@ -6,6 +6,7 @@ import { Subject } from "rxjs/Subject";
 export class GlobalVars {
   public username = new Subject<any>();
   public session = {};
+  public searchOptions = {};
 
   public setUsername(username: string) {
     this.username.next(username);

@@ -60,6 +60,17 @@ export class MyApp {
           return this.httpService.manageError(error);
         }.bind(this),
       );
+
+    // Load searchoptions
+    globalVars.searchOptions["ticket"] = {};
+    this.httpService.getListSearchOptions("Ticket")
+      .subscribe((data) => {
+        for (const item of data) {
+          if (item.id && item.id !== "undefined") {
+            globalVars.searchOptions["ticket"][item.id] = item;
+          }
+        }
+      });
   }
 
   public openPage(page) {
