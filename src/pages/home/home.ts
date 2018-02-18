@@ -87,7 +87,7 @@ export class HomePage {
         {link: "AND", field: 82, searchtype: "equals", value: "1"}];
     this.ticketNewCriteria = [{field: 12, searchtype: "equals", value: "1"}];
     this.ticketTovalidateCriteria = [{field: 7, searchtype: "equals", value: this.globalVars.session[this.glpiid]}];
-    this.ticketSatisfactionCriteria = [{field: 12, searchtype: "equals", value: '6'},
+    this.ticketSatisfactionCriteria = [{field: 12, searchtype: "equals", value: "6"},
       {link: "AND", field: 60, searchtype: "contains", value: "^"},
       {link: "AND", field: 61, searchtype: "contains", value: "NULL"},
       {link: "AND", field: 22, searchtype: "equals", value: this.globalVars.session[this.glpiid]}];
@@ -144,7 +144,6 @@ export class HomePage {
           this.ticketSatisfactionClass = ["dashboard"];
         }
       }.bind(this));
-
 
     // Tickets task to do...
     this.httpService.search("Ticket", [1, 2, 80],

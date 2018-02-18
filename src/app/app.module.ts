@@ -1,3 +1,4 @@
+import { HttpClient } from "@angular/common/http";
 import { ErrorHandler, NgModule } from "@angular/core";
 import { Http, HttpModule } from "@angular/http";
 import { BrowserModule } from "@angular/platform-browser";
@@ -24,7 +25,7 @@ import { TicketForm } from "../pages/ticket/ticket_form";
 import { SplashScreen } from "@ionic-native/splash-screen";
 import { StatusBar } from "@ionic-native/status-bar";
 
-export function createTranslateLoader(http: Http) {
+export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, "./assets/i18n/", ".json");
 }
 

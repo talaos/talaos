@@ -239,7 +239,11 @@ export class BackendService {
     }
 
     public manageError(error) {
-      if (error._body.indexOf("ERROR_SESSION_TOKEN_INVALID") > -1) {
+      if (typeof error._body !== "string") {
+        this.token = "";
+        localStorage.removeItem("session-token");
+        this.events.publish("login:new", "");
+      } else if (error._body.indexOf("ERROR_SESSION_TOKEN_INVALID") > -1) {
         this.token = "";
         localStorage.removeItem("session-token");
         this.events.publish("login:new", "");

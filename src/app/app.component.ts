@@ -55,7 +55,11 @@ export class MyApp {
         }
         globalVars.session = data.session;
         globalVars.setUsername(data.session.glpifirstname + " " + data.session.glpirealname);
-      });
+      },
+        function(error) {
+          return this.httpService.manageError(error);
+        }.bind(this),
+      );
   }
 
   public openPage(page) {
