@@ -256,6 +256,12 @@ export class TicketForm {
     this.httpService.getItem("ITILCategory", this.selectedItem.itilcategories_id, false)
       .subscribe(function(data) {
         let templateId = 0;
+        // TODO
+        // Order to load template:
+        // * category
+        // * entity
+        // * profile
+
         if (this.selectedItem.type === 1) {
           templateId = data.tickettemplates_id_incident;
         } else {
