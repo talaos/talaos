@@ -42,7 +42,7 @@ export class TicketPage {
     } else {
       this.criteria = criteria;
     }
-    this.forcedisplayBase = [1, 2, 80, 12, 19, 14, 7, 82];
+    this.forcedisplayBase = [1, 2, 80, 12, 19, 14, 7, 82, 27, 28];
     this.forcedisplaySup = [];
     this.selectedItem = navParams.get("item");
   }
@@ -140,6 +140,8 @@ export class TicketPage {
           id: item[2],
           name: item[1],
           note: "",
+          numberfollowups: item[27],
+          numbertasks: item[28],
           statusColor,
           statusIcon,
           type,

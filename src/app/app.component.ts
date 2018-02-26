@@ -49,7 +49,7 @@ export class MyApp {
 
     // Use language from GLPI session
     this.httpService.getFullSession()
-      .subscribe(function(data) {
+      .subscribe((data) => {
         if (data.session.glpilanguage === "fr_FR") {
           translate.use("fr_FR");
         }

@@ -30,7 +30,9 @@ export class TicketForm {
     groups_id: 0,
     groups_name: "",
     showGroup: false,
+    showGroupAssigned: false,
     showUser: false,
+    showUserAssigned: false,
     users_id: 0,
     users_name: "",
   };

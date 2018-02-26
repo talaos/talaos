@@ -37,7 +37,7 @@ export class HomePage {
   private subscription: Subscription;
 
   constructor(public navCtrl: NavController, private globalVars: GlobalVars, private httpService: BackendService) {
-    this.subscription = this.globalVars.getUsername().subscribe(username => {
+    this.subscription = this.globalVars.getUsername().subscribe((username) => {
       this.loadDashboard();
       this.username = username;
     });

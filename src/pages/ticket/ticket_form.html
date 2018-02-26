@@ -118,6 +118,7 @@
               </ion-item>
             </ion-item-group>
           </ion-col>
+
           <ion-col col-12 col-lg-4>
             <ion-item-group>
               <ion-item-divider color="light">{{ "Observers" | translate }}
@@ -135,6 +136,7 @@
               </ion-item>
             </ion-item-group>
           </ion-col>
+
           <ion-col col-12 col-lg-4>
             <ion-item-group>
               <ion-item-divider color="light">{{ "Assigned" | translate }}
@@ -142,6 +144,19 @@
                   <button ion-fab mini (click)="addAssigned()"><ion-icon name="add"></ion-icon></button>
                 </ion-fab>
               </ion-item-divider>
+
+              <ion-item *ngIf="addActors.showUserAssigned">
+                <ion-label floating>{{ "User" | translate }}</ion-label>
+                <input type="hidden" [(ngModel)]="addActors.users_id" value="0"/>
+                <ion-input type="text" [(ngModel)]="addActors.users_name" (click)="openDropdownSelect('User', true)" [readonly]="true"></ion-input>
+              </ion-item>
+
+              <ion-item *ngIf="addActors.showGroupAssigned">
+                <ion-label floating>{{ "Group" | translate }}</ion-label>
+                <input type="hidden" [(ngModel)]="addActors.groups_id" value="0"/>
+                <ion-input type="text" [(ngModel)]="addActors.groups_name" (click)="openDropdownSelect('Group', true)" [readonly]="true"></ion-input>
+              </ion-item>
+
               <ion-item *ngFor="let item of actors.assignes">
                 <ion-icon name="person" item-start></ion-icon>
                 {{item.users_id}}

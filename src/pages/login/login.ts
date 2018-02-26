@@ -9,9 +9,9 @@ import { BackendService } from "../../backend/backend.service";
 })
 export class LoginPage {
     public glpiurl: string;
-    public glpiurlf: string = "";
+    public glpiurlf: string = "http://127.0.0.1/glpi090/apirest.php"; // "http://theoule/glpi/apirest.php";
     public apptoken: string;
-    public apptokenf: string = "";
+    public apptokenf: string = "wmpjzyf2lrmlnjb4pvor30hoytlig618t8l19xxq";
     public username: string = "";
     public password: string = "";
 
