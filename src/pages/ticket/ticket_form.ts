@@ -277,7 +277,11 @@ export class TicketForm {
         this.httpService.getPage("TicketTemplatePredefinedField", {tickettemplates_id: "^" + templateId + "$"},
           false, false, false, "0-200")
           .subscribe((data2) => {
-            // console.log(data2);
+            for (const item of data2) {
+              if (item.num && item.num !== "undefined") {
+                this.selectedItem[this.globalVars.searchOptions.ticket[item.num].field] = item.value;
+              }
+            }
           });
 
       // load the hidden fields TicketTemplateHiddenField

@@ -24,7 +24,7 @@ export class TicketPage {
   public totalcount: number = 0;
   public itemscount: number = 0;
   public offset: number = 0;
-  public limit: number = 10;
+  public limit: number = 30;
   public sort = 2; // = ID
   public sortOrder = "ASC";
   public criteria = [];
