@@ -82,7 +82,7 @@ export class HomePage {
   private loadDashboard() {
     this.ticketProcessingCriteria = [{field: 4, searchtype: "equals", value: this.globalVars.session[this.glpiid]},
         {link: "AND", field: 12, searchtype: "equals", value: "notold"}];
-    this.ticketLateCriteria = [{field: 4, searchtype: "equals", value: this.globalVars.session[this.glpiid]},
+    this.ticketLateCriteria = [{field: 5, searchtype: "equals", value: this.globalVars.session[this.glpiid]},
         {link: "AND", field: 12, searchtype: "equals", value: "notold"},
         {link: "AND", field: 82, searchtype: "equals", value: "1"}];
     this.ticketNewCriteria = [{field: 12, searchtype: "equals", value: "1"}];
