@@ -24,7 +24,7 @@ export class TicketPage {
   public totalcount: number = 0;
   public itemscount: number = 0;
   public offset: number = 0;
-  public limit: number = 30;
+  public limit: number = 31;
   public sort = 2; // = ID
   public sortOrder = "ASC";
   public criteria = [];
@@ -57,7 +57,7 @@ export class TicketPage {
       if (data !== null) {
         this.criteria = data.criteria;
         this.forcedisplaySup = data.forcedisplay;
-        this.page(0, 10);
+        this.page(0, 31);
       }
     }.bind(this));
     modal.present();
