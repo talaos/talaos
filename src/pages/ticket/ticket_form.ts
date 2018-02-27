@@ -148,7 +148,7 @@ export class TicketForm {
     this.timeline = [];
 
     // Get followups
-    this.httpService.getPage("TicketFollowup", {tickets_id: this.selectedItem.id},
+    this.httpService.getPage("TicketFollowup", {tickets_id: "^" + this.selectedItem.id + "$"},
       true, true, false, "0-200")
       .subscribe(function(data) {
         this.followups = data;
@@ -166,7 +166,7 @@ export class TicketForm {
       }.bind(this));
 
     // Get tasks
-    this.httpService.getPage("TicketTask", {tickets_id: this.selectedItem.id},
+    this.httpService.getPage("TicketTask", {tickets_id: "^" + this.selectedItem.id + "$"},
       true, true, false, "0-200")
       .subscribe(function(data) {
         for (const item of data) {
@@ -346,7 +346,7 @@ export class TicketForm {
   }
 
   private _getActors() {
-    this.httpService.getPage("Ticket_User", {tickets_id: this.selectedItem.id},
+    this.httpService.getPage("Ticket_User", {tickets_id: "^" + this.selectedItem.id + "$"},
       true, true, false, "0-200")
       .subscribe(function(data) {
         this.actors = {};
@@ -366,7 +366,7 @@ export class TicketForm {
   }
 
   private _getGroups() {
-    this.httpService.getPage("Group_Ticket", {tickets_id: this.selectedItem.id},
+    this.httpService.getPage("Group_Ticket", {tickets_id: "^" + this.selectedItem.id + "$"},
       true, true, false, "0-200")
       .subscribe(function(data) {
         this.groups = {};
