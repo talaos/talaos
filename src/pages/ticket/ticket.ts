@@ -1,11 +1,11 @@
 import { Component } from "@angular/core";
 import { LoadingController, ModalController, NavController, NavParams } from "ionic-angular";
-import { BackendService } from "../../backend/backend.service";
+import { BackendGlpiService } from "../../backends/backend.glpi.service";
 import { Search } from "../../search/search";
 import { TicketForm } from "./ticket_form";
 
 @Component({
-  providers: [ BackendService ],
+  providers: [ BackendGlpiService ],
   selector: "page-list",
   templateUrl: "ticket.html",
 })
@@ -33,7 +33,7 @@ export class TicketPage {
   public loading;
   public infiniteloop = true;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private httpService: BackendService,
+  constructor(public navCtrl: NavController, public navParams: NavParams, private httpService: BackendGlpiService,
               public modalCtrl: ModalController, public loadingCtrl: LoadingController) {
     // If we navigated to this page, we will have an item available as a nav param
     const criteria = navParams.get("criteria");

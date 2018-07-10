@@ -10,8 +10,8 @@ import { TranslateHttpLoader } from "@ngx-translate/http-loader";
 import "rxjs/add/operator/map";
 
 import { GlobalVars } from "../app/globalvars";
-import { BackendComponent } from "../backend/backend.component";
-import { BackendService } from "../backend/backend.service";
+import { BackendGlpiComponent } from "../backends/backend.glpi.component";
+import { BackendGlpiService } from "../backends/backend.glpi.service";
 
 import { DropdownSelect } from "../dropdownselect/dropdownselect";
 import { HomePage } from "../pages/home/home";
@@ -33,7 +33,7 @@ export function createTranslateLoader(http: HttpClient) {
   bootstrap: [IonicApp],
   declarations: [
     MyApp,
-    BackendComponent,
+    BackendGlpiComponent,
     LoginPage,
     HomePage,
     TicketPage,
@@ -65,7 +65,7 @@ export function createTranslateLoader(http: HttpClient) {
   providers: [
     StatusBar,
     SplashScreen,
-    BackendService,
+    BackendGlpiService,
     GlobalVars,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
   ],

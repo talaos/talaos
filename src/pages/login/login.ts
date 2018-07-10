@@ -1,9 +1,9 @@
 import { Component} from "@angular/core";
 import { Events } from "ionic-angular";
-import { BackendService } from "../../backend/backend.service";
+import { BackendGlpiService } from "../../backends/backend.glpi.service";
 
 @Component({
-    providers: [ BackendService ],
+    providers: [ BackendGlpiService ],
     selector: "login",
     templateUrl: "login.html",
 })
@@ -15,7 +15,7 @@ export class LoginPage {
     public username: string = "";
     public password: string = "";
 
-    constructor(private httpService: BackendService, public events: Events) {
+    constructor(private httpService: BackendGlpiService, public events: Events) {
       this.ngOnInit();
     }
 

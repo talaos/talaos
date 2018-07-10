@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { NavController } from "ionic-angular";
 import { Subscription } from "rxjs/Subscription";
 import { GlobalVars } from "../../app/globalvars";
-import { BackendService } from "../../backend/backend.service";
+import { BackendGlpiService } from "../../backends/backend.glpi.service";
 import { TicketPage } from "../ticket/ticket";
 
 @Component({
@@ -37,7 +37,7 @@ export class HomePage {
 
   private subscription: Subscription;
 
-  constructor(public navCtrl: NavController, private globalVars: GlobalVars, private httpService: BackendService) {
+  constructor(public navCtrl: NavController, private globalVars: GlobalVars, private httpService: BackendGlpiService) {
     this.subscription = this.globalVars.getUsername().subscribe((username) => {
       this.loadDashboard();
       this.username = username;

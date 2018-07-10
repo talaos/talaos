@@ -8,7 +8,7 @@ import { ToastController } from "ionic-angular";
 import "rxjs/add/operator/map";
 
 @Injectable()
-export class BackendService {
+export class BackendGlpiService {
     public token = "";
     public glpiurl = "";
     public apptoken = "";

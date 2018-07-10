@@ -2,13 +2,13 @@ import { Component } from "@angular/core";
 import { FabContainer, ModalController, NavController, NavParams, ToastController } from "ionic-angular";
 import * as _ from "lodash";
 import { GlobalVars } from "../../app/globalvars";
-import { BackendService } from "../../backend/backend.service";
+import { BackendGlpiService } from "../../backends/backend.glpi.service";
 import { DropdownSelect } from "../../dropdownselect/dropdownselect";
 
 import { TranslateService } from "@ngx-translate/core";
 
 @Component({
-  providers: [ BackendService ],
+  providers: [ BackendGlpiService ],
   selector: "ticket_form",
   templateUrl: "ticket_form.html",
 })
@@ -40,7 +40,7 @@ export class TicketForm {
   };
   private disablechanges: boolean;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private httpService: BackendService,
+  constructor(public navCtrl: NavController, public navParams: NavParams, private httpService: BackendGlpiService,
               public modalCtrl: ModalController, translate: TranslateService, public toastCtrl: ToastController,
               private globalVars: GlobalVars) {
 

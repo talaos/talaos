@@ -6,7 +6,7 @@ import { StatusBar } from "@ionic-native/status-bar";
 
 import { TranslateService } from "@ngx-translate/core";
 
-import { BackendService } from "../backend/backend.service";
+import { BackendGlpiService } from "../backends/backend.glpi.service";
 
 import { GlobalVars } from "../app/globalvars";
 
@@ -15,7 +15,7 @@ import { LoginPage } from "../pages/login/login";
 import { TicketPage } from "../pages/ticket/ticket";
 
 @Component({
-  providers: [ BackendService ],
+  providers: [ BackendGlpiService ],
   templateUrl: "app.html",
 })
 export class MyApp {
@@ -24,7 +24,7 @@ export class MyApp {
   public pages: Array<{title: string, component: any}>;
 
   constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen,
-              public events: Events, translate: TranslateService, private httpService: BackendService,
+              public events: Events, translate: TranslateService, private httpService: BackendGlpiService,
               private globalVars: GlobalVars) {
 
     this.initializeApp();

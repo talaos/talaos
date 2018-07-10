@@ -1,9 +1,9 @@
 import { Component} from "@angular/core";
 import { NavParams, ViewController } from "ionic-angular";
-import { BackendService } from "../backend/backend.service";
+import { BackendGlpiService } from "../backends/backend.glpi.service";
 
 @Component({
-    providers: [ BackendService ],
+    providers: [ BackendGlpiService ],
     templateUrl: "dropdownselect.html",
 })
 export class DropdownSelect {
@@ -13,7 +13,7 @@ export class DropdownSelect {
   public items;
   public mySearchInput = "";
 
-  constructor(private httpService: BackendService, public params: NavParams, public viewCtrl: ViewController) {
+  constructor(private httpService: BackendGlpiService, public params: NavParams, public viewCtrl: ViewController) {
     this.itemtype = this.params.get("itemtype");
     this.items = [];
     this.getItems();
