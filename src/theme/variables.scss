@@ -74,7 +74,7 @@ $colors: (
 // so that the above variables are used and Ionic's
 // default are overridden.
 
-@import "ionic.theme.default";
+@import "ionic.theme.dark";
 
 
 // Ionicons
@@ -90,3 +90,10 @@ $colors: (
 
 @import "roboto";
 @import "noto-sans";
+
+$background-color: #26242f;
+$list-background-color: #201e2c;
+
+.label-md h2 {
+  color: #fff;
+}

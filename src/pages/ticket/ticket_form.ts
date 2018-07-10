@@ -124,6 +124,7 @@ export class TicketForm {
               }
               this.SetAllItemVisible();
               this.disablechanges = false;
+              this.loadTemplate();
             }.bind(this));
         }.bind(this));
 
@@ -141,6 +142,7 @@ export class TicketForm {
       this.selectedItem.impact = 3;
       this.selectedItem.status = 1;
       this.SetAllItemVisible();
+      this.loadTemplate();
     }
   }
 

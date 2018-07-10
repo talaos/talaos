@@ -11,7 +11,8 @@ import { TicketPage } from "../ticket/ticket";
 })
 export class HomePage {
   private glpiid = "glpiID";
-  private username = "";
+  private username = "helpdesk";
+  private interfacetype = "toto";
 
   private ticketProcessing = 0;
   private ticketLate = 0;
@@ -40,6 +41,9 @@ export class HomePage {
     this.subscription = this.globalVars.getUsername().subscribe((username) => {
       this.loadDashboard();
       this.username = username;
+    });
+    this.subscription = this.globalVars.getInterfacetype().subscribe((interfacetype) => {
+      this.interfacetype = interfacetype;
     });
   }
 

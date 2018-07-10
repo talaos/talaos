@@ -55,6 +55,7 @@ export class MyApp {
         }
         globalVars.session = data.session;
         globalVars.setUsername(data.session.glpifirstname + " " + data.session.glpirealname);
+        globalVars.setInterfacetype(data.session.glpiactiveprofile.interface);
       },
         function(error) {
           return this.httpService.manageError(error);
