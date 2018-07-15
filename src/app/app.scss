@@ -91,3 +91,52 @@ p {
   }
 }
 
+
+.login {
+  form {
+    align-content: center;
+    width: 600px;
+  }
+  background-image: url("../assets/imgs/login_bg.png");
+  background-repeat: no-repeat;
+  background-size: 100%;
+}
+
+.login-box {
+  background-color: #eeeeee;
+}
+
+.card-ticket {
+  -webkit-box-shadow: 0 3px 5px #333;
+  -moz-box-shadow: 0 3px 5px #333;
+  box-shadow: 0 3px 5px #333;
+}
+
+.card-ticket h1, .card-ticket p {
+  color: #ffffff;
+  text-align: left;
+}
+
+.card-ticket-add {
+  background-color: #ac202d;
+}
+
+.card-ticket-opened ion-item, .card-ticket-opened ion-card-content, .card-ticket-opened {
+  background-color: #29B6F6;
+  color: #ffffff;
+}
+
+.card-ticket-waiting ion-item, .card-ticket-waiting ion-card-content, .card-ticket-waiting ion-card {
+  background-color: #BDBDBD;
+  color: #ffffff;
+}
+
+.card-ticket-closed ion-item, .card-ticket-closed ion-card-content, .card-ticket-closed ion-card {
+  background-color: #66BB6A;
+  color: #ffffff;
+}
+
+.ticket-type {
+  font-size: 48px;
+  color: #f4f4f4;
+}

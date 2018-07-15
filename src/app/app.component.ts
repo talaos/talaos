@@ -22,6 +22,7 @@ export class MyApp {
   @ViewChild(Nav) public nav: Nav;
   public rootPage: any = HomePage;
   public pages: Array<{title: string, component: any}>;
+  public successConnection = 0;
 
   constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen,
               public events: Events, translate: TranslateService, private httpService: BackendGlpiService,
@@ -37,7 +38,10 @@ export class MyApp {
     ];
 
     events.subscribe("login:successful", () => {
-      this.openPage({title: translate.get("Home")[valueFieldName], component: HomePage});
+      this.successConnection++;
+      if (this.successConnection === this.globalVars.numberConnections) {
+        this.openPage({title: translate.get("Home")[valueFieldName], component: HomePage});
+      }
     });
 
     events.subscribe("login:new", () => {
@@ -48,30 +52,33 @@ export class MyApp {
     translate.use("en");
 
     // Use language from GLPI session
-    this.httpService.getFullSession()
-      .subscribe((data) => {
-        if (data.session.glpilanguage === "fr_FR") {
-          translate.use("fr_FR");
-        }
-        globalVars.session = data.session;
-        globalVars.setUsername(data.session.glpifirstname + " " + data.session.glpirealname);
-        globalVars.setInterfacetype(data.session.glpiactiveprofile.interface);
-      },
-        function(error) {
-          return this.httpService.manageError(error);
-        }.bind(this),
-      );
+    this.httpService.loadConnections();
+    if (this.httpService.connections.length > 0) {
+      this.httpService.getFullSession()
+        .subscribe((data) => {
+            if (data.session.glpilanguage === "fr_FR") {
+              translate.use("fr_FR");
+            }
+            globalVars.session = data.session;
+            globalVars.setUsername(data.session.glpifirstname + " " + data.session.glpirealname);
+            globalVars.setInterfacetype(data.session.glpiactiveprofile.interface);
+          },
+          function(error) {
+            return this.httpService.manageError(error);
+          }.bind(this),
+        );
 
-    // Load searchoptions
-    globalVars.searchOptions["ticket"] = {};
-    this.httpService.getListSearchOptions("Ticket")
-      .subscribe((data) => {
-        for (const item of data) {
-          if (item.id && item.id !== "undefined") {
-            globalVars.searchOptions["ticket"][item.id] = item;
+      // Load searchoptions
+      globalVars.searchOptions["ticket"] = {};
+      this.httpService.getListSearchOptions("Ticket")
+        .subscribe((data) => {
+          for (const item of data) {
+            if (item.id && item.id !== "undefined") {
+              globalVars.searchOptions["ticket"][item.id] = item;
+            }
           }
-        }
-      });
+        });
+    }
   }
 
   public openPage(page) {
@@ -88,5 +95,6 @@ export class MyApp {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
     });
+    this.successConnection = 0;
   }
 }

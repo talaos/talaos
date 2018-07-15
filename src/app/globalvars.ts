@@ -8,6 +8,7 @@ export class GlobalVars {
   public interfacetype = new Subject<any>();
   public session = {};
   public searchOptions = {};
+  public numberConnections = 0;
 
   public setUsername(username: string) {
     this.username.next(username);

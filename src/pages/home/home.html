@@ -129,37 +129,38 @@ Tickets non assignés</p>
 </ion-content>
 
 <ion-content padding *ngIf="interfacetype=='helpdesk'">
-
+<br>
   <ion-grid>
     <ion-row>
       <ion-col col-sm-12 col-md-2>
-        <ion-card [ngClass]="ticketNewClass">
-          <ion-item>
-            <ion-avatar item-start>
-              <img src="img/marty-avatar.png">
-            </ion-avatar>
-            <h2>Ticket #125190</h2>
-            <p>Title: problème d'outlook</p>
-          </ion-item>
-
+        <ion-card class="card-ticket card-ticket-add">
           <ion-card-content>
-            <p>
-
-
-
-
-
-
-
-
-              Last update : 2 hours ago</p>
+            <p style="text-align: center;">
+              <span>
+<i style="font-size: 96px; color: #ffffff" class="fa fa-plus-square"></i>
+              </span>
+<span style="font-size: 24px; color: #ffffff">New ticket</span>
+            </p>
           </ion-card-content>
-
-          <ion-item>
-            <button ion-button icon-left clear item-end *ngIf="ticketProcessing > 0" (click)="goTicketList('ticketProcessing')">
-              <ion-icon name="md-eye"></ion-icon>
-              SEE DETAILS
-            </button>
+        </ion-card>
+      </ion-col>
+      <ion-col col-sm-12 col-md-2 *ngFor="let myticket of ticketAll">
+        <ion-card [ngClass]="ticketNewClass" class="card-ticket card-ticket-{{myticket[12]}}">
+          <ion-item no-lines>
+            <i item-start class="fas fa-{{myticket[14]}} fa-flip-horizontal ticket-type"></i>
+            <h1>#{{myticket[2]}}</h1>
+            <p>{{myticket[1]}}</p>
+            <i style="font-size: 18px;" *ngFor="let number of myticket[3]" class="fas fa-seedling"></i>
+          </ion-item>
+          <ion-item no-lines>
+            Opened on: {{myticket[15]}}
+          </ion-item>
+          <ion-item no-lines>
+            Last update: {{myticket[19]}}
+          </ion-item>
+          <ion-item style="background-color: #ffffff; color: #29B6F6;">
+            View Details
+            <i item-end style="font-size: 24px;" class="fa fa-arrow-circle-right"></i>
           </ion-item>
         </ion-card>
       </ion-col>

@@ -23,6 +23,7 @@
     "@angular/platform-browser-dynamic": "^5.2.11",
     "@angular/platform-server": "^5.2.11",
     "@angular/router": "^5.2.11",
+    "@fortawesome/fontawesome-free": "^5.1.0",
     "@ionic-native/core": "4.5.2",
     "@ionic-native/splash-screen": "4.5.2",
     "@ionic-native/status-bar": "4.5.2",
@@ -48,7 +49,7 @@
   },
   "devDependencies": {
     "@ionic/app-scripts": "3.1.7",
-    "ionic": "3.19.1",
+    "ionic": "^3.20.0",
     "typescript": "^2.9.2"
   },
   "description": "An Ionic project",
@@ -63,5 +64,8 @@
     "platforms": [
       "android"
     ]
+  },
+  "config": {
+    "ionic_copy": "./scripts/copy-custom-libs.js"
   }
 }

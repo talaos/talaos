@@ -1,5 +1,6 @@
 import { Component} from "@angular/core";
-import { Events } from "ionic-angular";
+import {Events, FabContainer} from "ionic-angular";
+import { GlobalVars } from "../../app/globalvars";
 import { BackendGlpiService } from "../../backends/backend.glpi.service";
 
 @Component({
@@ -7,43 +8,95 @@ import { BackendGlpiService } from "../../backends/backend.glpi.service";
     selector: "login",
     templateUrl: "login.html",
 })
+
 export class LoginPage {
     public glpiurl: string;
     public glpiurlf: string = "http://127.0.0.1/glpi090/apirest.php"; // "http://theoule/glpi/apirest.php";
     public apptoken: string;
-    public apptokenf: string = "wmpjzyf2lrmlnjb4pvor30hoytlig618t8l19xxq";
+    public apptokenf: string = "";
     public username: string = "";
     public password: string = "";
 
-    constructor(private httpService: BackendGlpiService, public events: Events) {
-      this.ngOnInit();
+    public connections;
+    public types = [];
+
+    constructor(private httpGlpiService: BackendGlpiService, private globalVars: GlobalVars, public events: Events) {
+      this.types = [
+        {value: "glpi", viewValue: "Glpi"},
+      ];
+      this.connections = [];
     }
 
-    public login() {
-      if (this.glpiurlf !== "") {
-        localStorage.setItem("glpiurl", this.glpiurlf);
-      }
-      if (this.apptokenf !== "") {
-        localStorage.setItem("apptoken", this.apptokenf);
-      }
-      this.httpService.doLogin(this.username, this.password);
+  /**
+   * Run the login
+   */
+  public login() {
+    this.globalVars.numberConnections = this.connections.length;
 
+    // register in local storage
+    localStorage.setItem("number_connections", this.connections.length);
+
+    let i = 0;
+    for (const connection of this.connections) {
+      localStorage.setItem("connection_" + i + "_name", connection.name);
+      localStorage.setItem("connection_" + i + "_app_token", connection.app_token);
+      localStorage.setItem("connection_" + i + "_type", connection.type);
+      localStorage.setItem("connection_" + i + "_username", connection.username);
+      localStorage.setItem("connection_" + i + "_url", connection.url);
+
+      this.httpGlpiService.doLogin(connection.username, connection.password, i);
+      i++;
+    }
+  }
+
+  /**
+   * Add a new connection
+   */
+    public addConnection(type: string, fab: FabContainer) {
+      fab.close();
+      if (type === "glpi") {
+        this.connections.push({app_token: "", display_options: true, name: "", password: "",
+          session_token: "", type: "glpi", url: "http://127.0.0.1/glpi090/apirest.php", username: ""});
+      }
     }
 
-    private ngOnInit() {
-        let value: string = localStorage.getItem("session-token");
-        if (value && value !== "undefined" && value !== "null") {
+  /**
+   * show / hide connection options
+   */
+  public toggleOptions(myconnection) {
+      if (myconnection.display_options) {
+        myconnection.display_options = false;
+      } else {
+        myconnection.display_options = true;
+      }
+    }
+
+  /**
+   * Load connections in the localstorage
+   */
+  private ngOnInit() {
+    const numberConnections = Number(localStorage.getItem("number_connections"));
+    this.globalVars.numberConnections = numberConnections;
+    let i = 0;
+    while (i < numberConnections) {
+      if (localStorage.getItem("connection_" + i + "_name")) {
+        this.connections.push({
+          app_token: localStorage.getItem("connection_" + i + "_app_token"),
+          display_options: true,
+          name: localStorage.getItem("connection_" + i + "_name"),
+          password: "",
+          session_token: localStorage.getItem("connection_" + i + "_session_token"),
+          type: localStorage.getItem("connection_" + i + "_type"),
+          url: localStorage.getItem("connection_" + i + "_url"),
+          username: localStorage.getItem("connection_" + i + "_username"),
+        });
+        if (localStorage.getItem("connection_" + i + "_session_token") !== "") {
           this.events.publish("login:successful", "");
-        }
 
-        value = localStorage.getItem("glpiurl");
-        if (value && value !== "undefined" && value !== "null") {
-            this.glpiurl = value;
         }
-
-        value = localStorage.getItem("apptoken");
-        if (value && value !== "undefined" && value !== "null") {
-            this.apptoken = value;
-        }
+      }
+      i++;
     }
+  }
+
 }

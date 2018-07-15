@@ -1,36 +1,55 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      {{ "Login" | translate }}
+      {{ "Authentication page" | translate }}
     </ion-title>
   </ion-navbar>
 </ion-header>
-<ion-content padding>
-  <form #loginForm="ngForm" (ngSubmit)="login()" autocomplete="off">
-    <ion-row>
-      <ion-col>
-        <ion-list inset>
-          <ion-item>
-            <ion-input placeholder="Username" name="username" id="loginField" type="text" required [(ngModel)]="username" #email></ion-input>
-          </ion-item>
-          <ion-item>
-            <ion-input placeholder="Password" name="password" id="passwordField" type="password" required [(ngModel)]="password"></ion-input>
-          </ion-item>
-          <ion-item *ngIf="!glpiurl">
-            <ion-input placeholder="Glpiurl" name="glpiurlf" id="glpiurlField" type="text" required [(ngModel)]="glpiurlf"></ion-input>
-          </ion-item>
-          <ion-item *ngIf="!apptoken">
-            <ion-input placeholder="Apptoken" name="apptokenf" id="apptokenField" type="text" required [(ngModel)]="apptokenf"></ion-input>
-          </ion-item>
-        </ion-list>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        <div *ngIf="error" class="alert alert-danger">{{error}}</div>
-        <button ion-button class="submit-btn" full type="submit" [disabled]="!loginForm.form.valid">Login
-        </button>
-      </ion-col>
-    </ion-row>
+<ion-content padding ngClass="login">
+
+  <ion-fab top right middle #addconnexion>
+    <button ion-fab><ion-icon name="add"></ion-icon></button>
+    <ion-fab-list side="bottom">
+      <button ion-fab (click)="addConnection('glpi', addconnexion)"> <i class="fa fa-plug"></i></button> <!-- GLPI -->
+    </ion-fab-list>
+  </ion-fab>
+
+
+  <form #loginForm="ngForm" (ngSubmit)="login()" autocomplete="off" *ngIf="connections.length > 0">
+    <div class="login-box">
+      <ion-row *ngFor="let connection of connections">
+        <ion-col>
+          <ion-list no-border>
+            <ion-list-header>
+              {{connection.type}}
+              <i item-end class="fa fa-plug"></i>
+              <ion-icon ion-button item-end (click)="toggleOptions(connection)" name="md-options"></ion-icon>
+            </ion-list-header>
+            <ion-item>
+              <ion-input placeholder="Connection name" name="connection.name" type="text" required [(ngModel)]="connection.name"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-input placeholder="Username" name="username" id="loginField" type="text" required [(ngModel)]="connection.username" #email></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-input placeholder="Password" name="password" id="passwordField" type="password" required [(ngModel)]="connection.password"></ion-input>
+            </ion-item>
+            <ion-item *ngIf="connection.display_options">
+              <ion-input placeholder="Glpiurl" name="url" id="glpiurlField" type="text" required [(ngModel)]="connection.url"></ion-input>
+            </ion-item>
+            <ion-item *ngIf="connection.display_options">
+              <ion-input placeholder="Apptoken" name="app_token" id="apptokenField" type="text" required [(ngModel)]="connection.app_token"></ion-input>
+            </ion-item>
+          </ion-list>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <div *ngIf="error" class="alert alert-danger">{{error}}</div>
+          <button ion-button class="submit-btn" full type="submit" [disabled]="!loginForm.form.valid">Login
+          </button>
+        </ion-col>
+      </ion-row>
+    </div>
   </form>
 </ion-content>
