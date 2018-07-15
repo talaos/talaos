@@ -97,8 +97,7 @@ p {
     align-content: center;
     width: 600px;
   }
-  background-image: url("../assets/imgs/login_bg.png");
-  background-repeat: no-repeat;
+  background: url("../assets/imgs/login_bg.png") no-repeat;
   background-size: 100%;
 }
 
@@ -140,3 +139,19 @@ p {
   font-size: 48px;
   color: #f4f4f4;
 }
+
+.card-ticket-opened ion-item:last-child {
+  color: #29B6F6;
+  background-color: #ffffff;
+}
+
+.card-ticket-waiting ion-item:last-child {
+  color: #BDBDBD;
+  background-color: #ffffff;
+}
+
+.card-ticket-closed ion-item:last-child {
+  color: #66BB6A;
+  background-color: #ffffff;
+}
+

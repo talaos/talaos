@@ -8,7 +8,7 @@ import { TranslateService } from "@ngx-translate/core";
 
 import { BackendGlpiService } from "../backends/backend.glpi.service";
 
-import { GlobalVars } from "../app/globalvars";
+import { GlobalVars } from "./globalvars";
 
 import { HomePage } from "../pages/home/home";
 import { LoginPage } from "../pages/login/login";

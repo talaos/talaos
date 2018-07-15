@@ -9,9 +9,9 @@ import { TranslateLoader, TranslateModule } from "@ngx-translate/core";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
 import "rxjs/add/operator/map";
 
-import { GlobalVars } from "../app/globalvars";
 import { BackendGlpiComponent } from "../backends/backend.glpi.component";
 import { BackendGlpiService } from "../backends/backend.glpi.service";
+import { GlobalVars } from "./globalvars";
 
 import { DropdownSelect } from "../dropdownselect/dropdownselect";
 import { HomePage } from "../pages/home/home";

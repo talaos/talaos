@@ -59,18 +59,18 @@ export class BackendGlpiService {
     }
 
     const headers = new Headers();
-      headers.append("App-Token", this.connections[0].app_token);
-      headers.append("Session-Token", this.connections[0].session_token);
+    headers.append("App-Token", this.connections[0].app_token);
+    headers.append("Session-Token", this.connections[0].session_token);
 
-      const params: URLSearchParams = new URLSearchParams();
-      if (expand) {
-        params.set("expand_dropdowns", "1");
-      }
+    const params: URLSearchParams = new URLSearchParams();
+    if (expand) {
+      params.set("expand_dropdowns", "1");
+    }
 
-      return this.http.get(this.connections[0].url + "/" + itemtype + "/" + itemId, {headers, search: params})
-          .map(function convert(res) {
-            return res.json();
-          });
+    return this.http.get(this.connections[0].url + "/" + itemtype + "/" + itemId, {headers, search: params})
+        .map(function convert(res) {
+          return res.json();
+        });
   }
 
   public getAll(endpoint) {
@@ -78,19 +78,19 @@ export class BackendGlpiService {
       return;
     }
 
-      const headers = new Headers();
-      headers.append("App-Token", this.connections[0].app_token);
-      headers.append("Session-Token", this.connections[0].session_token);
+    const headers = new Headers();
+    headers.append("App-Token", this.connections[0].app_token);
+    headers.append("Session-Token", this.connections[0].session_token);
 
-      // headers.append("Cache-control", "no-cache");
-      // headers.append("Cache-control", "no-store");
-      headers.append("Cache-Control", "max-age=20");
-      // headers.append("Expires", "0");
-      // headers.append("Pragma", "no-cache");
-      return this.http.get(this.connections[0].url + "/" + endpoint, {headers})
-          .map(function convert(res) {
-            return res.json();
-          });
+    // headers.append("Cache-control", "no-cache");
+    // headers.append("Cache-control", "no-store");
+    headers.append("Cache-Control", "max-age=20");
+    // headers.append("Expires", "0");
+    // headers.append("Pragma", "no-cache");
+    return this.http.get(this.connections[0].url + "/" + endpoint, {headers})
+        .map(function convert(res) {
+          return res.json();
+        });
   }
 
   /** Get only a page with all parameters possible */
@@ -100,54 +100,54 @@ export class BackendGlpiService {
     if (this.connections.length === 0) {
       return;
     }
-      const headers = new Headers();
-      headers.append("App-Token", this.connections[0].app_token);
-      headers.append("Session-Token", this.connections[0].session_token);
-      // define a cache of 10 seconds
-      // headers.append("Cache-Control", "max-age=10");
-      // headers.append("Cache-Control", "max-age=0");
-      // manage params
-      const params: URLSearchParams = new URLSearchParams();
+    const headers = new Headers();
+    headers.append("App-Token", this.connections[0].app_token);
+    headers.append("Session-Token", this.connections[0].session_token);
+    // define a cache of 10 seconds
+    // headers.append("Cache-Control", "max-age=10");
+    // headers.append("Cache-Control", "max-age=0");
+    // manage params
+    const params: URLSearchParams = new URLSearchParams();
 
-      if (where !== null) {
-          for (const i of Object.keys(where)) {
-              params.set("searchText[" + i + "]", where[i]);
-          }
+    if (where !== null) {
+      for (const i of Object.keys(where)) {
+        params.set("searchText[" + i + "]", where[i]);
       }
+    }
 
-      if (expandDropdowns === true) {
-          params.set("expand_dropdowns", "true");
-      }
-      if (getHateoas === true) {
-          params.set("get_hateoas", "true");
-      } else {
-          params.set("get_hateoas", "false");
-      }
-      if (onlyId === true) {
-          params.set("only_id", "true");
-      }
-      params.set("range", range);
+    if (expandDropdowns === true) {
+      params.set("expand_dropdowns", "true");
+    }
+    if (getHateoas === true) {
+      params.set("get_hateoas", "true");
+    } else {
+      params.set("get_hateoas", "false");
+    }
+    if (onlyId === true) {
+        params.set("only_id", "true");
+    }
+    params.set("range", range);
 /*
       //params.set("sort", sort);
       params.set("order", order);
 */
-      if (isDeleted === true) {
-          params.set("is_deleted", "true");
-      }
-      return this.http.get(this.connections[0].url + "/" + endpoint, {headers, search: params})
-          .map(function convert(res) {
-              const data = res.json();
-              if (res.headers.has("Content-Range")) {
-                const ranges = res.headers.get("Content-Range").split("/");
-                data._total = ranges[1];
-                const therange = ranges[0].split("-");
-                data._number = therange[0];
-              } else {
-                data._total = 0;
-                data._number = 0;
-              }
-              return data;
-          });
+    if (isDeleted === true) {
+      params.set("is_deleted", "true");
+    }
+    return this.http.get(this.connections[0].url + "/" + endpoint, {headers, search: params})
+        .map(function convert(res) {
+            const data = res.json();
+            if (res.headers.has("Content-Range")) {
+              const ranges = res.headers.get("Content-Range").split("/");
+              data._total = ranges[1];
+              const therange = ranges[0].split("-");
+              data._number = therange[0];
+            } else {
+              data._total = 0;
+              data._number = 0;
+            }
+            return data;
+        });
   }
 
   public search(endpoint, forcedisplay = [1, 2, 80], criteria = [], range = "0-10", sort = 1, order = "ASC") {
@@ -240,21 +240,21 @@ export class BackendGlpiService {
     if (this.connections.length === 0) {
       return;
     }
-      const headers = new Headers();
-      headers.append("App-Token", this.connections[0].app_token);
-      headers.append("Session-Token", this.connections[0].session_token);
+    const headers = new Headers();
+    headers.append("App-Token", this.connections[0].app_token);
+    headers.append("Session-Token", this.connections[0].session_token);
 
-      if (itemId === 0) {
-        return this.http.post(this.connections[0].url + "/" + itemtype, {input}, {headers})
-          .map(function convert(res) {
-            return res.json();
-          });
-      } else {
-        return this.http.put(this.connections[0].url + "/" + itemtype + "/" + itemId, {input}, {headers})
-          .map(function convert(res) {
-            return res.json();
-          });
-      }
+    if (itemId === 0) {
+      return this.http.post(this.connections[0].url + "/" + itemtype, {input}, {headers})
+        .map(function convert(res) {
+          return res.json();
+        });
+    } else {
+      return this.http.put(this.connections[0].url + "/" + itemtype + "/" + itemId, {input}, {headers})
+        .map(function convert(res) {
+          return res.json();
+        });
+    }
   }
 
   public manageError(error) {

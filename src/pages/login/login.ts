@@ -64,11 +64,7 @@ export class LoginPage {
    * show / hide connection options
    */
   public toggleOptions(myconnection) {
-      if (myconnection.display_options) {
-        myconnection.display_options = false;
-      } else {
-        myconnection.display_options = true;
-      }
+      myconnection.display_options = !myconnection.display_options;
     }
 
   /**
