@@ -4,6 +4,7 @@ import { Subscription } from "rxjs/Subscription";
 import { GlobalVars } from "../../app/globalvars";
 import { BackendGlpiService } from "../../backends/backend.glpi.service";
 import { TicketPage } from "../ticket/ticket";
+import {TicketForm} from "../ticket/ticket_form";
 
 @Component({
   selector: "page-home",
@@ -39,7 +40,8 @@ export class HomePage {
 
   private subscription: Subscription;
 
-  constructor(public navCtrl: NavController, private globalVars: GlobalVars, private httpGlpiService: BackendGlpiService) {
+  constructor(public navCtrl: NavController, private globalVars: GlobalVars,
+              private httpGlpiService: BackendGlpiService) {
     this.subscription = this.globalVars.getUsername().subscribe((username) => {
       this.username = username;
       this.subscription = this.globalVars.getInterfacetype().subscribe((interfacetype) => {
@@ -81,6 +83,18 @@ export class HomePage {
         criteria: this.ticketTasktodoCriteria,
       });
     }
+  }
+
+  public goTicketForm(ticketsId) {
+    if (ticketsId === undefined) {
+      ticketsId = 0;
+    }
+    const item = {id: ticketsId};
+
+    // That's right, we're pushing to ourselves!
+    this.navCtrl.push(TicketForm, {
+      item,
+    });
   }
 
   private ngOnInit() {
@@ -198,4 +212,6 @@ export class HomePage {
         }
       }.bind(this));
   }
+
+
 }
