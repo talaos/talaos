@@ -461,12 +461,12 @@
               </ion-item>
               <ion-item *ngIf="!hiddenItem.id22">
                 <ion-label>{{ "Created by" | translate }}</ion-label>
-                <ion-input item-end type="text" value="{{selectedItem.users_id_recipient}}" [readonly]="true"></ion-input>
+                <ion-input class="input-right" style="text-align: right;" type="text" value="{{selectedItem.users_id_recipient}}" [readonly]="true"></ion-input>
               </ion-item>
               <ion-item *ngIf="!hiddenItem.id29">
                 <ion-label>{{ "Request type" | translate }}</ion-label>
                 <input type="hidden" [(ngModel)]="selectedItem.requesttypes_id" value="0"/>
-                <ion-input item-end type="text" [(ngModel)]="selectedItem.requesttypes_name" (click)="openDropdownSelect('RequestType', true, 'ticketrequesttype')" [readonly]="true"></ion-input>
+                <ion-input class="input-right" type="text" [(ngModel)]="selectedItem.requesttypes_name" (click)="openDropdownSelect('RequestType', true, 'ticketrequesttype')" [readonly]="true"></ion-input>
               </ion-item>
             </ion-list>
         </ion-card>

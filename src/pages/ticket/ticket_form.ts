@@ -123,6 +123,8 @@ export class TicketForm {
             this.selectedItem.headerClass = "opened";
           }
           this.setRate("priority", this.selectedItem.priority);
+          this.setRate("urgency", this.selectedItem.urgency);
+          this.setRate("impact", this.selectedItem.impact);
           this.setType();
 
           this.httpService.getItem("Ticket", this.selectedItem.id, false)
