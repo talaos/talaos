@@ -3,7 +3,7 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>GLPI - {{ "Homepage" | translate }}</ion-title>
+    <ion-title>{{ "Homepage" | translate }}</ion-title>
     <ion-buttons end>
       <button ion-button icon-only>
         <ion-icon name="md-calendar"></ion-icon>
@@ -135,28 +135,23 @@ Tickets non assignés</p>
       <ion-col col-sm-12 col-md-2>
         <ion-card class="card-ticket card-ticket-add">
           <ion-card-content (click)="goTicketForm()">
-            <p style="text-align: center;">
-              <span>
-<i style="font-size: 96px; color: #ffffff" class="fa fa-plus-square"></i>
-              </span>
-<span style="font-size: 24px; color: #ffffff">New ticket</span>
-            </p>
+            <p style="text-align: center;"><span><i style="font-size: 96px; color: #ffffff" class="fa fa-plus-square"></i></span>
+
+<span style="font-size: 24px; color: #ffffff">New ticket</span></p>
           </ion-card-content>
         </ion-card>
       </ion-col>
       <ion-col col-sm-12 col-md-2 *ngFor="let myticket of ticketAll">
         <ion-card [ngClass]="ticketNewClass" class="card-ticket card-ticket-{{myticket[12]}}">
           <ion-item no-lines>
-            <i item-start class="fas fa-{{myticket[14]}} fa-flip-horizontal ticket-type"></i>
+            <i item-start class="fas fa-{{myticket[14]}} ticket-type"></i>
             <h1>#{{myticket[2]}}</h1>
             <p>{{myticket[1]}}</p>
             <i style="font-size: 18px;" *ngFor="let number of myticket[3]" class="fas fa-seedling"></i>
           </ion-item>
           <ion-item no-lines>
-            Opened on: {{myticket[15]}}
-          </ion-item>
-          <ion-item no-lines>
-            Last update: {{myticket[19]}}
+            <p>Opened on: {{myticket[15]}}
+Last update: {{myticket[19]}}</p>
           </ion-item>
           <ion-item (click)="goTicketForm(myticket[2])">
             View Details

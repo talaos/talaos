@@ -105,6 +105,8 @@ p {
   background-color: #eeeeee;
 }
 
+// Homepage
+
 .card-ticket {
   -webkit-box-shadow: 0 3px 5px #333;
   -moz-box-shadow: 0 3px 5px #333;
@@ -153,5 +155,46 @@ p {
 .card-ticket-closed ion-item:last-child {
   color: #66BB6A;
   background-color: #ffffff;
+}
+
+// Ticket form
+
+.ticket-form-opened ion-card-header {
+  background-color: #29B6F6;
+  color: #ffffff;
+}
+
+.ticket-form-waiting ion-card-header {
+  background-color: #BDBDBD;
+  color: #ffffff;
+}
+
+.ticket-form-closed ion-card-header {
+  background-color: #66BB6A;
+  color: #ffffff;
+}
+
+.priority {
+  color: #32db64;
+}
+
+.priority-disabled {
+  color: #BDBDBD;
+}
+
+.urgency {
+  color: #FFAB91;
+}
+
+.urgency-disabled {
+  color: #BDBDBD;
+}
+
+.impact {
+  color: #FFAB91;
+}
+
+.impact-disabled {
+  color: #BDBDBD;
 }
 

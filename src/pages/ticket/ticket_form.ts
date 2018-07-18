@@ -6,6 +6,7 @@ import { BackendGlpiService } from "../../backends/backend.glpi.service";
 import { DropdownSelect } from "../../dropdownselect/dropdownselect";
 
 import { TranslateService } from "@ngx-translate/core";
+import {Subscription} from "rxjs/Subscription";
 
 @Component({
   providers: [ BackendGlpiService ],
@@ -38,13 +39,19 @@ export class TicketForm {
     users_id: 0,
     users_name: "",
   };
+  public rateClass = {};
+  private interfacetype = "helpdesk";
+  private subscription: Subscription;
   private disablechanges: boolean;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private httpService: BackendGlpiService,
               public modalCtrl: ModalController, translate: TranslateService, public toastCtrl: ToastController,
               private globalVars: GlobalVars) {
-
     const valueFieldName = "value";
+    this.subscription = this.globalVars.getInterfacetype().subscribe((interfacetype) => {
+      this.interfacetype = interfacetype;
+    });
+
     this.types = [
       {value: 1, viewValue: translate.get("Incident")[valueFieldName]},
       {value: 2, viewValue: translate.get("Request")[valueFieldName]},
@@ -73,6 +80,7 @@ export class TicketForm {
       {value: 2, viewValue: translate.get("Low")[valueFieldName]},
       {value: 1, viewValue: translate.get("Very low")[valueFieldName]},
     ];
+    this.rateClass = {priority: {}, urgency: {}, impact: {}};
 
     // If we navigated to this page, we will have an item available as a nav param
     this.selectedItem = navParams.get("item");
@@ -102,6 +110,18 @@ export class TicketForm {
             data.closedate = data.closedate.replace(" ", "T");
           }
           this.selectedItem = data;
+          // Define color of header
+          if (data[12] === 5) {
+            this.selectedItem.headerClass = "closed";
+          } else if (data[12] === 6) {
+            this.selectedItem.headerClass = "closed";
+          } else if (data[12] === 4) {
+            this.selectedItem.headerClass = "waiting";
+          } else {
+            this.selectedItem.headerClass = "opened";
+          }
+          this.setRate("priority", this.selectedItem.priority);
+
           this.httpService.getItem("Ticket", this.selectedItem.id, false)
             .subscribe(function(dataNotExp) {
               if (dataNotExp.itilcategories_id === 0) {
@@ -345,6 +365,31 @@ export class TicketForm {
         this.newtask.content = null;
         this.loadTimeline();
       }.bind(this));
+  }
+
+  public setRate(type, value) {
+    this.selectedItem[type] = value;
+
+    this.rateClass[type][1] = "";
+    this.rateClass[type][2] = "-disabled";
+    this.rateClass[type][3] = "-disabled";
+    this.rateClass[type][4] = "-disabled";
+    this.rateClass[type][5] = "-disabled";
+    if (this.selectedItem[type] === 2) {
+      this.rateClass[type][2] = "";
+    } else if (this.selectedItem[type] === 3) {
+      this.rateClass[type][2] = "";
+      this.rateClass[type][3] = "";
+    } else if (this.selectedItem[type] === 4) {
+      this.rateClass[type][2] = "";
+      this.rateClass[type][3] = "";
+      this.rateClass[type][4] = "";
+    } else if (this.selectedItem[type] === 5) {
+      this.rateClass[type][2] = "";
+      this.rateClass[type][3] = "";
+      this.rateClass[type][4] = "";
+      this.rateClass[type][5] = "";
+    }
   }
 
   private _getActors() {

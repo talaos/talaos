@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header *ngIf="interfacetype=='central'">
 
   <ion-navbar>
     <ion-title *ngIf="selectedItem.id>0">Ticket #{{selectedItem.id}} - {{selectedItem.name}}</ion-title>
@@ -33,7 +33,7 @@
 </ion-header>
 
 
-<ion-content>
+<ion-content *ngIf="interfacetype=='central'">
   <ion-grid>
     <ion-row>
       <ion-col col-12 col-lg-4>
@@ -343,4 +343,139 @@
     </ion-list>
 
   </div>
+</ion-content>
+
+
+<ion-header *ngIf="interfacetype=='helpdesk'">
+
+  <ion-navbar>
+    <ion-title *ngIf="selectedItem.id>0">Ticket #{{selectedItem.id}} - {{selectedItem.name}}</ion-title>
+    <ion-title *ngIf="selectedItem.id==0">{{ "New ticket" | translate }}</ion-title>
+    <ion-buttons end *ngIf="changed">
+      <button ion-button icon-end solid color="danger" (click)="updateItem()">
+        <ion-icon name="md-send"></ion-icon>
+        {{ "Save modifications" | translate }}
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding *ngIf="interfacetype=='helpdesk'">
+  <ion-grid class="ticket-form-{{selectedItem.headerClass}}">
+    <ion-row>
+      <ion-col col-sm-12 col-md-4>
+        <ion-card class="card-ticket" >
+          <ion-card-header>
+            General
+          </ion-card-header>
+          <ion-card-content>
+            <ion-list>
+              <ion-item no-lines>
+                <ion-range min="0" max="1" step="1">
+                  <ion-label range-left style="text-align: center;padding-left: 20%;">
+                    <i style="font-size: 36px;" class="fas fa-ambulance"></i>
+                    <br>incident
+                  </ion-label>
+                  <ion-label range-right style="text-align: center;padding-right: 20%;">
+                    <i style="font-size: 36px;" class="fas fa-paper-plane"></i>
+                    <br>demande
+                  </ion-label>
+                </ion-range>
+              </ion-item>
+              <ion-item no-lines>
+                <ion-label>{{ "Category" | translate }}</ion-label>
+                <input type="hidden" [(ngModel)]="selectedItem.itilcategories_id" value="0" (input)="changeField('itilcategories_id')"/>
+                <ion-input type="text" [(ngModel)]="selectedItem.itilcategories_name" (click)="openDropdownSelect('ITILCategory', true, 'ticketcategory')" [readonly]="true"></ion-input>
+              </ion-item>
+              <ion-item no-lines *ngIf="selectedItem.id > 0">
+                <ion-label>{{ "Status" | translate }}</ion-label>
+                <ion-select [(ngModel)]="selectedItem.status" interface="popover" (ionChange)="changeField('status')" disabled>
+                  <ion-option *ngFor="let st of status" [value]="st.value">
+                    {{st.viewValue}}
+                  </ion-option>
+                </ion-select>
+              </ion-item>
+              <ion-item no-lines *ngIf="!hiddenItem.id1">
+                <ion-label floating>{{ "Title" | translate }}</ion-label>
+                <ion-input type="text" [(ngModel)]="selectedItem.name" value="{{selectedItem.name}}" (input)="changeField('name')"></ion-input>
+              </ion-item>
+              <ion-item no-lines *ngIf="!hiddenItem.id21">
+                <ion-label floating>{{ "Description" | translate }}</ion-label>
+                <ion-textarea type="text" [(ngModel)]="selectedItem.content" value="{{selectedItem.content}}" [attr.rows]="10" (input)="changeField('content')"></ion-textarea>
+              </ion-item>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <ion-col col-sm-12 col-md-4>
+        <ion-card class="card-ticket">
+          <ion-card-header>
+            Details
+          </ion-card-header>
+            <ion-list>
+              <ion-item *ngIf="!hiddenItem.id15">
+                <ion-label>{{ "Opening date" | translate }}</ion-label>
+                <ion-datetime displayFormat="YYYY-MM-DD HH:mm:ss" [(ngModel)]="selectedItem.date"></ion-datetime>
+              </ion-item>
+              <ion-item *ngIf="!hiddenItem.id19">
+                <ion-label>{{ "Last modification" | translate }}</ion-label>
+                <ion-datetime displayFormat="YYYY-MM-DD HH:mm:ss" [(ngModel)]="selectedItem.date_mod"></ion-datetime>
+              </ion-item>
+              <ion-item *ngIf="!hiddenItem.id17 * selectedItem.status >= 4">
+                <ion-label>{{ "solve date" | translate }}</ion-label>
+                <ion-datetime displayFormat="YYYY-MM-DD HH:mm:ss" [(ngModel)]="selectedItem.solvedate"></ion-datetime>
+              </ion-item>
+              <ion-item *ngIf="!hiddenItem.id16 * selectedItem.status >= 5">
+                <ion-label>{{ "Close date" | translate }}</ion-label>
+                <ion-datetime displayFormat="YYYY-MM-DD HH:mm:ss" [(ngModel)]="selectedItem.closedate"></ion-datetime>
+              </ion-item>
+              <ion-item *ngIf="!hiddenItem.id22">
+                <ion-label>{{ "Created by" | translate }}</ion-label>
+                <ion-input item-end type="text" value="{{selectedItem.users_id_recipient}}" [readonly]="true"></ion-input>
+              </ion-item>
+              <ion-item *ngIf="!hiddenItem.id29">
+                <ion-label>{{ "Request type" | translate }}</ion-label>
+                <input type="hidden" [(ngModel)]="selectedItem.requesttypes_id" value="0"/>
+                <ion-input item-end type="text" [(ngModel)]="selectedItem.requesttypes_name" (click)="openDropdownSelect('RequestType', true, 'ticketrequesttype')" [readonly]="true"></ion-input>
+              </ion-item>
+              <ion-item *ngIf="!hiddenItem.id10">
+                <p style="color: #999;">{{ "Urgency" | translate }}</p>
+                <i item-end style="font-size: 18px;" class="fas fa-seedling urgency{{rateClass.urgency[1]}}" (click)="setRate('urgency', 1)"></i>
+                <i item-end style="font-size: 18px;" class="fas fa-seedling urgency{{rateClass.urgency[2]}}" (click)="setRate('urgency', 2)"></i>
+                <i item-end style="font-size: 18px;" class="fas fa-seedling urgency{{rateClass.urgency[3]}}" (click)="setRate('urgency', 3)"></i>
+                <i item-end style="font-size: 18px;" class="fas fa-seedling urgency{{rateClass.urgency[4]}}" (click)="setRate('urgency', 4)"></i>
+                <i item-end style="font-size: 18px;" class="fas fa-seedling urgency{{rateClass.urgency[5]}}" (click)="setRate('urgency', 5)"></i>
+              </ion-item>
+              <ion-item *ngIf="!hiddenItem.id11">
+                <p style="color: #999;">{{ "Impact" | translate }}</p>
+                <i item-end style="font-size: 18px;" class="fas fa-seedling impact{{rateClass.impact[1]}}" (click)="setRate('impact', 1)"></i>
+                <i item-end style="font-size: 18px;" class="fas fa-seedling impact{{rateClass.impact[2]}}" (click)="setRate('impact', 2)"></i>
+                <i item-end style="font-size: 18px;" class="fas fa-seedling impact{{rateClass.impact[3]}}" (click)="setRate('impact', 3)"></i>
+                <i item-end style="font-size: 18px;" class="fas fa-seedling impact{{rateClass.impact[4]}}" (click)="setRate('impact', 4)"></i>
+                <i item-end style="font-size: 18px;" class="fas fa-seedling impact{{rateClass.impact[5]}}" (click)="setRate('impact', 5)"></i>
+              </ion-item>
+              <ion-item *ngIf="!hiddenItem.id3">
+                <p style="color: #999;">{{ "Priority" | translate }}</p>
+                <i item-end style="font-size: 18px;" class="fas fa-seedling priority{{rateClass.priority[1]}}" (click)="setRate('priority', 1)"></i>
+                <i item-end style="font-size: 18px;" class="fas fa-seedling priority{{rateClass.priority[2]}}" (click)="setRate('priority', 2)"></i>
+                <i item-end style="font-size: 18px;" class="fas fa-seedling priority{{rateClass.priority[3]}}" (click)="setRate('priority', 3)"></i>
+                <i item-end style="font-size: 18px;" class="fas fa-seedling priority{{rateClass.priority[4]}}" (click)="setRate('priority', 4)"></i>
+                <i item-end style="font-size: 18px;" class="fas fa-seedling priority{{rateClass.priority[5]}}" (click)="setRate('priority', 5)"></i>
+              </ion-item>
+              <ion-item *ngIf="!hiddenItem.id83">
+                <ion-label floating>{{ "Location" | translate }}</ion-label>
+                <input type="hidden" [(ngModel)]="selectedItem.locations_id" value="0" (input)="changeField('locations_id')"/>
+                <ion-input type="text" [(ngModel)]="selectedItem.locations_name" (click)="openDropdownSelect('Location', true, 'ticketlocation')" [readonly]="true"></ion-input>
+              </ion-item>
+            </ion-list>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <span class="fa-stack fa-2x">
+  <i class="far fa-calendar fa-stack-2x"></i>
+  <i class="fas fa-play fa-stack-1x"></i>
+</span>
+
 </ion-content>
