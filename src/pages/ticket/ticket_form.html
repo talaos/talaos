@@ -371,14 +371,14 @@
           <ion-card-content>
             <ion-list>
               <ion-item no-lines>
-                <ion-range min="0" max="1" step="1">
+                <ion-range min="1" max="2" step="1" (ionChange)="setType()" [(ngModel)]="selectedItem.type">
                   <ion-label range-left style="text-align: center;padding-left: 20%;">
-                    <i style="font-size: 36px;" class="fas fa-ambulance"></i>
-                    <br>incident
+                    <i style="font-size: 36px;" class="fas fa-ambulance {{typeIncidentClass}}"></i>
+                    <br><span class="{{typeIncidentClass}}">incident</span>
                   </ion-label>
                   <ion-label range-right style="text-align: center;padding-right: 20%;">
-                    <i style="font-size: 36px;" class="fas fa-paper-plane"></i>
-                    <br>demande
+                    <i style="font-size: 36px;" class="fas fa-paper-plane {{typeRequestClass}}"></i>
+                    <br><span class="{{typeRequestClass}}">demande</span>
                   </ion-label>
                 </ion-range>
               </ion-item>
@@ -430,14 +430,18 @@
                 <ion-label>{{ "Close date" | translate }}</ion-label>
                 <ion-datetime displayFormat="YYYY-MM-DD HH:mm:ss" [(ngModel)]="selectedItem.closedate"></ion-datetime>
               </ion-item>
-              <ion-item *ngIf="!hiddenItem.id22">
-                <ion-label>{{ "Created by" | translate }}</ion-label>
-                <ion-input item-end type="text" value="{{selectedItem.users_id_recipient}}" [readonly]="true"></ion-input>
+              <ion-item *ngIf="!hiddenItem.id83">
+                <ion-label floating>{{ "Location" | translate }}</ion-label>
+                <input type="hidden" [(ngModel)]="selectedItem.locations_id" value="0" (input)="changeField('locations_id')"/>
+                <ion-input type="text" [(ngModel)]="selectedItem.locations_name" (click)="openDropdownSelect('Location', true, 'ticketlocation')" [readonly]="true"></ion-input>
               </ion-item>
-              <ion-item *ngIf="!hiddenItem.id29">
-                <ion-label>{{ "Request type" | translate }}</ion-label>
-                <input type="hidden" [(ngModel)]="selectedItem.requesttypes_id" value="0"/>
-                <ion-input item-end type="text" [(ngModel)]="selectedItem.requesttypes_name" (click)="openDropdownSelect('RequestType', true, 'ticketrequesttype')" [readonly]="true"></ion-input>
+              <ion-item *ngIf="!hiddenItem.id3">
+                <p style="color: #999;">{{ "Priority" | translate }}</p>
+                <i item-end style="font-size: 18px;" class="fas fa-seedling priority{{rateClass.priority[1]}}" (click)="setRate('priority', 1)"></i>
+                <i item-end style="font-size: 18px;" class="fas fa-seedling priority{{rateClass.priority[2]}}" (click)="setRate('priority', 2)"></i>
+                <i item-end style="font-size: 18px;" class="fas fa-seedling priority{{rateClass.priority[3]}}" (click)="setRate('priority', 3)"></i>
+                <i item-end style="font-size: 18px;" class="fas fa-seedling priority{{rateClass.priority[4]}}" (click)="setRate('priority', 4)"></i>
+                <i item-end style="font-size: 18px;" class="fas fa-seedling priority{{rateClass.priority[5]}}" (click)="setRate('priority', 5)"></i>
               </ion-item>
               <ion-item *ngIf="!hiddenItem.id10">
                 <p style="color: #999;">{{ "Urgency" | translate }}</p>
@@ -455,27 +459,18 @@
                 <i item-end style="font-size: 18px;" class="fas fa-seedling impact{{rateClass.impact[4]}}" (click)="setRate('impact', 4)"></i>
                 <i item-end style="font-size: 18px;" class="fas fa-seedling impact{{rateClass.impact[5]}}" (click)="setRate('impact', 5)"></i>
               </ion-item>
-              <ion-item *ngIf="!hiddenItem.id3">
-                <p style="color: #999;">{{ "Priority" | translate }}</p>
-                <i item-end style="font-size: 18px;" class="fas fa-seedling priority{{rateClass.priority[1]}}" (click)="setRate('priority', 1)"></i>
-                <i item-end style="font-size: 18px;" class="fas fa-seedling priority{{rateClass.priority[2]}}" (click)="setRate('priority', 2)"></i>
-                <i item-end style="font-size: 18px;" class="fas fa-seedling priority{{rateClass.priority[3]}}" (click)="setRate('priority', 3)"></i>
-                <i item-end style="font-size: 18px;" class="fas fa-seedling priority{{rateClass.priority[4]}}" (click)="setRate('priority', 4)"></i>
-                <i item-end style="font-size: 18px;" class="fas fa-seedling priority{{rateClass.priority[5]}}" (click)="setRate('priority', 5)"></i>
+              <ion-item *ngIf="!hiddenItem.id22">
+                <ion-label>{{ "Created by" | translate }}</ion-label>
+                <ion-input item-end type="text" value="{{selectedItem.users_id_recipient}}" [readonly]="true"></ion-input>
               </ion-item>
-              <ion-item *ngIf="!hiddenItem.id83">
-                <ion-label floating>{{ "Location" | translate }}</ion-label>
-                <input type="hidden" [(ngModel)]="selectedItem.locations_id" value="0" (input)="changeField('locations_id')"/>
-                <ion-input type="text" [(ngModel)]="selectedItem.locations_name" (click)="openDropdownSelect('Location', true, 'ticketlocation')" [readonly]="true"></ion-input>
+              <ion-item *ngIf="!hiddenItem.id29">
+                <ion-label>{{ "Request type" | translate }}</ion-label>
+                <input type="hidden" [(ngModel)]="selectedItem.requesttypes_id" value="0"/>
+                <ion-input item-end type="text" [(ngModel)]="selectedItem.requesttypes_name" (click)="openDropdownSelect('RequestType', true, 'ticketrequesttype')" [readonly]="true"></ion-input>
               </ion-item>
             </ion-list>
         </ion-card>
       </ion-col>
     </ion-row>
   </ion-grid>
-  <span class="fa-stack fa-2x">
-  <i class="far fa-calendar fa-stack-2x"></i>
-  <i class="fas fa-play fa-stack-1x"></i>
-</span>
-
 </ion-content>

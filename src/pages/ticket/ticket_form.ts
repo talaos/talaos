@@ -40,6 +40,8 @@ export class TicketForm {
     users_name: "",
   };
   public rateClass = {};
+  public typeIncidentClass: string = "";
+  public typeRequestClass: string = "";
   private interfacetype = "helpdesk";
   private subscription: Subscription;
   private disablechanges: boolean;
@@ -121,6 +123,7 @@ export class TicketForm {
             this.selectedItem.headerClass = "opened";
           }
           this.setRate("priority", this.selectedItem.priority);
+          this.setType();
 
           this.httpService.getItem("Ticket", this.selectedItem.id, false)
             .subscribe(function(dataNotExp) {
@@ -389,6 +392,19 @@ export class TicketForm {
       this.rateClass[type][3] = "";
       this.rateClass[type][4] = "";
       this.rateClass[type][5] = "";
+    }
+  }
+
+  /**
+   * Change the color of type icon
+   */
+  public setType() {
+    if (this.selectedItem.type === 1) {
+      this.typeIncidentClass = "type-selected";
+      this.typeRequestClass = "";
+    } else if (this.selectedItem.type === 2) {
+      this.typeIncidentClass = "";
+      this.typeRequestClass = "type-selected";
     }
   }
 
