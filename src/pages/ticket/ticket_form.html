@@ -368,43 +368,41 @@
           <ion-card-header>
             General
           </ion-card-header>
-          <ion-card-content>
-            <ion-list>
-              <ion-item no-lines>
-                <ion-range min="1" max="2" step="1" (ionChange)="setType()" [(ngModel)]="selectedItem.type">
-                  <ion-label range-left style="text-align: center;padding-left: 20%;">
-                    <i style="font-size: 36px;" class="fas fa-ambulance {{typeIncidentClass}}"></i>
-                    <br><span class="{{typeIncidentClass}}">incident</span>
-                  </ion-label>
-                  <ion-label range-right style="text-align: center;padding-right: 20%;">
-                    <i style="font-size: 36px;" class="fas fa-paper-plane {{typeRequestClass}}"></i>
-                    <br><span class="{{typeRequestClass}}">demande</span>
-                  </ion-label>
-                </ion-range>
-              </ion-item>
-              <ion-item no-lines>
-                <ion-label>{{ "Category" | translate }}</ion-label>
-                <input type="hidden" [(ngModel)]="selectedItem.itilcategories_id" value="0" (input)="changeField('itilcategories_id')"/>
-                <ion-input type="text" [(ngModel)]="selectedItem.itilcategories_name" (click)="openDropdownSelect('ITILCategory', true, 'ticketcategory')" [readonly]="true"></ion-input>
-              </ion-item>
-              <ion-item no-lines *ngIf="selectedItem.id > 0">
-                <ion-label>{{ "Status" | translate }}</ion-label>
-                <ion-select [(ngModel)]="selectedItem.status" interface="popover" (ionChange)="changeField('status')" disabled>
-                  <ion-option *ngFor="let st of status" [value]="st.value">
-                    {{st.viewValue}}
-                  </ion-option>
-                </ion-select>
-              </ion-item>
-              <ion-item no-lines *ngIf="!hiddenItem.id1">
-                <ion-label floating>{{ "Title" | translate }}</ion-label>
-                <ion-input type="text" [(ngModel)]="selectedItem.name" value="{{selectedItem.name}}" (input)="changeField('name')"></ion-input>
-              </ion-item>
-              <ion-item no-lines *ngIf="!hiddenItem.id21">
-                <ion-label floating>{{ "Description" | translate }}</ion-label>
-                <ion-textarea type="text" [(ngModel)]="selectedItem.content" value="{{selectedItem.content}}" [attr.rows]="10" (input)="changeField('content')"></ion-textarea>
-              </ion-item>
-            </ion-list>
-          </ion-card-content>
+          <ion-list>
+            <ion-item no-lines>
+              <ion-range min="1" max="2" step="1" (ionChange)="setType()" [(ngModel)]="selectedItem.type">
+                <ion-label range-left style="text-align: center;padding-left: 20%;">
+                  <i style="font-size: 36px;" class="fas fa-ambulance {{typeIncidentClass}}"></i>
+                  <br><span class="{{typeIncidentClass}}">incident</span>
+                </ion-label>
+                <ion-label range-right style="text-align: center;padding-right: 20%;">
+                  <i style="font-size: 36px;" class="fas fa-paper-plane {{typeRequestClass}}"></i>
+                  <br><span class="{{typeRequestClass}}">demande</span>
+                </ion-label>
+              </ion-range>
+            </ion-item>
+            <ion-item no-lines>
+              <ion-label>{{ "Category" | translate }}</ion-label>
+              <input type="hidden" [(ngModel)]="selectedItem.itilcategories_id" value="0" (input)="changeField('itilcategories_id')"/>
+              <ion-input type="text" [(ngModel)]="selectedItem.itilcategories_name" (click)="openDropdownSelect('ITILCategory', true, 'ticketcategory')" [readonly]="true"></ion-input>
+            </ion-item>
+            <ion-item no-lines *ngIf="selectedItem.id > 0">
+              <ion-label>{{ "Status" | translate }}</ion-label>
+              <ion-select [(ngModel)]="selectedItem.status" interface="popover" (ionChange)="changeField('status')" disabled>
+                <ion-option *ngFor="let st of status" [value]="st.value">
+                  {{st.viewValue}}
+                </ion-option>
+              </ion-select>
+            </ion-item>
+            <ion-item no-lines *ngIf="!hiddenItem.id1">
+              <ion-label floating>{{ "Title" | translate }}</ion-label>
+              <ion-input type="text" [(ngModel)]="selectedItem.name" value="{{selectedItem.name}}" (input)="changeField('name')"></ion-input>
+            </ion-item>
+            <ion-item no-lines *ngIf="!hiddenItem.id21">
+              <ion-label floating>{{ "Description" | translate }}</ion-label>
+              <ion-textarea type="text" [(ngModel)]="selectedItem.content" value="{{selectedItem.content}}" [attr.rows]="10" (input)="changeField('content')"></ion-textarea>
+            </ion-item>
+          </ion-list>
         </ion-card>
       </ion-col>
 
