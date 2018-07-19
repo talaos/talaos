@@ -56,12 +56,12 @@ export class MyApp {
     if (this.httpService.connections.length > 0) {
       this.httpService.getFullSession()
         .subscribe((data) => {
-            if (data.session.glpilanguage === "fr_FR") {
+            if (data.session["glpilanguage"] === "fr_FR") {
               translate.use("fr_FR");
             }
             globalVars.session = data.session;
-            globalVars.setUsername(data.session.glpifirstname + " " + data.session.glpirealname);
-            globalVars.setInterfacetype(data.session.glpiactiveprofile.interface);
+            globalVars.setUsername(data.session["glpifirstname"] + " " + data.session["glpirealname"]);
+            globalVars.setInterfacetype(data.session["glpiactiveprofile"]["interface"]);
           },
           function(error) {
             return this.httpService.manageError(error);

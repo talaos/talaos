@@ -1,6 +1,5 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpClientModule } from "@angular/common/http";
 import { ErrorHandler, NgModule } from "@angular/core";
-import { Http, HttpModule } from "@angular/http";
 import { BrowserModule } from "@angular/platform-browser";
 import { IonicApp, IonicErrorHandler, IonicModule } from "ionic-angular";
 
@@ -53,10 +52,10 @@ export function createTranslateLoader(http: HttpClient) {
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
-    HttpModule,
+    HttpClientModule,
     TranslateModule.forRoot({
       loader: {
-        deps: [Http],
+        deps: [HttpClient],
         provide: TranslateLoader,
         useFactory: (createTranslateLoader),
       },
