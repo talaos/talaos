@@ -125,7 +125,7 @@ export class TicketForm {
           this.setRate("priority", this.selectedItem.priority);
           this.setRate("urgency", this.selectedItem.urgency);
           this.setRate("impact", this.selectedItem.impact);
-          this.setType();
+          this.setType(this.selectedItem.type);
 
           this.httpService.getItem("Ticket", this.selectedItem.id, false)
             .subscribe(function(dataNotExp) {
@@ -400,12 +400,13 @@ export class TicketForm {
   /**
    * Change the color of type icon
    */
-  public setType() {
+  public setType(type) {
+    this.selectedItem.type = type;
     if (this.selectedItem.type === 1) {
       this.typeIncidentClass = "type-selected";
-      this.typeRequestClass = "";
+      this.typeRequestClass = "type-not-selected";
     } else if (this.selectedItem.type === 2) {
-      this.typeIncidentClass = "";
+      this.typeIncidentClass = "type-not-selected";
       this.typeRequestClass = "type-selected";
     }
   }
