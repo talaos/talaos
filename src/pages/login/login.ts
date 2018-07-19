@@ -76,9 +76,16 @@ export class LoginPage {
     let i = 0;
     while (i < numberConnections) {
       if (localStorage.getItem("connection_" + i + "_name")) {
+        let displayOptions = true;
+        if (localStorage.getItem("connection_" + i + "_app_token")
+          && localStorage.getItem("connection_" + i + "_url")) {
+
+          displayOptions = false;
+        }
+
         this.connections.push({
           app_token: localStorage.getItem("connection_" + i + "_app_token"),
-          display_options: true,
+          display_options: displayOptions,
           name: localStorage.getItem("connection_" + i + "_name"),
           password: "",
           session_token: localStorage.getItem("connection_" + i + "_session_token"),

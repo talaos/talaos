@@ -16,15 +16,14 @@ export class BackendGlpiService {
   }
 
   public doLogin(login, password, connectionNumber) {
-    this.connections = [];
     this.loadConnections();
     if (this.connections.length === 0) {
       return;
     }
     const headers = new Headers();
     headers.append("Authorization", "Basic " + btoa(login + ":" + password));
-    headers.append("App-Token", this.connections[0].app_token);
-    this.http.get(this.connections[0].url + "/initSession", {headers})
+    headers.append("App-Token", this.connections[connectionNumber].app_token);
+    this.http.get(this.connections[connectionNumber].url + "/initSession", {headers})
         .map(function convert(res) {
           return res.json();
         })
@@ -33,7 +32,7 @@ export class BackendGlpiService {
 
             this.events.publish("login:successful", "");
         }.bind(this),
-          function(error) {
+        function(error) {
           const toast = this.toastCtrl.create({
             duration: 5000,
             message: error,

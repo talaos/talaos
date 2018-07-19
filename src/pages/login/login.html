@@ -17,7 +17,7 @@
 
   <form #loginForm="ngForm" (ngSubmit)="login()" autocomplete="off" *ngIf="connections.length > 0">
     <div class="login-box">
-      <ion-row *ngFor="let connection of connections">
+      <ion-row *ngFor="let connection of connections; index as i">
         <ion-col>
           <ion-list no-border>
             <ion-list-header>
@@ -26,19 +26,19 @@
               <ion-icon ion-button item-end (click)="toggleOptions(connection)" name="md-options"></ion-icon>
             </ion-list-header>
             <ion-item>
-              <ion-input placeholder="Connection name" name="connection.name" type="text" required [(ngModel)]="connection.name"></ion-input>
+              <ion-input placeholder="Connection name" name="name-{{i}}" type="text" required [(ngModel)]="connection.name"></ion-input>
             </ion-item>
             <ion-item>
-              <ion-input placeholder="Username" name="username" id="loginField" type="text" required [(ngModel)]="connection.username" #email></ion-input>
+              <ion-input placeholder="Username" name="username-{{i}}" id="loginField" type="text" required [(ngModel)]="connection.username" #email></ion-input>
             </ion-item>
             <ion-item>
-              <ion-input placeholder="Password" name="password" id="passwordField" type="password" required [(ngModel)]="connection.password"></ion-input>
+              <ion-input placeholder="Password" name="password-{{i}}" id="passwordField" type="password" required [(ngModel)]="connection.password"></ion-input>
             </ion-item>
             <ion-item *ngIf="connection.display_options">
-              <ion-input placeholder="Glpiurl" name="url" id="glpiurlField" type="text" required [(ngModel)]="connection.url"></ion-input>
+              <ion-input placeholder="Glpiurl" name="url-{{i}}" id="glpiurlField" type="text" required [(ngModel)]="connection.url"></ion-input>
             </ion-item>
             <ion-item *ngIf="connection.display_options">
-              <ion-input placeholder="Apptoken" name="app_token" id="apptokenField" type="text" required [(ngModel)]="connection.app_token"></ion-input>
+              <ion-input placeholder="Apptoken" name="app_token-{{i}}" id="apptokenField" type="text" required [(ngModel)]="connection.app_token"></ion-input>
             </ion-item>
           </ion-list>
         </ion-col>
