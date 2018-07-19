@@ -70,10 +70,12 @@ export class BackendGlpiService {
       params: new HttpParams(),
     };
 
-    if (expand) {
-      httpOptions.params.append("expand_dropdowns", "1");
-    }
+    let params = new HttpParams();
 
+    if (expand) {
+      params = params.set("expand_dropdowns", "1");
+    }
+    httpOptions.params = params;
     return this.http.get(this.connections[0].url + "/" + itemtype + "/" + itemId, httpOptions);
   }
 
@@ -189,24 +191,27 @@ export class BackendGlpiService {
       observe: "response" as "response",
       params: new HttpParams(),
     };
+    let params = new HttpParams();
 
     let i = 0;
     for (const item of forcedisplay) {
-      httpOptions.params.append("forcedisplay[" + i + "]", String(item));
+      params = params.set("forcedisplay[" + i + "]", String(item));
       i = i + 1;
     }
 
     let j = 0;
     for (const item of criteria) {
-      httpOptions.params.append("criteria[" + j + "][field]", String(item.field));
-      httpOptions.params.append("criteria[" + j + "][searchtype]", String(item.searchtype));
-      httpOptions.params.append("criteria[" + j + "][value]", String(item.value));
+      params = params.set("criteria[" + j + "][field]", String(item.field));
+      params = params.set("criteria[" + j + "][searchtype]", String(item.searchtype));
+      params = params.set("criteria[" + j + "][value]", String(item.value));
       j = j + 1;
     }
 
-    httpOptions.params.append("range", range);
-    httpOptions.params.append("sort", String(sort));
-    httpOptions.params.append("order", order);
+    params = params.set("range", range);
+    params = params.set("sort", String(sort));
+    params = params.set("order", order);
+
+    httpOptions.params = params;
 
     // noinspection TsLint
     interface Search {
