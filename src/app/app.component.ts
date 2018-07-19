@@ -10,9 +10,9 @@ import { BackendGlpiService } from "../backends/backend.glpi.service";
 
 import { GlobalVars } from "./globalvars";
 
+import { TicketPage } from "../pages/glpi/ticket/ticket";
 import { HomePage } from "../pages/home/home";
 import { LoginPage } from "../pages/login/login";
-import { TicketPage } from "../pages/ticket/ticket";
 
 @Component({
   providers: [ BackendGlpiService ],
@@ -69,12 +69,11 @@ export class MyApp {
         );
 
       // Load searchoptions
-      globalVars.searchOptions["ticket"] = {};
       this.httpService.getListSearchOptions("Ticket")
         .subscribe((data) => {
           for (const item of data) {
             if (item.id && item.id !== "undefined") {
-              globalVars.searchOptions["ticket"][item.id] = item;
+              globalVars.searchOptions.ticket[item.id] = item;
             }
           }
         });

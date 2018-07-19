@@ -14,13 +14,13 @@ import { BackendGlpiService } from "../backends/backend.glpi.service";
 import { GlobalVars } from "./globalvars";
 
 import { DropdownSelect } from "../dropdownselect/dropdownselect";
+import { TicketPage } from "../pages/glpi/ticket/ticket";
 import { HomePage } from "../pages/home/home";
 import { LoginPage } from "../pages/login/login";
-import { TicketPage } from "../pages/ticket/ticket";
 import { Search } from "../search/search";
 import { MyApp } from "./app.component";
 
-import { TicketForm } from "../pages/ticket/ticket_form";
+import { TicketForm } from "../pages/glpi/ticket/ticket_form";
 
 import { SplashScreen } from "@ionic-native/splash-screen";
 import { StatusBar } from "@ionic-native/status-bar";

@@ -1,9 +1,9 @@
 import { Component } from "@angular/core";
 import { FabContainer, ModalController, NavController, NavParams, ToastController } from "ionic-angular";
 import * as _ from "lodash";
-import { GlobalVars } from "../../app/globalvars";
-import { BackendGlpiService } from "../../backends/backend.glpi.service";
-import { DropdownSelect } from "../../dropdownselect/dropdownselect";
+import { GlobalVars } from "../../../app/globalvars";
+import { BackendGlpiService } from "../../../backends/backend.glpi.service";
+import { DropdownSelect } from "../../../dropdownselect/dropdownselect";
 
 import { TranslateService } from "@ngx-translate/core";
 import {Subscription} from "rxjs/Subscription";

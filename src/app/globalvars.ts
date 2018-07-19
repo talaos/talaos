@@ -7,7 +7,7 @@ export class GlobalVars {
   public username = new Subject<any>();
   public interfacetype = new Subject<any>();
   public session = {};
-  public searchOptions = {};
+  public searchOptions = {ticket: {}};
   public numberConnections = 0;
 
   public setUsername(username: string) {

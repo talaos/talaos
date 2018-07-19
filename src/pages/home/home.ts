@@ -3,8 +3,8 @@ import { NavController } from "ionic-angular";
 import { Subscription } from "rxjs/Subscription";
 import { GlobalVars } from "../../app/globalvars";
 import { BackendGlpiService } from "../../backends/backend.glpi.service";
-import { TicketPage } from "../ticket/ticket";
-import {TicketForm} from "../ticket/ticket_form";
+import { TicketPage } from "../glpi/ticket/ticket";
+import {TicketForm} from "../glpi/ticket/ticket_form";
 
 @Component({
   selector: "page-home",
@@ -212,6 +212,5 @@ export class HomePage {
         }
       }.bind(this));
   }
-
 
 }

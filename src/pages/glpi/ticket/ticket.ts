@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { LoadingController, ModalController, NavController, NavParams } from "ionic-angular";
-import { BackendGlpiService } from "../../backends/backend.glpi.service";
-import { Search } from "../../search/search";
+import { BackendGlpiService } from "../../../backends/backend.glpi.service";
+import { Search } from "../../../search/search";
 import { TicketForm } from "./ticket_form";
 
 @Component({
