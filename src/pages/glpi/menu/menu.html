@@ -1,0 +1,8 @@
+<ion-item>
+  <ion-label>Only with data</ion-label>
+  <ion-toggle checked="true"></ion-toggle>
+</ion-item>
+
+<button menuClose ion-item *ngFor="let p of pages">
+  {{p.name}}<ion-badge item-end>{{p.number}}</ion-badge>
+</button>

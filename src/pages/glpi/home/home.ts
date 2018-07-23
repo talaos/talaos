@@ -1,9 +1,9 @@
 import { Component } from "@angular/core";
 
 @Component({
-  selector: "page-home",
+  selector: "glpi-dashboard",
   templateUrl: "home.html",
 })
-export class HomePage {
+export class GlpiHomePage {
 
 }

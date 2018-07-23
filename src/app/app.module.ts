@@ -16,10 +16,16 @@ import { DropdownSelect } from "../dropdownselect/dropdownselect";
 import { TicketPage } from "../pages/glpi/ticket/ticket";
 import { HomePage } from "../pages/home/home";
 import { LoginPage } from "../pages/login/login";
+import { GeneralMenu } from "../pages/menu/menu";
 import { Search } from "../search/search";
 import { MyApp } from "./app.component";
 
 import { TicketForm } from "../pages/glpi/ticket/ticket_form";
+
+import { GlpiHomeAdminPage } from "../pages/glpi/home/admin";
+import { GlpiHomeEnduserPage } from "../pages/glpi/home/end-user";
+import { GlpiHomePage } from "../pages/glpi/home/home";
+import { GlpiMenu } from "../pages/glpi/menu/menu";
 
 import { SplashScreen } from "@ionic-native/splash-screen";
 import { StatusBar } from "@ionic-native/status-bar";
@@ -35,19 +41,29 @@ export function createTranslateLoader(http: HttpClient) {
     BackendGlpiComponent,
     LoginPage,
     HomePage,
+    GeneralMenu,
+    GlpiHomePage,
+    GlpiMenu,
     TicketPage,
     TicketForm,
     Search,
     DropdownSelect,
+    GlpiHomeEnduserPage,
+    GlpiHomeAdminPage,
   ],
   entryComponents: [
     MyApp,
     LoginPage,
+    GlpiHomePage,
     HomePage,
+    GeneralMenu,
+    GlpiMenu,
     TicketPage,
     TicketForm,
     Search,
     DropdownSelect,
+    GlpiHomeEnduserPage,
+    GlpiHomeAdminPage,
   ],
   imports: [
     BrowserModule,
