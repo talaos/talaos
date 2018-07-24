@@ -59,7 +59,6 @@ export class MyApp {
             if (data.session["glpilanguage"] === "fr_FR") {
               translate.use("fr_FR");
             }
-            console.log(data);
             globalVars.session = data.session;
             globalVars.setUsername(data.session["glpifirstname"] + " " + data.session["glpirealname"]);
             globalVars.setInterfacetype(data.session["glpiactiveprofile"]["interface"]);
