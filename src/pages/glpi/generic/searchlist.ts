@@ -1,15 +1,14 @@
 import { Component } from "@angular/core";
 import { LoadingController, ModalController, NavController, NavParams } from "ionic-angular";
 import { BackendGlpiService } from "../../../backends/backend.glpi.service";
-import { Searchmodal } from "../generic/searchmodal";
-import { TicketForm } from "./ticket_form";
+import { Searchmodal } from "./searchmodal";
 
 @Component({
   providers: [ BackendGlpiService ],
-  selector: "page-list",
-  templateUrl: "ticket.html",
+  selector: "page-search",
+  templateUrl: "searchlist.html",
 })
-export class TicketPage {
+export class SearchPage {
   public selectedItem: any;
   public items: Array<{
     name: string,
@@ -28,15 +27,26 @@ export class TicketPage {
   public sort = 2; // = ID
   public sortOrder = "ASC";
   public criteria = [];
+  public itemtype = "";
   public forcedisplaySup;
   public forcedisplayBase;
   public loading;
   public infiniteloop = true;
 
+// https://codepen.io/anon/pen/pjzKMZ
+// https://codepen.io/anon/pen/gPGzdK
+
+// https://swimlane.github.io/ngx-datatable/
+// https://ionicframework.com/docs/api/components/grid/Grid/
+// https://github.com/TonyGermaneri/canvas-datagrid
+// https://github.com/fin-hypergrid/core
+// https://codepen.io/calendee/pen/vkgtz / https://calendee.com/2014/06/26/responsive-columns-in-an-ionic-list/
+
   constructor(public navCtrl: NavController, public navParams: NavParams, private httpService: BackendGlpiService,
               public modalCtrl: ModalController, public loadingCtrl: LoadingController) {
     // If we navigated to this page, we will have an item available as a nav param
     const criteria = navParams.get("criteria");
+    this.itemtype = navParams.get("itemtype");
     if (criteria === "undefined") {
       this.criteria = [{field: 12, searchtype: "equals", value: "notold"}];
     } else {
@@ -52,7 +62,7 @@ export class TicketPage {
   }
 
   public openModal(characterNum) {
-    const modal = this.modalCtrl.create(Searchmodal, {itemtype: "Ticket"});
+    const modal = this.modalCtrl.create(Searchmodal, {itemtype: this.itemtype});
     modal.onDidDismiss(function(data) {
       if (data !== null) {
         this.criteria = data.criteria;
@@ -70,7 +80,7 @@ export class TicketPage {
       content: "Please wait...",
     });
     this.loading.present();
-    this.httpService.search("Ticket", this.forcedisplayBase.concat(this.forcedisplaySup),
+    this.httpService.search(this.itemtype, this.forcedisplayBase.concat(this.forcedisplaySup),
       this.criteria, range, 19, "DESC")
       .subscribe(
         function(data) {
@@ -172,9 +182,9 @@ export class TicketPage {
     }
 
     // That's right, we're pushing to ourselves!
-    this.navCtrl.push(TicketForm, {
-      item,
-    });
+//    this.navCtrl.push(TicketForm, {
+//      item,
+//    });
   }
 
   public doInfinite(infiniteScroll) {

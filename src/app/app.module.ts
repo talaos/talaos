@@ -17,7 +17,8 @@ import { TicketPage } from "../pages/glpi/ticket/ticket";
 import { HomePage } from "../pages/home/home";
 import { LoginPage } from "../pages/login/login";
 import { GeneralMenu } from "../pages/menu/menu";
-import { Search } from "../search/search";
+import { Searchmodal } from "../pages/glpi/generic/searchmodal";
+import { SearchPage } from "../pages/glpi/generic/searchlist";
 import { MyApp } from "./app.component";
 
 import { TicketForm } from "../pages/glpi/ticket/ticket_form";
@@ -46,7 +47,8 @@ export function createTranslateLoader(http: HttpClient) {
     GlpiMenu,
     TicketPage,
     TicketForm,
-    Search,
+    SearchPage,
+    Searchmodal,
     DropdownSelect,
     GlpiHomeEnduserPage,
     GlpiHomeAdminPage,
@@ -60,7 +62,8 @@ export function createTranslateLoader(http: HttpClient) {
     GlpiMenu,
     TicketPage,
     TicketForm,
-    Search,
+    SearchPage,
+    Searchmodal,
     DropdownSelect,
     GlpiHomeEnduserPage,
     GlpiHomeAdminPage,

@@ -1,12 +1,12 @@
 import { Component} from "@angular/core";
 import { NavParams, ViewController } from "ionic-angular";
-import { BackendGlpiService } from "../backends/backend.glpi.service";
+import { BackendGlpiService } from "../../../backends/backend.glpi.service";
 
 @Component({
     providers: [ BackendGlpiService ],
-    templateUrl: "search.html",
+    templateUrl: "searchmodal.html",
 })
-export class Search {
+export class Searchmodal {
   public itemtype;
   public mysearch;
   public fields;

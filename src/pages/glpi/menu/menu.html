@@ -15,7 +15,7 @@
 </button>
 
 <span *ngFor="let p of pages" >
-  <button menuClose ion-item (click)="goToPage(p.component)" *ngIf="!onlyWithData || (onlyWithData && p.number > 0)">
+  <button menuClose ion-item (click)="goToPage(p.type)" *ngIf="!onlyWithData || (onlyWithData && p.number > 0)">
     {{p.name}}<ion-badge item-end>{{p.number}}</ion-badge>
   </button>
 </span>

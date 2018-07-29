@@ -3,9 +3,9 @@ import {Component} from "@angular/core";
 import { BackendGlpiService } from "../../../backends/backend.glpi.service";
 
 import { TranslateService } from "@ngx-translate/core";
-import { Nav } from "ionic-angular";
+import { App } from "ionic-angular";
+import { SearchPage } from "../generic/searchlist";
 import {TicketPage} from "../ticket/ticket";
-
 
 @Component({
   providers: [ BackendGlpiService ],
@@ -21,7 +21,8 @@ export class GlpiMenu {
   public currentmenu = "";
   public onlyWithData = true;
 
-  constructor(private httpGlpiService: BackendGlpiService, translate: TranslateService) {
+  constructor(private httpGlpiService: BackendGlpiService, translate: TranslateService, public appCtrl: App) {
+
     this.onlyWithData = true;
     this.currentmenu = "";
     this.submenu = [
@@ -44,12 +45,15 @@ export class GlpiMenu {
       {order: 10, submenu: "asset", type: "Enclosure", name: "Enclosures"},
       {order: 11, submenu: "asset", type: "PDU", name: "PDUs"},
 
-      {order: 0, submenu: "assistance", type: "Ticket", name: "Tickets", component: TicketPage},
+      {order: 0, submenu: "assistance", type: "Ticket", name: "Tickets"},
       {order: 1, submenu: "assistance", type: "Problem", name: "Problems"},
       {order: 2, submenu: "assistance", type: "Change", name: "Changes"},
       {order: 3, submenu: "assistance", type: "Planning", name: "Planning"},
       {order: 4, submenu: "assistance", type: "Stat", name: "Statistics"},
       {order: 5, submenu: "assistance", type: "TicketRecurrent", name: "Recurrent tickets"},
+
+      {order: 0, submenu: "management", type: "SoftwareLicense", name: "Licenses"},
+
     ];
   }
 
@@ -58,7 +62,7 @@ export class GlpiMenu {
     this.pages = [];
     for (const datatype of this.itemtypes) {
       if (datatype.submenu === submenu) {
-        this.pages.push({name: datatype.name, number: 0, order: datatype.order});
+        this.pages.push({name: datatype.name, number: 0, order: datatype.order, type: datatype.type});
         this.httpGlpiService.search(datatype.type, [1, 2, 80], [], "0-1")
           .subscribe(function(data) {
             this.pages[(datatype.order)].number = data.totalcount;
@@ -73,7 +77,7 @@ export class GlpiMenu {
   }
 
   public goToPage(page) {
-//    MyApp.nav.setRoot(page.component);
+    this.appCtrl.getRootNav().push(SearchPage, {itemtype: page});
   }
 
 }
