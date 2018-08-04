@@ -253,7 +253,8 @@ export class BackendGlpiService {
       params: new HttpParams(),
     };
 
-    return this.http.get(this.connections[0].url + "/listSearchOptions/" + itemtype, httpOptions)
+    return this.http.get(this.connections[0].url + "/listSearchOptions/" + itemtype, httpOptions);
+/*
       .map(function convert(res) {
         const regex = /"((?!name|table|field|datatype|nosearch|nodisplay|available_searchtypes|uid)[\d|\w]+)"[:]/g;
         const mySelectFields = [];
@@ -264,6 +265,7 @@ export class BackendGlpiService {
         });
         const groupname = "";
         const parsed = res;
+        */
         /*
         for (let m = regex.exec(res.text()); m !== null; m = regex.exec(res.text())) {
         // while ((m = regex.exec(res.text())) !== null) {
@@ -285,8 +287,8 @@ export class BackendGlpiService {
           }
         }
           */
-        return mySelectFields;
-      });
+//        return mySelectFields;
+//      });
   }
 
   public saveItem(itemtype, itemId, input) {

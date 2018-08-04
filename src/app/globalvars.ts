@@ -7,7 +7,7 @@ export class GlobalVars {
   public username = new Subject<any>();
   public interfacetype = new Subject<any>();
   public session = {};
-  public searchOptions = {ticket: {}};
+  public searchOptions = {};
   public numberConnections = 0;
 
   public setUsername(username: string) {
@@ -24,6 +24,20 @@ export class GlobalVars {
 
   public getInterfacetype(): Observable<any> {
     return this.interfacetype.asObservable();
+  }
+
+  public setSearchoptions(itemtype, idkey, interfacetype: object) {
+    if (this.searchOptions[itemtype] === undefined) {
+      this.searchOptions[itemtype] = {};
+    }
+//    if (this.searchOptions[itemtype][idkey] === undefined) {
+//      this.searchOptions[itemtype][idkey] = ;
+//    }
+    this.searchOptions[itemtype][idkey] = interfacetype;
+  }
+
+  public getSearchoptions(itemtype, idkey) {
+    return this.searchOptions[itemtype][idkey];
   }
 
 }

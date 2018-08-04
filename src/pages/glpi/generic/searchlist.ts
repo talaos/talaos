@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
 import { LoadingController, ModalController, NavController, NavParams } from "ionic-angular";
+import { GlobalVars } from "../../../app/globalvars";
 import { BackendGlpiService } from "../../../backends/backend.glpi.service";
 import { Searchmodal } from "./searchmodal";
 
@@ -24,7 +25,7 @@ export class SearchPage {
   public itemscount: number = 0;
   public offset: number = 0;
   public limit: number = 31;
-  public sort = 2; // = ID
+  public sort = 1; // = name
   public sortOrder = "ASC";
   public criteria = [];
   public itemtype = "";
@@ -32,6 +33,13 @@ export class SearchPage {
   public forcedisplayBase;
   public loading;
   public infiniteloop = true;
+
+  public drows = [
+    { name: "Austin", gender: "Male", company: "Swimlane" },
+    { name: "Dany", gender: "Male", company: "KFC" },
+    { name: "Molly", gender: "Female", company: "Burger King" },
+  ];
+  public dcolumns = [];
 
 // https://codepen.io/anon/pen/pjzKMZ
 // https://codepen.io/anon/pen/gPGzdK
@@ -43,7 +51,8 @@ export class SearchPage {
 // https://codepen.io/calendee/pen/vkgtz / https://calendee.com/2014/06/26/responsive-columns-in-an-ionic-list/
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private httpService: BackendGlpiService,
-              public modalCtrl: ModalController, public loadingCtrl: LoadingController) {
+              public modalCtrl: ModalController, public loadingCtrl: LoadingController,
+              private globalVars: GlobalVars) {
     // If we navigated to this page, we will have an item available as a nav param
     const criteria = navParams.get("criteria");
     this.itemtype = navParams.get("itemtype");
@@ -51,6 +60,10 @@ export class SearchPage {
       this.criteria = [{field: 12, searchtype: "equals", value: "notold"}];
     } else {
       this.criteria = criteria;
+    }
+    this.sort = 1;
+    if (this.itemtype === "Ticket") {
+      this.sort = 2; // the ID
     }
     this.forcedisplayBase = [1, 2, 80, 12, 19, 14, 7, 82, 27, 28];
     this.forcedisplaySup = [];
@@ -81,7 +94,7 @@ export class SearchPage {
     });
     this.loading.present();
     this.httpService.search(this.itemtype, this.forcedisplayBase.concat(this.forcedisplaySup),
-      this.criteria, range, 19, "DESC")
+      this.criteria, range, this.sort, this.sortOrder)
       .subscribe(
         function(data) {
           return this.parsePage(data);
@@ -105,65 +118,81 @@ export class SearchPage {
   public parsePage(data) {
     this.totalcount = data.totalcount;
     const rows = [];
-
     if (data.data !== undefined) {
       for (const item of data.data) {
-        let type = "Incident";
-        let statusIcon = "";
-        let statusColor = "";
+        /*
+                let type = "Incident";
+                let statusIcon = "";
+                let statusColor = "";
 
-        if (item[12] === 1) {
-          statusIcon = "md-bulb";
-          statusColor = "primary";
-        } else if (item[12] === 2) {
-          statusIcon = "md-person";
-          statusColor = "primary";
-        } else if (item[12] === 3) {
-          statusIcon = "md-calendar";
-          statusColor = "primary";
-        } else if (item[12] === 4) {
-          statusIcon = "md-pause";
-          statusColor = "light";
-        } else if (item[12] === 5) {
-          statusIcon = "md-checkmark";
-          statusColor = "secondary";
-        } else if (item[12] === 6) {
-          statusIcon = "md-done-all";
-          statusColor = "secondary";
-        }
+                if (item[12] === 1) {
+                  statusIcon = "md-bulb";
+                  statusColor = "primary";
+                } else if (item[12] === 2) {
+                  statusIcon = "md-person";
+                  statusColor = "primary";
+                } else if (item[12] === 3) {
+                  statusIcon = "md-calendar";
+                  statusColor = "primary";
+                } else if (item[12] === 4) {
+                  statusIcon = "md-pause";
+                  statusColor = "light";
+                } else if (item[12] === 5) {
+                  statusIcon = "md-checkmark";
+                  statusColor = "secondary";
+                } else if (item[12] === 6) {
+                  statusIcon = "md-done-all";
+                  statusColor = "secondary";
+                }
 
-        // Manage late
-        if (item[82] === 1) {
-          if (item[12] < 4) {
-            statusIcon = "md-bonfire";
-            statusColor = "danger";
+                // Manage late
+                if (item[82] === 1) {
+                  if (item[12] < 4) {
+                    statusIcon = "md-bonfire";
+                    statusColor = "danger";
+                  }
+                }
+
+                if (item[14] === 2) {
+                  type = "Demande";
+                }
+
+                const myrow = {
+                  category: item[7],
+                  date_mod: item[19],
+                  id: item[2],
+                  name: item[1],
+                  note: "",
+                  numberfollowups: item[27],
+                  numbertasks: item[28],
+                  statusColor,
+                  statusIcon,
+                  type,
+                };
+                for (const sup of this.forcedisplaySup) {
+                  myrow[sup] = item[sup];
+                }
+                */
+        if (this.dcolumns.length === 0) {
+          let columns = [];
+          for (const itemid of Object.keys(item)) {
+            columns.push({
+              name: this.globalVars.getSearchoptions(this.itemtype, itemid).name,
+              prop: this.globalVars.getSearchoptions(this.itemtype, itemid).name,
+            });
           }
+          this.dcolumns = [...columns];
         }
-
-        if (item[14] === 2) {
-          type = "Demande";
-        }
-
-        const myrow = {
-          category: item[7],
-          date_mod: item[19],
-          id: item[2],
-          name: item[1],
-          note: "",
-          numberfollowups: item[27],
-          numbertasks: item[28],
-          statusColor,
-          statusIcon,
-          type,
-        };
-        for (const sup of this.forcedisplaySup) {
-          myrow[sup] = item[sup];
+        const myrow = {};
+        for (const itemid of Object.keys(item)) {
+          const searchoptions = this.globalVars.getSearchoptions(this.itemtype, itemid);
+          myrow[searchoptions.name] = item[itemid]; // item[itemid];
         }
         rows.push(myrow);
-
-        // user picture http://127.0.0.1/glpi090/files/_pictures/b7/2_59eebad45dbb7_min.png
       }
     }
+    this.drows = [...rows];
+
     this.items = rows;
     this.itemscount = this.items.length;
     if (this.itemscount === this.totalcount) {

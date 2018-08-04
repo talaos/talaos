@@ -13,12 +13,12 @@ import { BackendGlpiService } from "../backends/backend.glpi.service";
 import { GlobalVars } from "./globalvars";
 
 import { DropdownSelect } from "../dropdownselect/dropdownselect";
+import { SearchPage } from "../pages/glpi/generic/searchlist";
+import { Searchmodal } from "../pages/glpi/generic/searchmodal";
 import { TicketPage } from "../pages/glpi/ticket/ticket";
 import { HomePage } from "../pages/home/home";
 import { LoginPage } from "../pages/login/login";
 import { GeneralMenu } from "../pages/menu/menu";
-import { Searchmodal } from "../pages/glpi/generic/searchmodal";
-import { SearchPage } from "../pages/glpi/generic/searchlist";
 import { MyApp } from "./app.component";
 
 import { TicketForm } from "../pages/glpi/ticket/ticket_form";
@@ -30,6 +30,8 @@ import { GlpiMenu } from "../pages/glpi/menu/menu";
 
 import { SplashScreen } from "@ionic-native/splash-screen";
 import { StatusBar } from "@ionic-native/status-bar";
+
+import { NgxDatatableModule } from "@swimlane/ngx-datatable";
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, "./assets/i18n/", ".json");
@@ -72,6 +74,7 @@ export function createTranslateLoader(http: HttpClient) {
     BrowserModule,
     IonicModule.forRoot(MyApp),
     HttpClientModule,
+    NgxDatatableModule,
     TranslateModule.forRoot({
       loader: {
         deps: [HttpClient],

@@ -30,6 +30,19 @@
       </button>
     </ion-list>
     -->
+
+  <div>
+    <ngx-datatable
+      class="material"
+      [rows]="drows"
+      [columns]="dcolumns"
+      [columnMode]="'force'"
+      [headerHeight]="50"
+      [footerHeight]="50"
+      [rowHeight]="'auto'">
+    </ngx-datatable>
+  </div>
+<!--
   <ion-grid>
     <ion-row>
       <ion-col col-sm-12 col-md-6 col-xl-3 *ngFor="let item of items" (click)="itemTapped($event, item)">
@@ -41,43 +54,44 @@
       <h2>{{item.name}}</h2>
       <p>{{item.type}} / {{item.category}}</p>
     </ion-item>
-
+-->
 <!--    <ion-card-content>
       <p>Wait a minute. Wait a minute, Doc. Uhhh... Are you telling me that you built a time machine... out of a DeLorean?! Whoa. This is heavy.</p>
     </ion-card-content>
 -->
-    <ion-row>
-      <ion-col>
-        <button ion-button icon-left clear small *ngIf="item.numberfollowups > 0">
-          <ion-icon name="md-chatboxes"></ion-icon>
-          <div>{{item.numberfollowups}} followups</div>
-        </button>
-      </ion-col>
-      <ion-col>
-        <button ion-button icon-left clear small color="tickettask" *ngIf="item.numbertasks > 0">
-          <ion-icon name="md-checkbox-outline"></ion-icon>
-          <div>{{item.numbertasks}} tasks</div>
-        </button>
-      </ion-col>
-      <ion-col center text-center>
-        <ion-note>
-          {{item.date_mod}}
-        </ion-note>
-      </ion-col>
-    </ion-row>
+<!--
+      <ion-row>
+        <ion-col>
+          <button ion-button icon-left clear small *ngIf="item.numberfollowups > 0">
+            <ion-icon name="md-chatboxes"></ion-icon>
+            <div>{{item.numberfollowups}} followups</div>
+          </button>
+        </ion-col>
+        <ion-col>
+          <button ion-button icon-left clear small color="tickettask" *ngIf="item.numbertasks > 0">
+            <ion-icon name="md-checkbox-outline"></ion-icon>
+            <div>{{item.numbertasks}} tasks</div>
+          </button>
+        </ion-col>
+        <ion-col center text-center>
+          <ion-note>
+            {{item.date_mod}}
+          </ion-note>
+        </ion-col>
+      </ion-row>
 
-  </ion-card>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+    </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+-->
+    <ion-infinite-scroll (ionInfinite)="doInfinite($event)" *ngIf="infiniteloop">
+      <ion-infinite-scroll-content></ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+  </ion-content>
 
-  <ion-infinite-scroll (ionInfinite)="doInfinite($event)" *ngIf="infiniteloop">
-    <ion-infinite-scroll-content></ion-infinite-scroll-content>
-  </ion-infinite-scroll>
-</ion-content>
-
-<ion-footer>
-  <ion-toolbar>
-    <p>{{itemscount}} / {{totalcount}}</p>
-  </ion-toolbar>
-</ion-footer>
+  <ion-footer>
+    <ion-toolbar>
+      <p>{{itemscount}} / {{totalcount}}</p>
+    </ion-toolbar>
+  </ion-footer>

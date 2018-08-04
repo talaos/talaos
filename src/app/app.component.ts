@@ -70,13 +70,31 @@ export class MyApp {
 
       // Load searchoptions
       this.httpService.getListSearchOptions("Ticket")
-        .subscribe((data) => {
-          for (const item of data) {
-            if (item.id && item.id !== "undefined") {
-              globalVars.searchOptions.ticket[item.id] = item;
+        .subscribe((options) => {
+          for (const key in options) {
+            if (options[key] && options[key].field !== "undefined") {
+              globalVars.setSearchoptions("Ticket", key, options[key]);
             }
           }
         });
+      this.httpService.getListSearchOptions("Software")
+        .subscribe((options) => {
+          for (const key in options) {
+            if (options[key] && options[key].field !== "undefined") {
+              globalVars.setSearchoptions("Software", key, options[key]);
+            }
+          }
+        });
+
+      this.httpService.getListSearchOptions("Computer")
+        .subscribe((options) => {
+          for (const key in options) {
+            if (options[key] && options[key].field !== "undefined") {
+              globalVars.setSearchoptions("Computer", key, options[key]);
+            }
+          }
+        });
+
     }
   }
 
