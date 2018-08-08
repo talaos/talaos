@@ -1,5 +1,5 @@
 import { HttpClient, HttpClientModule } from "@angular/common/http";
-import { ErrorHandler, NgModule } from "@angular/core";
+import { CUSTOM_ELEMENTS_SCHEMA, ErrorHandler, NgModule } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 import { IonicApp, IonicErrorHandler, IonicModule } from "ionic-angular";
 
@@ -89,6 +89,9 @@ export function createTranslateLoader(http: HttpClient) {
     BackendGlpiService,
     GlobalVars,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
+  ],
+  schemas: [
+    CUSTOM_ELEMENTS_SCHEMA,
   ],
 })
 export class AppModule {}

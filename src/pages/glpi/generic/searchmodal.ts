@@ -169,7 +169,7 @@ export class Searchmodal {
     return newdata;
   }
 
-  private convertToGLPIType() {
+  public convertToGLPIType() {
     const criteria = [];
     const forcedisplay = [];
     // manage the and (level1)

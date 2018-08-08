@@ -24,3 +24,10 @@ $ ionic cordova run ios
 
 Substitute ios for android if not on a Mac.
 
+## Tests
+
+To run tests, run the command: 
+
+```
+npm run test
+```

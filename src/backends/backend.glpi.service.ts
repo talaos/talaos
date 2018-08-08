@@ -6,6 +6,7 @@ import { Injectable } from "@angular/core";
 import { Events } from "ionic-angular";
 import { ToastController } from "ionic-angular";
 import "rxjs/add/operator/map";
+import {Observable} from "rxjs/Observable";
 
 @Injectable()
 export class BackendGlpiService {
@@ -242,7 +243,11 @@ export class BackendGlpiService {
 
   public getListSearchOptions(itemtype) {
     if (this.connections.length === 0) {
-      return;
+      this.connections[0] = {
+        app_token: "",
+        session_token: "",
+        url: "",
+      };
     }
 
     const httpOptions = {
