@@ -174,5 +174,45 @@ describe("BackendGlpiService", () => {
     expect(gotPage).toEqual(httpPageComputer);
   });
 
+  it("test search - simple", () => {
+    const httpSearchComputer = {
+      count: 4,
+      data: [
+        {
+          1: "test-PC1",
+          2: 1,
+          80: "Root entity",
+        },
+        {
+          1: "test-PC2",
+          2: 2,
+          80: "Root entity",
+        },
+        {
+          1: "test-PC3",
+          2: 3,
+          80: "Root entity",
+        },
+        {
+          1: "test-PC4",
+          2: 4,
+          80: "Root entity",
+        },
+      ],
+      order: "ASC",
+      sort: 1,
+      totalcount: 4,
+    };
+    httpSearchComputer["content-range"] = "0-3/4";
+    let gotSearch;
+
+    _addFirstConnection();
+    service.search("Computer").subscribe((data) => {
+      gotSearch = data;
+    });
+    http.expectOne("http://127.0.0.1/glpi090/apirest.php/search/Computer?forcedisplay%5B0%5D=1" +
+      "&forcedisplay%5B1%5D=2&forcedisplay%5B2%5D=80&range=0-10&sort=1&order=ASC").flush(httpSearchComputer);
+    expect(gotSearch).toEqual(httpSearchComputer);
+  });
 
 });
