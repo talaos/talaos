@@ -30,6 +30,7 @@ export class BackendGlpiService {
     this.http.get(this.connections[connectionNumber].url + "/initSession", httpOptions)
         .subscribe(function(token) {
             localStorage.setItem("connection_" + connectionNumber + "_session_token", token.session_token);
+            this.connections[connectionNumber].session_token = token.session_token;
 
             this.events.publish("login:successful", "");
         }.bind(this),
