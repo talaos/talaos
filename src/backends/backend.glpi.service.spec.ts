@@ -14,6 +14,7 @@ describe("BackendGlpiService", () => {
   let injector: TestBed;
   let service: BackendGlpiService;
   let httpMock: HttpTestingController;
+  let http: HttpTestingController;
 
   beforeEach(() => {
 
@@ -27,6 +28,7 @@ describe("BackendGlpiService", () => {
     injector = getTestBed();
     service = injector.get(BackendGlpiService);
     httpMock = injector.get(HttpTestingController);
+    http = TestBed.get(HttpTestingController);
   });
 
   afterEach(() => {
@@ -44,7 +46,6 @@ describe("BackendGlpiService", () => {
 
   it("Test fonction convert the search engine into GLPI search compatible", () => {
     const sessionToken = { session_token: "86q9nuqrkil6op6bkubbte8bf7" };
-    const http = TestBed.get(HttpTestingController);
 
     service.doLogin("glpi", "glpi", 0);
     expect(service.connections).toEqual([]);
@@ -64,7 +65,6 @@ describe("BackendGlpiService", () => {
   });
 
   it("Test getFullSession", () => {
-    const http = TestBed.get(HttpTestingController);
     const sessionData = {session: {
         glpiID: 2,
         glpiname: "glpi",
@@ -83,7 +83,6 @@ describe("BackendGlpiService", () => {
   });
 
   it("test get an item - no expand", () => {
-    const http = TestBed.get(HttpTestingController);
     const glpiItem = {
       entities_id: 0,
       id: 10,
@@ -107,7 +106,6 @@ describe("BackendGlpiService", () => {
   });
 
   it("test get an item - expand", () => {
-    const http = TestBed.get(HttpTestingController);
     const glpiItem = {
       entities_id: "Root entity",
       id: 10,
@@ -129,7 +127,52 @@ describe("BackendGlpiService", () => {
     http.expectOne("http://127.0.0.1/glpi090/apirest.php/Computer/10?expand_dropdowns=1").flush(glpiItem);
     expect(getTheItem).toEqual(glpiItem);
   });
+/*
+  it("test get all items [TODO]", () => {
 
+  });
+*/
+
+  it("test get page - simple", () => {
+    const httpPageComputer = {
+      count: 4,
+      data: [
+        {
+          1: "test-PC1",
+          2: 1,
+          80: "Root entity",
+        },
+        {
+          1: "test-PC2",
+          2: 2,
+          80: "Root entity",
+        },
+        {
+          1: "test-PC3",
+          2: 3,
+          80: "Root entity",
+        },
+        {
+          1: "test-PC4",
+          2: 4,
+          80: "Root entity",
+        },
+      ],
+      order: "ASC",
+      sort: 1,
+      totalcount: 4,
+    };
+    httpPageComputer["content-range"] = "0-3/4";
+    let gotPage;
+
+    _addFirstConnection();
+
+    service.getPage("Computer").subscribe((data) => {
+      gotPage = data;
+    });
+    http.expectOne("http://127.0.0.1/glpi090/apirest.php/Computer?get_hateoas=true&range=0-10").flush(httpPageComputer);
+    expect(gotPage).toEqual(httpPageComputer);
+  });
 
 
 });

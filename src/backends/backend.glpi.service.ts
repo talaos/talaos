@@ -355,10 +355,3 @@ export class BackendGlpiService {
   }
 
 }
-
-/*
-@Injectable()
-export class MessageService {
-    message: string = "";
-}
-*/
