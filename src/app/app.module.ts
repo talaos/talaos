@@ -33,6 +33,9 @@ import { StatusBar } from "@ionic-native/status-bar";
 
 import { NgxDatatableModule } from "@swimlane/ngx-datatable";
 
+import { HTTP_INTERCEPTORS } from "@angular/common/http";
+import { GlpiHttpInterceptor } from "../backends/backend.glpi.interceptor";
+
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, "./assets/i18n/", ".json");
 }
@@ -89,6 +92,11 @@ export function createTranslateLoader(http: HttpClient) {
     BackendGlpiService,
     GlobalVars,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
+    {
+      multi: true,
+      provide: HTTP_INTERCEPTORS,
+      useClass: GlpiHttpInterceptor,
+    },
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA,

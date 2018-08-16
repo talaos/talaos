@@ -1,19 +1,19 @@
 /**
  * Created by ddurieux on 2/4/17.
  */
-import { HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpParams, HttpRequest, HttpHandler, HttpResponse, HttpEvent, HttpInterceptor} from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Events } from "ionic-angular";
 import { ToastController } from "ionic-angular";
-import { forkJoin } from "rxjs/observable/forkJoin";
 import "rxjs/add/operator/map";
 import "rxjs/add/operator/toPromise";
 import { GlobalVars } from "../app/globalvars";
-import {Observable} from "rxjs";
+import { Observable } from "rxjs";
 
 @Injectable()
 export class BackendGlpiService {
   public connections = [];
+  private cache;
 
   constructor(private http: HttpClient, public events: Events, public toastCtrl: ToastController,
               private globalVars: GlobalVars) {
@@ -273,53 +273,21 @@ export class BackendGlpiService {
       }),
       params: new HttpParams(),
     };
-    return this.http.get(this.connections[0].url + "/listSearchOptions/" + itemtype, httpOptions)
-      .map((options) => {
-        for (const key in options) {
-          if (options[key] && options[key].field !== "undefined") {
-            if (options[key].uid !== "undefined") {
-              options[key].uid = options[key].uid.replace(/\./gi, "__");
+//    if (this.globalVars.getSearchoptionsItemtype(itemtype) !== {}) {
+//      return this.globalVars.getSearchoptionsItemtype(itemtype);
+//    } else {
+      return this.http.get(this.connections[0].url + "/listSearchOptions/" + itemtype, httpOptions)
+        .map((options) => {
+          for (const key in options) {
+            if (options[key] && options[key].field !== "undefined") {
+              if (options[key].uid !== "undefined") {
+                options[key].uid = options[key].uid.replace(/\./gi, "__");
+              }
+              this.globalVars.setSearchoptions(itemtype, key, options[key]);
             }
-            this.globalVars.setSearchoptions(itemtype, key, options[key]);
           }
-        }
-      });
-
-/*
-      .map(function convert(res) {
-        const regex = /"((?!name|table|field|datatype|nosearch|nodisplay|available_searchtypes|uid)[\d|\w]+)"[:]/g;
-        const mySelectFields = [];
-        mySelectFields.push({
-          group: "Default",
-          label: "------",
-          number: "0",
         });
-        const groupname = "";
-        const parsed = res;
-        */
-        /*
-        for (let m = regex.exec(res.text()); m !== null; m = regex.exec(res.text())) {
-        // while ((m = regex.exec(res.text())) !== null) {
-          // This is necessary to avoid infinite loops with zero-width matches
-          if (m.index === regex.lastIndex) {
-            regex.lastIndex++;
-          }
-          if (typeof parsed[m[1]] === "string") {
-            // it's the group name (compat 9.1 only)
-            mySelectFields.push(parsed[m[1]]);
-          } else {
-            if (!("table" in parsed[m[1]])) {
-              // it's the group name (compat 9.2)
-              mySelectFields.push(parsed[m[1]]);
-            } else {
-              parsed[m[1]].id = m[1];
-              mySelectFields.push(parsed[m[1]]);
-            }
-          }
-        }
-          */
-//        return mySelectFields;
-//      });
+//    }
   }
 
   public saveItem(itemtype, itemId, input) {

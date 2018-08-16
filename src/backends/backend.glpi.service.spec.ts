@@ -10,6 +10,9 @@ import {CUSTOM_ELEMENTS_SCHEMA} from "@angular/core";
 import {ToastControllerMock} from "ionic-mocks";
 import {NavParamsMock} from "../../test-config/mocks-ionic";
 import {GlobalVars} from "../app/globalvars";
+import { HTTP_INTERCEPTORS } from "@angular/common/http";
+import { GlpiHttpInterceptor } from "./backend.glpi.interceptor";
+
 
 describe("BackendGlpiService", () => {
   let injector: TestBed;
@@ -21,7 +24,12 @@ describe("BackendGlpiService", () => {
 
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [BackendGlpiService, Events, {provide: ToastController, useClass: ToastControllerMock}, GlobalVars],
+      providers: [BackendGlpiService, Events, {provide: ToastController, useClass: ToastControllerMock}, GlobalVars,
+        {
+          multi: true,
+          provide: HTTP_INTERCEPTORS,
+          useClass: GlpiHttpInterceptor,
+        }],
       schemas: [
         CUSTOM_ELEMENTS_SCHEMA,
       ],
@@ -340,6 +348,17 @@ describe("BackendGlpiService", () => {
         totalcount: 4,
       },
     };
+    expect(gotSearch).toEqual(searchReturnExpected);
+
+    // Second time we to same query and it may not call API for listSearchOptions because it must be in cache
+
+    service.search("Computer").subscribe((data) => {
+      gotSearch = data;
+    });
+
+    http.expectOne("http://127.0.0.1/glpi090/apirest.php/search/Computer?forcedisplay%5B0%5D=1" +
+      "&forcedisplay%5B1%5D=2&forcedisplay%5B2%5D=80&range=0-10&sort=1&order=ASC").flush(httpSearchComputer);
+
     expect(gotSearch).toEqual(searchReturnExpected);
   });
 
