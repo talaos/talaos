@@ -1,14 +1,14 @@
 /**
  * Created by ddurieux on 2/4/17.
  */
-import { HttpClient, HttpHeaders, HttpParams, HttpRequest, HttpHandler, HttpResponse, HttpEvent, HttpInterceptor} from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Events } from "ionic-angular";
 import { ToastController } from "ionic-angular";
+import { Observable } from "rxjs";
 import "rxjs/add/operator/map";
 import "rxjs/add/operator/toPromise";
 import { GlobalVars } from "../app/globalvars";
-import { Observable } from "rxjs";
 
 @Injectable()
 export class BackendGlpiService {
@@ -222,10 +222,10 @@ export class BackendGlpiService {
     // noinspection TsLint
     interface Search {
       data: any;
-      count: number,
-      order: string,
-      sort: string,
-      totalcount: number,
+      count: number;
+      order: string;
+      sort: string;
+      totalcount: number;
     }
 
     return Observable.forkJoin(
@@ -233,7 +233,7 @@ export class BackendGlpiService {
       this.http.get<Search>(this.connections[0].url + "/search/" + endpoint, httpOptions),
     ).map(([listOptions, searchList]) => {
       const searchOptions = this.globalVars.getSearchoptionsItemtype(endpoint);
-      let data = {
+      const data = {
         data: [],
         meta: {
           count: searchList.body.count,
@@ -273,21 +273,17 @@ export class BackendGlpiService {
       }),
       params: new HttpParams(),
     };
-//    if (this.globalVars.getSearchoptionsItemtype(itemtype) !== {}) {
-//      return this.globalVars.getSearchoptionsItemtype(itemtype);
-//    } else {
-      return this.http.get(this.connections[0].url + "/listSearchOptions/" + itemtype, httpOptions)
-        .map((options) => {
-          for (const key in options) {
-            if (options[key] && options[key].field !== "undefined") {
-              if (options[key].uid !== "undefined") {
-                options[key].uid = options[key].uid.replace(/\./gi, "__");
-              }
-              this.globalVars.setSearchoptions(itemtype, key, options[key]);
+    return this.http.get(this.connections[0].url + "/listSearchOptions/" + itemtype, httpOptions)
+      .map((options) => {
+        for (const key in options) {
+          if (options[key] && options[key].field !== "undefined") {
+            if (options[key].uid !== "undefined") {
+              options[key].uid = options[key].uid.replace(/\./gi, "__");
             }
+            this.globalVars.setSearchoptions(itemtype, key, options[key]);
           }
-        });
-//    }
+        }
+      });
   }
 
   public saveItem(itemtype, itemId, input) {

@@ -1,8 +1,8 @@
 {
-  "name": "glpi_frontend_ionic",
+  "name": "Talaos - IT Management UI",
   "version": "0.0.1",
-  "author": "Ionic Framework",
-  "homepage": "https://ionicframework.com/",
+  "author": "David Durieux <david@durieux.family>",
+  "homepage": "https://",
   "private": true,
   "scripts": {
     "clean": "ionic-app-scripts clean",
@@ -10,6 +10,7 @@
     "ionic:build": "ionic-app-scripts build",
     "ionic:serve": "ionic-app-scripts serve",
     "test": "karma start ./test-config/karma.conf.js",
+    "lint": "./node_modules/.bin/tslint src/**/*.ts",
     "test-ci": "karma start ./test-config/karma.conf.js --single-run",
     "test-coverage": "karma start ./test-config/karma.conf.js --coverage",
     "e2e": "npm run e2e-update && npm run e2e-test",
@@ -66,7 +67,7 @@
     "ts-node": "^3.3.0",
     "typescript": "^2.9.2"
   },
-  "description": "An Ionic project",
+  "description": "An IT management UI for GLPI, monitoring...",
   "config": {
     "ionic_copy": "./scripts/copy-custom-libs.js"
   }

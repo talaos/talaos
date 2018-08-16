@@ -25,7 +25,7 @@ export class GlpiHttpInterceptor implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler,
   ): Observable<HttpEvent<any>> {
-    return next.handle(req).do(event => {
+    return next.handle(req).do((event) => {
       if (event instanceof HttpResponse) {
         this.cache.set(req.url, event);
       }

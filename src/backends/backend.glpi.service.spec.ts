@@ -1,18 +1,13 @@
-import { BackendGlpiService } from "./backend.glpi.service";
-import {async, inject} from "@angular/core/testing";
-import {} from "jasmine";
-import {Events, NavParams, ToastController} from "ionic-angular";
-import {Searchmodal} from "../pages/glpi/generic/searchmodal";
-import {HttpClient} from "@angular/common/http";
-import { TestBed, getTestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
-import {CUSTOM_ELEMENTS_SCHEMA} from "@angular/core";
-import {ToastControllerMock} from "ionic-mocks";
-import {NavParamsMock} from "../../test-config/mocks-ionic";
-import {GlobalVars} from "../app/globalvars";
 import { HTTP_INTERCEPTORS } from "@angular/common/http";
+import { HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
+import {CUSTOM_ELEMENTS_SCHEMA} from "@angular/core";
+import { getTestBed, TestBed } from "@angular/core/testing";
+import {Events, NavParams, ToastController} from "ionic-angular";
+import {ToastControllerMock} from "ionic-mocks";
+import {} from "jasmine";
+import {GlobalVars} from "../app/globalvars";
 import { GlpiHttpInterceptor } from "./backend.glpi.interceptor";
-
+import { BackendGlpiService } from "./backend.glpi.service";
 
 describe("BackendGlpiService", () => {
   let injector: TestBed;
