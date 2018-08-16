@@ -40,4 +40,11 @@ export class GlobalVars {
     return this.searchOptions[itemtype][idkey];
   }
 
+  public getSearchoptionsItemtype(itemtype) {
+    if (this.searchOptions[itemtype] === undefined) {
+      return {};
+    }
+    return this.searchOptions[itemtype];
+  }
+
 }

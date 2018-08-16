@@ -67,34 +67,6 @@ export class MyApp {
             return this.httpService.manageError(error);
           }.bind(this),
         );
-
-      // Load searchoptions
-      this.httpService.getListSearchOptions("Ticket")
-        .subscribe((options) => {
-          for (const key in options) {
-            if (options[key] && options[key].field !== "undefined") {
-              globalVars.setSearchoptions("Ticket", key, options[key]);
-            }
-          }
-        });
-      this.httpService.getListSearchOptions("Software")
-        .subscribe((options) => {
-          for (const key in options) {
-            if (options[key] && options[key].field !== "undefined") {
-              globalVars.setSearchoptions("Software", key, options[key]);
-            }
-          }
-        });
-
-      this.httpService.getListSearchOptions("Computer")
-        .subscribe((options) => {
-          for (const key in options) {
-            if (options[key] && options[key].field !== "undefined") {
-              globalVars.setSearchoptions("Computer", key, options[key]);
-            }
-          }
-        });
-
     }
   }
 

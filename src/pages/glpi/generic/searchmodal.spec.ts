@@ -11,6 +11,7 @@ import {NavParams, ViewController} from "ionic-angular";
 import { mockView } from "ionic-angular/util/mock-providers";
 import {} from "jasmine";
 import { BackendGlpiService } from "../../../backends/backend.glpi.service";
+import { GlobalVars } from "../../../app/globalvars";
 
 describe("Searchmodal", () => {
   let de: DebugElement;
@@ -30,6 +31,7 @@ describe("Searchmodal", () => {
         { provide: NavParams, useClass: NavParamsMock },
         { provide: Platform, useClass: PlatformMock},
         BackendGlpiService,
+        GlobalVars,
         { provide: ViewController, useValue: mockView() },
       ],
     });
@@ -42,7 +44,6 @@ describe("Searchmodal", () => {
   });
 
   it("Test fonction convert the search engine into GLPI search compatible", () => {
-
     const result = comp.convertToGLPIType();
     const expected = {
       criteria: [{
@@ -52,6 +53,6 @@ describe("Searchmodal", () => {
       }],
       forcedisplay: [1],
     };
-    expect(result).toEqual(expected)
+    expect(result).toEqual(expected);
   });
 });

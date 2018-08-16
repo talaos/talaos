@@ -5,14 +5,18 @@ import { HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Events } from "ionic-angular";
 import { ToastController } from "ionic-angular";
+import { forkJoin } from "rxjs/observable/forkJoin";
 import "rxjs/add/operator/map";
-import {Observable} from "rxjs/Observable";
+import "rxjs/add/operator/toPromise";
+import { GlobalVars } from "../app/globalvars";
+import {Observable} from "rxjs";
 
 @Injectable()
 export class BackendGlpiService {
   public connections = [];
 
-  constructor(private http: HttpClient, public events: Events, public toastCtrl: ToastController) {
+  constructor(private http: HttpClient, public events: Events, public toastCtrl: ToastController,
+              private globalVars: GlobalVars) {
       this.loadConnections();
   }
 
@@ -217,29 +221,40 @@ export class BackendGlpiService {
 
     // noinspection TsLint
     interface Search {
-      count: number;
       data: any;
-      order: string;
-      sort: number;
-      totalcount: number;
-      _total: number;
-      _number: number;
+      count: number,
+      order: string,
+      sort: string,
+      totalcount: number,
     }
 
-    return this.http.get<Search>(this.connections[0].url + "/search/" + endpoint, httpOptions)
-      .map(function convert(res) {
-        const data = res.body;
-        if (res.headers.has("Content-Range")) {
-          const ranges = res.headers.get("Content-Range").split("/"); // Content-range give for example 0-20/370328
-          data._total = +ranges[1];
-          const therange = ranges[0].split("-");
-          data._number = +therange[0];
-        } else {
-          data._total = 0;
-          data._number = 0;
+    return Observable.forkJoin(
+      this.getListSearchOptions(endpoint),
+      this.http.get<Search>(this.connections[0].url + "/search/" + endpoint, httpOptions),
+    ).map(([listOptions, searchList]) => {
+      const searchOptions = this.globalVars.getSearchoptionsItemtype(endpoint);
+      let data = {
+        data: [],
+        meta: {
+          count: searchList.body.count,
+          order: searchList.body.order,
+          sort: searchOptions[searchList.body.sort].uid,
+          totalcount: searchList.body.totalcount,
+        },
+      };
+      for (const item of searchList.body.data) {
+        const newItem = {};
+        for (const field of Object.keys(item)) {
+          newItem[searchOptions[field].uid] = {
+            datatype: searchOptions[field].datatype,
+            name: searchOptions[field].name,
+            value: item[field],
+          };
         }
-        return data;
-      });
+        data.data.push(newItem);
+      }
+      return data;
+    });
   }
 
   public getListSearchOptions(itemtype) {
@@ -258,8 +273,18 @@ export class BackendGlpiService {
       }),
       params: new HttpParams(),
     };
+    return this.http.get(this.connections[0].url + "/listSearchOptions/" + itemtype, httpOptions)
+      .map((options) => {
+        for (const key in options) {
+          if (options[key] && options[key].field !== "undefined") {
+            if (options[key].uid !== "undefined") {
+              options[key].uid = options[key].uid.replace(/\./gi, "__");
+            }
+            this.globalVars.setSearchoptions(itemtype, key, options[key]);
+          }
+        }
+      });
 
-    return this.http.get(this.connections[0].url + "/listSearchOptions/" + itemtype, httpOptions);
 /*
       .map(function convert(res) {
         const regex = /"((?!name|table|field|datatype|nosearch|nodisplay|available_searchtypes|uid)[\d|\w]+)"[:]/g;

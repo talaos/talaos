@@ -81,19 +81,8 @@ export class Searchmodal {
     return [];
   }
 
-  public parseListOptions(data) {
-    this.fields = data;
-  }
-
   public getFields() {
-    this.httpService.getListSearchOptions("Ticket")
-      .subscribe(function(data) {
-          this.parseListOptions(data);
-        }.bind(this),
-        function(error) {
-          this.httpService.manageError(error);
-        }.bind(this),
-      );
+    this.fields = this.httpService.getListSearchOptions("Ticket");
   }
 
   /*
