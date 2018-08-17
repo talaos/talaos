@@ -44,7 +44,8 @@ export class LoginPage {
       localStorage.setItem("connection_" + i + "_username", connection.username);
       localStorage.setItem("connection_" + i + "_url", connection.url);
 
-      this.httpGlpiService.doLogin(connection.username, connection.password, i);
+      this.httpGlpiService.doLogin(connection.username, connection.password, i)
+        .subscribe((data) => data);
       i++;
     }
   }

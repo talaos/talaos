@@ -23,7 +23,7 @@ export class BackendGlpiService {
   public doLogin(login, password, connectionNumber) {
     this.loadConnections();
     if (this.connections.length === 0) {
-      return;
+      return Observable.of({});
     }
     const httpOptions = {
       headers: new HttpHeaders({
@@ -31,20 +31,22 @@ export class BackendGlpiService {
         "Authorization": "Basic " + btoa(login + ":" + password),
       }),
     };
-    this.http.get(this.connections[connectionNumber].url + "/initSession", httpOptions)
-        .subscribe(function(token) {
+    return this.http.get(this.connections[connectionNumber].url + "/initSession", httpOptions)
+        .map(function(token) {
             localStorage.setItem("connection_" + connectionNumber + "_session_token", token.session_token);
             this.connections[connectionNumber].session_token = token.session_token;
 
             this.events.publish("login:successful", "");
+            return token;
         }.bind(this),
-        function(error) {
-          const toast = this.toastCtrl.create({
-            duration: 5000,
-            message: error,
-          });
-          toast.present();
-        }.bind(this));
+        (error) => {
+          console.log(error);
+          // const toast = this.toastCtrl.create({
+          //   duration: 5000,
+          //   message: error,
+          // });
+          // toast.present();
+        });
   }
 
   public getFullSession() {
@@ -56,11 +58,18 @@ export class BackendGlpiService {
     };
 
     // noinspection TsLint
-    interface UserSession {
-      session: {};
+    interface IUserSession {
+      session: {
+        glpilanguage: string;
+        glpifirstname: string;
+        glpirealname: string;
+        glpiactiveprofile: {
+          interface: string;
+        }
+      };
     }
 
-    return this.http.get<UserSession>(this.connections[0].url + "/getFullSession", httpOptions);
+    return this.http.get<IUserSession>(this.connections[0].url + "/getFullSession", httpOptions);
   }
 
   public getItem(itemtype, itemId, expand: boolean = true) {
@@ -157,7 +166,7 @@ export class BackendGlpiService {
     httpOptions.params = params;
 
     // noinspection TsLint
-    interface Page {
+    interface IPage {
       count: number;
       data: any;
       order: string;
@@ -167,7 +176,7 @@ export class BackendGlpiService {
       _number: number;
     }
 
-    return this.http.get<Page>(this.connections[0].url + "/" + endpoint, httpOptions)
+    return this.http.get<IPage>(this.connections[0].url + "/" + endpoint, httpOptions)
         .map(function convert(res) {
             const data = res.body;
             if (res.headers.has("Content-Range")) {
@@ -220,7 +229,7 @@ export class BackendGlpiService {
     httpOptions.params = params;
 
     // noinspection TsLint
-    interface Search {
+    interface ISearch {
       data: any;
       count: number;
       order: string;
@@ -230,7 +239,7 @@ export class BackendGlpiService {
 
     return Observable.forkJoin(
       this.getListSearchOptions(endpoint),
-      this.http.get<Search>(this.connections[0].url + "/search/" + endpoint, httpOptions),
+      this.http.get<ISearch>(this.connections[0].url + "/search/" + endpoint, httpOptions),
     ).map(([listOptions, searchList]) => {
       const searchOptions = this.globalVars.getSearchoptionsItemtype(endpoint);
       const data = {
@@ -242,21 +251,29 @@ export class BackendGlpiService {
           totalcount: searchList.body.totalcount,
         },
       };
-      for (const item of searchList.body.data) {
-        const newItem = {};
-        for (const field of Object.keys(item)) {
-          newItem[searchOptions[field].uid] = {
-            datatype: searchOptions[field].datatype,
-            name: searchOptions[field].name,
-            value: item[field],
-          };
+      if (searchList.body.data !== undefined) {
+        for (const item of searchList.body.data) {
+          const newItem = {};
+          for (const field of Object.keys(item)) {
+            newItem[searchOptions[field].uid] = {
+              datatype: searchOptions[field].datatype,
+              name: searchOptions[field].name,
+              value: item[field],
+            };
+          }
+          data.data.push(newItem);
         }
-        data.data.push(newItem);
       }
       return data;
     });
   }
 
+  /**
+   * Get the List of search options of an itemtype.
+   * This queries will be cached the first time through an HTTP Interceptor and so return from cache the next times
+   *
+   * @param itemtype the name of the itemtype (Computer, Ticket...)
+   */
   public getListSearchOptions(itemtype) {
     if (this.connections.length === 0) {
       this.connections[0] = {
@@ -277,12 +294,13 @@ export class BackendGlpiService {
       .map((options) => {
         for (const key in options) {
           if (options[key] && options[key].field !== "undefined") {
-            if (options[key].uid !== "undefined") {
+            if (options[key].uid !== undefined) {
               options[key].uid = options[key].uid.replace(/\./gi, "__");
             }
             this.globalVars.setSearchoptions(itemtype, key, options[key]);
           }
         }
+        return options;
       });
   }
 

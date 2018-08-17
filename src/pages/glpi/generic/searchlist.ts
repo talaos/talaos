@@ -116,80 +116,77 @@ export class SearchPage {
   }
 
   public parsePage(data) {
-    this.totalcount = data.totalcount;
+    this.totalcount = data.meta.totalcount;
     const rows = [];
-    if (data.data !== undefined) {
-      for (const item of data.data) {
-        /*
-                let type = "Incident";
-                let statusIcon = "";
-                let statusColor = "";
+    for (const item of data.data) {
+      /*
+              let type = "Incident";
+              let statusIcon = "";
+              let statusColor = "";
 
-                if (item[12] === 1) {
-                  statusIcon = "md-bulb";
-                  statusColor = "primary";
-                } else if (item[12] === 2) {
-                  statusIcon = "md-person";
-                  statusColor = "primary";
-                } else if (item[12] === 3) {
-                  statusIcon = "md-calendar";
-                  statusColor = "primary";
-                } else if (item[12] === 4) {
-                  statusIcon = "md-pause";
-                  statusColor = "light";
-                } else if (item[12] === 5) {
-                  statusIcon = "md-checkmark";
-                  statusColor = "secondary";
-                } else if (item[12] === 6) {
-                  statusIcon = "md-done-all";
-                  statusColor = "secondary";
-                }
+              if (item[12] === 1) {
+                statusIcon = "md-bulb";
+                statusColor = "primary";
+              } else if (item[12] === 2) {
+                statusIcon = "md-person";
+                statusColor = "primary";
+              } else if (item[12] === 3) {
+                statusIcon = "md-calendar";
+                statusColor = "primary";
+              } else if (item[12] === 4) {
+                statusIcon = "md-pause";
+                statusColor = "light";
+              } else if (item[12] === 5) {
+                statusIcon = "md-checkmark";
+                statusColor = "secondary";
+              } else if (item[12] === 6) {
+                statusIcon = "md-done-all";
+                statusColor = "secondary";
+              }
 
-                // Manage late
-                if (item[82] === 1) {
-                  if (item[12] < 4) {
-                    statusIcon = "md-bonfire";
-                    statusColor = "danger";
-                  }
+              // Manage late
+              if (item[82] === 1) {
+                if (item[12] < 4) {
+                  statusIcon = "md-bonfire";
+                  statusColor = "danger";
                 }
+              }
 
-                if (item[14] === 2) {
-                  type = "Demande";
-                }
+              if (item[14] === 2) {
+                type = "Demande";
+              }
 
-                const myrow = {
-                  category: item[7],
-                  date_mod: item[19],
-                  id: item[2],
-                  name: item[1],
-                  note: "",
-                  numberfollowups: item[27],
-                  numbertasks: item[28],
-                  statusColor,
-                  statusIcon,
-                  type,
-                };
-                for (const sup of this.forcedisplaySup) {
-                  myrow[sup] = item[sup];
-                }
-                */
-        if (this.dcolumns.length === 0) {
-          let columns = [];
-          for (const itemid of Object.keys(item)) {
-            columns.push({
-              name: this.globalVars.getSearchoptions(this.itemtype, itemid).name,
-              prop: this.globalVars.getSearchoptions(this.itemtype, itemid).name,
-            });
-          }
-          this.dcolumns = [...columns];
+              const myrow = {
+                category: item[7],
+                date_mod: item[19],
+                id: item[2],
+                name: item[1],
+                note: "",
+                numberfollowups: item[27],
+                numbertasks: item[28],
+                statusColor,
+                statusIcon,
+                type,
+              };
+              for (const sup of this.forcedisplaySup) {
+                myrow[sup] = item[sup];
+              }
+              */
+      if (this.dcolumns.length === 0) {
+        const columns = [];
+        for (const fielduid of Object.keys(item)) {
+          columns.push({
+            name: item[fielduid].name,
+            prop: item[fielduid].name,
+          });
         }
-        const myrow = {};
-        for (const itemid of Object.keys(item)) {
-          const searchoptions = this.globalVars.getSearchoptions(this.itemtype, itemid);
-          myrow[searchoptions.name] = item[itemid]; // item[itemid];
-        }
-        rows.push(myrow);
+        this.dcolumns = [...columns];
       }
+      const myrow = {};
+      for (const fielduid of Object.keys(item)) {
+        myrow[item[fielduid].name] = item[fielduid].value; // item[itemid];
+      }
+      rows.push(myrow);
     }
     this.drows = [...rows];
 
