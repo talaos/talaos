@@ -139,7 +139,7 @@ describe("BackendGlpiService", () => {
   });
 */
 
-  it("test get page - simple", () => {
+  it("test get items restrict - simple", () => {
     const httpPageComputer = {
       count: 4,
       data: [
@@ -173,7 +173,7 @@ describe("BackendGlpiService", () => {
 
     _addFirstConnection();
 
-    service.getPage("Computer").subscribe((data) => {
+    service.getItemsRestrict("Computer").subscribe((data) => {
       gotPage = data;
     });
     http.expectOne("http://127.0.0.1/glpi090/apirest.php/Computer?get_hateoas=true&range=0-10").flush(httpPageComputer);

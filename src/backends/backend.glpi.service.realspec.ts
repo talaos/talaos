@@ -129,48 +129,74 @@ describe("BackendGlpiService", () => {
     http.expectOne("http://127.0.0.1/glpi090/apirest.php/Computer/10?expand_dropdowns=1").flush(glpiItem);
     expect(getTheItem).toEqual(glpiItem);
   });
-
-  it("test get page - simple", () => {
-    const httpPageComputer = {
-      count: 4,
+*/
+  it("test get items restrict - simple", (done) => {
+    const httpDatas = {
+      count: 6,
       data: [
         {
-          1: "test-PC1",
-          2: 1,
-          80: "Root entity",
+          id: 29,
+          itemtype: "Computer",
+          num: 31,
+          rank: 1,
+          users_id: 0,
         },
         {
-          1: "test-PC2",
-          2: 2,
-          80: "Root entity",
+          id: 30,
+          itemtype: "Computer",
+          num: 23,
+          rank: 2,
+          users_id: 0,
         },
         {
-          1: "test-PC3",
-          2: 3,
-          80: "Root entity",
+          id: 31,
+          itemtype: "Computer",
+          num: 5,
+          rank: 3,
+          users_id: 0,
         },
         {
-          1: "test-PC4",
-          2: 4,
-          80: "Root entity",
+          id: 32,
+          itemtype: "Computer",
+          num: 4,
+          rank: 4,
+          users_id: 0,
+        },
+        {
+          id: 33,
+          itemtype: "Computer",
+          num: 40,
+          rank: 5,
+          users_id: 0,
+        },
+        {
+          id: 34,
+          itemtype: "Computer",
+          num: 45,
+          rank: 6,
+          users_id: 0,
         },
       ],
-      order: "ASC",
-      sort: 1,
-      totalcount: 4,
+      end: 5,
+      start: 0,
+      totalcount: 229,
     };
-    httpPageComputer["content-range"] = "0-3/4";
-    let gotPage;
+    let gotItems;
 
     _addFirstConnection();
 
-    service.getPage("Computer").subscribe((data) => {
-      gotPage = data;
-    });
-    http.expectOne("http://127.0.0.1/glpi090/apirest.php/Computer?get_hateoas=true&range=0-10").flush(httpPageComputer);
-    expect(gotPage).toEqual(httpPageComputer);
+    service.doLogin("glpi", "glpi", 0)
+      .subscribe((token) => {
+        service.getItemsRestrict("DisplayPreference",  null, false, true, false, "0-5").subscribe((data) => {
+          gotItems = data;
+        });
+      });
+    setTimeout(() => {
+      expect(gotItems).toEqual(httpDatas);
+      done();
+    }, 2000);
   });
-*/
+
   it("test search - simple", (done) => {
     const httpListSearchOptions = {
       1: {

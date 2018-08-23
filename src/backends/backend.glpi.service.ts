@@ -116,8 +116,8 @@ export class BackendGlpiService {
   }
 
   /** Get only a page with all parameters possible */
-  public getPage(endpoint, where = null, expandDropdowns = false, getHateoas = true, onlyId = false,
-                 range = "0-10", sort = 1, order = "ASC", isDeleted = false) {
+  public getItemsRestrict(endpoint, where = null, expandDropdowns = false, getHateoas = true, onlyId = false,
+                          range = "0-50", sort = "", order = "ASC", isDeleted = false) {
 
     if (this.connections.length === 0) {
       return;
@@ -156,39 +156,35 @@ export class BackendGlpiService {
       params = params.set("only_id", "true");
     }
     params = params.set("range", range);
-/*
-      //params.set("sort", sort);
-      params.set("order", order);
-*/
+
+    if (sort !== "") {
+      params = params.set("sort", sort);
+      params = params.set("order", order);
+    }
+
     if (isDeleted === true) {
       params = params.set("is_deleted", "true");
     }
     httpOptions.params = params;
 
-    // noinspection TsLint
-    interface IPage {
-      count: number;
-      data: any;
-      order: string;
-      sort: number;
-      totalcount: number;
-      _total: number;
-      _number: number;
-    }
-
-    return this.http.get<IPage>(this.connections[0].url + "/" + endpoint, httpOptions)
+    return this.http.get(this.connections[0].url + "/" + endpoint, httpOptions)
         .map(function convert(res) {
-            const data = res.body;
-            if (res.headers.has("Content-Range")) {
-              const ranges = res.headers.get("Content-Range").split("/");
-              data._total = +ranges[1];
-              const therange = ranges[0].split("-");
-              data._number = +therange[0];
-            } else {
-              data._total = 0;
-              data._number = 0;
-            }
-            return data;
+          const data = {
+            count: Object.keys(res.body).length,
+            data: res.body,
+            end: 0,
+            start: 0,
+            totalcount: 0,
+          };
+          if (res.headers.has("Content-Range")) {
+            const ranges = res.headers.get("Content-Range").split("/");
+            data.totalcount = +ranges[1];
+            const therange = ranges[0].split("-");
+            data.start = +therange[0];
+            data.end = +therange[1];
+            data.count = Object.keys(res.body).length;
+          }
+          return data;
         });
   }
 
@@ -296,6 +292,7 @@ export class BackendGlpiService {
           if (options[key] && options[key].field !== "undefined") {
             if (options[key].uid !== undefined) {
               options[key].uid = options[key].uid.replace(/\./gi, "__");
+              options[key].id = key;
             }
             this.globalVars.setSearchoptions(itemtype, key, options[key]);
           }
@@ -321,6 +318,21 @@ export class BackendGlpiService {
     } else {
       return this.http.put(this.connections[0].url + "/" + itemtype + "/" + itemId, {input}, httpOptions);
     }
+  }
+
+  public deleteItem(itemtype, itemId) {
+    if (this.connections.length === 0) {
+      return;
+    }
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "App-Token": this.connections[0].app_token,
+        "Session-Token": this.connections[0].session_token,
+      }),
+      params: new HttpParams(),
+    };
+
+    return this.http.delete(this.connections[0].url + "/" + itemtype + "/" + itemId, httpOptions);
   }
 
   public manageError(error) {
@@ -360,5 +372,4 @@ export class BackendGlpiService {
       }
     }
   }
-
 }

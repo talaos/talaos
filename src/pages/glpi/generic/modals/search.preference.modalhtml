@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      {{ "Searchmodal" | translate }}
+    </ion-title>
+    <ion-buttons start>
+      <button ion-button (click)="CloseModal()">
+        <ion-icon name="md-close"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list class="chat-sliding-demo">
+    <ion-list-header>
+      Columns
+    </ion-list-header>
+
+    <ion-item-group reorder="true" (ionItemReorder)="reorderData($event)">
+      <ion-item *ngFor="let columns of allColumns">
+        <ion-checkbox [(ngModel)]="columns.enabled" (click)="updatePreferences()"></ion-checkbox>
+        <ion-label><h2>{{ columns.name }}</h2></ion-label>
+      </ion-item>
+    </ion-item-group>
+  </ion-list>
+</ion-content>

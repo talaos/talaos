@@ -4,33 +4,21 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>
-      {{ "Ticket" | translate }}
+      {{ itemtype | translate }}
     </ion-title>
     <ion-buttons start>
-      <button ion-fab mini (click)="openModal()"><ion-icon name="md-search"></ion-icon></button>
+      <button ion-fab mini (click)="openModalSearch()"><ion-icon name="md-search"></ion-icon></button>
+    </ion-buttons>
+    <ion-buttons start>
+      <button ion-fab mini (click)="itemTapped($event)" color="danger"><ion-icon name="add"></ion-icon></button>
     </ion-buttons>
     <ion-buttons end>
-      <button ion-fab mini (click)="itemTapped($event)" color="danger"><ion-icon name="add"></ion-icon></button>
+      <button ion-fab mini (click)="openModalPreference()" color="light"><ion-icon name="md-settings"></ion-icon></button>
     </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
-  <!--  <ion-list>
-      <button ion-item *ngFor="let item of items" (click)="itemTapped($event, item)">
-        <ion-icon [name]="item.statusIcon" [color]="item.statusColor" item-start></ion-icon>
-        <b>{{item.name}}</b>
-        <div class="item-note" item-end>
-          {{item.note}}
-        </div>
-        <h2>{{item.type}}</h2>
-        <h3>{{item.category}}</h3>
-        <p *ngFor="let newfield of forcedisplay_sup">{{item[newfield]}}</p>
-        <ion-note item-end>{{item.date_mod}}</ion-note>
-      </button>
-    </ion-list>
-    -->
-
   <div>
     <ngx-datatable
       class="material"
@@ -41,50 +29,27 @@
       [footerHeight]="50"
       [rowHeight]="'auto'">
     </ngx-datatable>
+    <ng-template #messagecontainer>
+    </ng-template>
+    <searchtemplate-ticket></searchtemplate-ticket>
   </div>
-<!--
-  <ion-grid>
-    <ion-row>
-      <ion-col col-sm-12 col-md-6 col-xl-3 *ngFor="let item of items" (click)="itemTapped($event, item)">
-
-  <ion-card>
-
-    <ion-item>
-      <ion-icon [name]="item.statusIcon" [color]="item.statusColor" item-start></ion-icon>
-      <h2>{{item.name}}</h2>
-      <p>{{item.type}} / {{item.category}}</p>
-    </ion-item>
--->
-<!--    <ion-card-content>
-      <p>Wait a minute. Wait a minute, Doc. Uhhh... Are you telling me that you built a time machine... out of a DeLorean?! Whoa. This is heavy.</p>
-    </ion-card-content>
--->
-<!--
-      <ion-row>
-        <ion-col>
-          <button ion-button icon-left clear small *ngIf="item.numberfollowups > 0">
-            <ion-icon name="md-chatboxes"></ion-icon>
-            <div>{{item.numberfollowups}} followups</div>
-          </button>
-        </ion-col>
-        <ion-col>
-          <button ion-button icon-left clear small color="tickettask" *ngIf="item.numbertasks > 0">
-            <ion-icon name="md-checkbox-outline"></ion-icon>
-            <div>{{item.numbertasks}} tasks</div>
-          </button>
-        </ion-col>
-        <ion-col center text-center>
-          <ion-note>
-            {{item.date_mod}}
-          </ion-note>
-        </ion-col>
-      </ion-row>
-
-    </ion-card>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
--->
+  <!-- part of code to display columns to display, to manage with displaypreference endpoint
+  <div class='selected-column'>
+    <h4>Available Columns</h4>
+    <ul>
+      <li *ngFor='let col of allColumns'>
+        <input
+          type='checkbox'
+          [id]="col.name"
+          (click)='toggle(col)'
+          [checked]='isChecked(col)'
+        />
+        <label [attr.for]="col.name">{{col.name}}</label>
+      </li>
+    </ul>
+  </div>
+  -->
+  <div id="tpltest"></div>
     <ion-infinite-scroll (ionInfinite)="doInfinite($event)" *ngIf="infiniteloop">
       <ion-infinite-scroll-content></ion-infinite-scroll-content>
     </ion-infinite-scroll>

@@ -1,8 +1,13 @@
-import { Component } from "@angular/core";
+import { Component, ViewChild} from "@angular/core";
 import { LoadingController, ModalController, NavController, NavParams } from "ionic-angular";
 import { GlobalVars } from "../../../app/globalvars";
 import { BackendGlpiService } from "../../../backends/backend.glpi.service";
+import { SearchPreferenceModal } from "./modals/search.preference.modal";
 import { Searchmodal } from "./searchmodal";
+
+// Import search templates
+import { SearchTemplateTicket } from "./searchtemplates/searchtemplate.ticket";
+import {TicketForm} from "../ticket/ticket_form";
 
 @Component({
   providers: [ BackendGlpiService ],
@@ -34,6 +39,8 @@ export class SearchPage {
   public loading;
   public infiniteloop = true;
 
+  public templates;
+
   public drows = [
     { name: "Austin", gender: "Male", company: "Swimlane" },
     { name: "Dany", gender: "Male", company: "KFC" },
@@ -41,14 +48,10 @@ export class SearchPage {
   ];
   public dcolumns = [];
 
-// https://codepen.io/anon/pen/pjzKMZ
-// https://codepen.io/anon/pen/gPGzdK
+  public componentRef: any;
 
-// https://swimlane.github.io/ngx-datatable/
-// https://ionicframework.com/docs/api/components/grid/Grid/
-// https://github.com/TonyGermaneri/canvas-datagrid
-// https://github.com/fin-hypergrid/core
-// https://codepen.io/calendee/pen/vkgtz / https://calendee.com/2014/06/26/responsive-columns-in-an-ionic-list/
+  @ViewChild(SearchTemplateTicket)
+  private searchTemplate: SearchTemplateTicket;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private httpService: BackendGlpiService,
               public modalCtrl: ModalController, public loadingCtrl: LoadingController,
@@ -65,16 +68,18 @@ export class SearchPage {
     if (this.itemtype === "Ticket") {
       this.sort = 2; // the ID
     }
-    this.forcedisplayBase = [1, 2, 80, 12, 19, 14, 7, 82, 27, 28];
+    this.forcedisplayBase = [1, 2, 80];
     this.forcedisplaySup = [];
     this.selectedItem = navParams.get("item");
+
+    this.templates = ["Ticket__Status"];
   }
 
   public ngOnInit() {
-    this.page(this.offset, this.limit);
+    this.getColumnsToDisplay();
   }
 
-  public openModal(characterNum) {
+  public openModalSearch() {
     const modal = this.modalCtrl.create(Searchmodal, {itemtype: this.itemtype});
     modal.onDidDismiss(function(data) {
       if (data !== null) {
@@ -82,6 +87,14 @@ export class SearchPage {
         this.forcedisplaySup = data.forcedisplay;
         this.page(0, 31);
       }
+    }.bind(this));
+    modal.present();
+  }
+
+  public openModalPreference() {
+    const modal = this.modalCtrl.create(SearchPreferenceModal, {itemtype: this.itemtype});
+    modal.onDidDismiss(function(data) {
+      this.getColumnsToDisplay();
     }.bind(this));
     modal.present();
   }
@@ -119,65 +132,14 @@ export class SearchPage {
     this.totalcount = data.meta.totalcount;
     const rows = [];
     for (const item of data.data) {
-      /*
-              let type = "Incident";
-              let statusIcon = "";
-              let statusColor = "";
-
-              if (item[12] === 1) {
-                statusIcon = "md-bulb";
-                statusColor = "primary";
-              } else if (item[12] === 2) {
-                statusIcon = "md-person";
-                statusColor = "primary";
-              } else if (item[12] === 3) {
-                statusIcon = "md-calendar";
-                statusColor = "primary";
-              } else if (item[12] === 4) {
-                statusIcon = "md-pause";
-                statusColor = "light";
-              } else if (item[12] === 5) {
-                statusIcon = "md-checkmark";
-                statusColor = "secondary";
-              } else if (item[12] === 6) {
-                statusIcon = "md-done-all";
-                statusColor = "secondary";
-              }
-
-              // Manage late
-              if (item[82] === 1) {
-                if (item[12] < 4) {
-                  statusIcon = "md-bonfire";
-                  statusColor = "danger";
-                }
-              }
-
-              if (item[14] === 2) {
-                type = "Demande";
-              }
-
-              const myrow = {
-                category: item[7],
-                date_mod: item[19],
-                id: item[2],
-                name: item[1],
-                note: "",
-                numberfollowups: item[27],
-                numbertasks: item[28],
-                statusColor,
-                statusIcon,
-                type,
-              };
-              for (const sup of this.forcedisplaySup) {
-                myrow[sup] = item[sup];
-              }
-              */
       if (this.dcolumns.length === 0) {
         const columns = [];
         for (const fielduid of Object.keys(item)) {
           columns.push({
+            cellTemplate: this.searchTemplate[fielduid],
             name: item[fielduid].name,
             prop: item[fielduid].name,
+            uid: fielduid,
           });
         }
         this.dcolumns = [...columns];
@@ -186,6 +148,7 @@ export class SearchPage {
       for (const fielduid of Object.keys(item)) {
         myrow[item[fielduid].name] = item[fielduid].value; // item[itemid];
       }
+      console.log(myrow);
       rows.push(myrow);
     }
     this.drows = [...rows];
@@ -220,6 +183,34 @@ export class SearchPage {
 
       infiniteScroll.complete();
     }, 500);
+  }
+
+  public getColumnsToDisplay() {
+    const where = {
+      itemtype: "^" + this.itemtype + "$",
+      users_id: "^" + this.globalVars.session["glpiID"] + "$",
+    };
+    this.forcedisplayBase = [1, 2, 80];
+    this.dcolumns = [];
+    // Get preferences of this user
+    this.httpService.getItemsRestrict("DisplayPreference", where, false, true, false, "0-50", "rank")
+      .subscribe((data) => {
+        if (Object.keys(data.data).length === 0) {
+          where.users_id = "^" + 0 + "$";
+          this.httpService.getItemsRestrict("DisplayPreference", where, false, true, false, "0-50", "rank")
+            .subscribe((dataAll) => {
+              for (const item of Object.keys(dataAll.data)) {
+                this.forcedisplayBase.push(dataAll.data[item].num);
+              }
+              this.page(this.offset, this.limit);
+            });
+        } else {
+          for (const item of Object.keys(data.data)) {
+            this.forcedisplayBase.push(data.data[item].num);
+          }
+          this.page(this.offset, this.limit);
+        }
+      });
   }
 
 }

@@ -20,7 +20,7 @@ export class DropdownSelect {
   }
 
   public getItems() {
-    this.httpService.getPage(this.itemtype, {name: this.mySearchInput},
+    this.httpService.getItemsRestrict(this.itemtype, {name: this.mySearchInput},
       true, true, false, "0-10")
       .subscribe(function(data) {
         this.followups = data;

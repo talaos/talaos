@@ -175,7 +175,7 @@ export class TicketForm {
     this.timeline = [];
 
     // Get followups
-    this.httpService.getPage("TicketFollowup", {tickets_id: "^" + this.selectedItem.id + "$"},
+    this.httpService.getItemsRestrict("TicketFollowup", {tickets_id: "^" + this.selectedItem.id + "$"},
       true, true, false, "0-200")
       .subscribe(function(data) {
         this.followups = data;
@@ -193,7 +193,7 @@ export class TicketForm {
       }.bind(this));
 
     // Get tasks
-    this.httpService.getPage("TicketTask", {tickets_id: "^" + this.selectedItem.id + "$"},
+    this.httpService.getItemsRestrict("TicketTask", {tickets_id: "^" + this.selectedItem.id + "$"},
       true, true, false, "0-200")
       .subscribe(function(data) {
         for (const item of data) {
@@ -300,14 +300,14 @@ export class TicketForm {
         }
         this.SetAllItemVisible();
       // Load the mandatory fields of the template TicketTemplateMandatoryField
-        this.httpService.getPage("TicketTemplateMandatoryField", {tickettemplates_id: "^" + templateId + "$"},
+        this.httpService.getItemsRestrict("TicketTemplateMandatoryField", {tickettemplates_id: "^" + templateId + "$"},
           false, false, false, "0-200")
           .subscribe((data2) => {
             // console.log(data2);
           });
 
       // load the predefined fields TicketTemplatePredefinedField
-        this.httpService.getPage("TicketTemplatePredefinedField", {tickettemplates_id: "^" + templateId + "$"},
+        this.httpService.getItemsRestrict("TicketTemplatePredefinedField", {tickettemplates_id: "^" + templateId + "$"},
           false, false, false, "0-200")
           .subscribe((data2) => {
             for (const item of data2) {
@@ -318,7 +318,7 @@ export class TicketForm {
           });
 
       // load the hidden fields TicketTemplateHiddenField
-        this.httpService.getPage("TicketTemplateHiddenField", {tickettemplates_id: "^" + templateId + "$"},
+        this.httpService.getItemsRestrict("TicketTemplateHiddenField", {tickettemplates_id: "^" + templateId + "$"},
           false, false, false, "0-200")
           .subscribe(function(data2) {
             for (const item of data2) {
@@ -412,7 +412,7 @@ export class TicketForm {
   }
 
   private _getActors() {
-    this.httpService.getPage("Ticket_User", {tickets_id: "^" + this.selectedItem.id + "$"},
+    this.httpService.getItemsRestrict("Ticket_User", {tickets_id: "^" + this.selectedItem.id + "$"},
       true, true, false, "0-200")
       .subscribe(function(data) {
         this.actors = {};
@@ -432,7 +432,7 @@ export class TicketForm {
   }
 
   private _getGroups() {
-    this.httpService.getPage("Group_Ticket", {tickets_id: "^" + this.selectedItem.id + "$"},
+    this.httpService.getItemsRestrict("Group_Ticket", {tickets_id: "^" + this.selectedItem.id + "$"},
       true, true, false, "0-200")
       .subscribe(function(data) {
         this.groups = {};

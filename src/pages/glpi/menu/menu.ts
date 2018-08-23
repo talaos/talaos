@@ -48,9 +48,9 @@ export class GlpiMenu {
       {order: 0, submenu: "assistance", type: "Ticket", name: "Tickets"},
       {order: 1, submenu: "assistance", type: "Problem", name: "Problems"},
       {order: 2, submenu: "assistance", type: "Change", name: "Changes"},
-//      {order: 3, submenu: "assistance", type: "Planning", name: "Planning"},
-//      {order: 4, submenu: "assistance", type: "Stat", name: "Statistics"},
-      {order: 5, submenu: "assistance", type: "TicketRecurrent", name: "Recurrent tickets"},
+      {order: 3, submenu: "assistance", type: "TicketRecurrent", name: "Recurrent tickets"},
+//      {order: 4, submenu: "assistance", type: "Planning", name: "Planning"},
+//      {order: 5, submenu: "assistance", type: "Stat", name: "Statistics"},
 
       {order: 0, submenu: "management", type: "SoftwareLicense", name: "Licenses"},
     ];

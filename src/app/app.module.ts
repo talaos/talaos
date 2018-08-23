@@ -13,6 +13,7 @@ import { BackendGlpiService } from "../backends/backend.glpi.service";
 import { GlobalVars } from "./globalvars";
 
 import { DropdownSelect } from "../dropdownselect/dropdownselect";
+import { SearchPreferenceModal } from "../pages/glpi/generic/modals/search.preference.modal";
 import { SearchPage } from "../pages/glpi/generic/searchlist";
 import { Searchmodal } from "../pages/glpi/generic/searchmodal";
 import { TicketPage } from "../pages/glpi/ticket/ticket";
@@ -36,6 +37,8 @@ import { NgxDatatableModule } from "@swimlane/ngx-datatable";
 import { HTTP_INTERCEPTORS } from "@angular/common/http";
 import { GlpiHttpInterceptor } from "../backends/backend.glpi.interceptor";
 
+import { SearchTemplateTicket } from "../pages/glpi/generic/searchtemplates/searchtemplate.ticket";
+
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, "./assets/i18n/", ".json");
 }
@@ -54,9 +57,11 @@ export function createTranslateLoader(http: HttpClient) {
     TicketForm,
     SearchPage,
     Searchmodal,
+    SearchPreferenceModal,
     DropdownSelect,
     GlpiHomeEnduserPage,
     GlpiHomeAdminPage,
+    SearchTemplateTicket,
   ],
   entryComponents: [
     MyApp,
@@ -69,9 +74,11 @@ export function createTranslateLoader(http: HttpClient) {
     TicketForm,
     SearchPage,
     Searchmodal,
+    SearchPreferenceModal,
     DropdownSelect,
     GlpiHomeEnduserPage,
     GlpiHomeAdminPage,
+    SearchTemplateTicket,
   ],
   imports: [
     BrowserModule,
