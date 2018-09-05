@@ -1,6 +1,6 @@
-import {Component, Input, TemplateRef, ViewChild} from "@angular/core";
-import {NavController} from "ionic-angular";
-import {TicketForm} from "../../ticket/ticket_form";
+import { Component, TemplateRef, ViewChild } from "@angular/core";
+import { App } from "ionic-angular";
+import { TicketForm } from "../../ticket/ticket_form";
 
 @Component({
   selector: "searchtemplate-ticket",
@@ -75,7 +75,7 @@ export class SearchTemplateTicket {
   @ViewChild("Ticket__name")
     public Ticket__name: TemplateRef<any>;
 
-  constructor(public navCtrl: NavController) {}
+  constructor(public appCtrl: App) {}
 
   public goForm(itemId) {
     if (itemId === undefined) {
@@ -84,7 +84,7 @@ export class SearchTemplateTicket {
     const item = {id: itemId};
 
     // That's right, we're pushing to ourselves!
-    this.navCtrl.push(TicketForm, {
+    this.appCtrl.getActiveNav().push(TicketForm, {
       item,
     });
   }

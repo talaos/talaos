@@ -5,7 +5,8 @@
     </ion-title>
   </ion-navbar>
 </ion-header>
-<ion-content padding ngClass="login">
+
+<ion-content padding ngClass="login" *ngIf="display">
 
   <ion-fab top right middle #addconnexion>
     <button ion-fab><ion-icon name="add"></ion-icon></button>

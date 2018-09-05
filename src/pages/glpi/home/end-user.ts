@@ -1,19 +1,19 @@
 import { Component } from "@angular/core";
 import { NavController } from "ionic-angular";
 import { Subscription } from "rxjs/Subscription";
-import { GlobalVars } from "../../../app/globalvars";
 import { BackendGlpiService } from "../../../backends/backend.glpi.service";
 import { TicketPage } from "../../glpi/ticket/ticket";
 import {TicketForm} from "../../glpi/ticket/ticket_form";
 
 @Component({
+  providers: [ BackendGlpiService ],
   selector: "glpi-dashboard-enduser",
   templateUrl: "end-user.html",
 })
 export class GlpiHomeEnduserPage {
   private glpiid = "glpiID";
   private username = "helpdesk";
-  private interfacetype = "helpdesk";
+  private interfacetype = "";
 
   private ticketProcessing = 0;
   private ticketLate = 0;
@@ -40,22 +40,12 @@ export class GlpiHomeEnduserPage {
 
   private subscription: Subscription;
 
-  constructor(public navCtrl: NavController, private globalVars: GlobalVars,
-              private httpGlpiService: BackendGlpiService) {
-    this.subscription = this.globalVars.getUsername().subscribe((username) => {
-      this.username = username;
-      this.subscription = this.globalVars.getInterfacetype().subscribe((interfacetype) => {
-        this.interfacetype = interfacetype;
-        if (this.interfacetype === "central") {
-          this.loadDashboardCentral();
-        } else if (this.interfacetype === "helpdesk") {
-          this.loadDashboardEnduser();
-        }
-      });
-    });
+  constructor(public navCtrl: NavController, private httpGlpiService: BackendGlpiService) {
   }
 
   public goTicketList(type) {
+    const glpiID = this.httpGlpiService.getSessionValue("glpiID");
+
     if (type === "ticketProcessing") {
       this.navCtrl.push(TicketPage, {
         criteria: this.ticketProcessingCriteria,
@@ -70,7 +60,7 @@ export class GlpiHomeEnduserPage {
       });
     } else if (type === "ticketTovalidate") {
       this.navCtrl.push(TicketPage, {
-        criteria: [{field: 59, searchtype: "equals", value: this.globalVars.session[this.glpiid]},
+        criteria: [{field: 59, searchtype: "equals", value: glpiID},
           {link: "AND", field: 55, searchtype: "equals", value: "2"},
           {link: "AND", field: 52, searchtype: "equals", value: "2"}],
       });
@@ -98,90 +88,11 @@ export class GlpiHomeEnduserPage {
   }
 
   private ngOnInit() {
-    if (this.globalVars.session[this.glpiid] && this.globalVars.session[this.glpiid] !== "undefined") {
-      if (this.interfacetype === "central") {
-        this.loadDashboardCentral();
-      } else if (this.interfacetype === "helpdesk") {
-        this.loadDashboardEnduser();
-      }
+    this.username = this.httpGlpiService.getSessionValue("username");
+    this.interfacetype = this.httpGlpiService.getSessionValue("interface");
+    if (this.interfacetype === "helpdesk") {
+      this.loadDashboardEnduser();
     }
-  }
-
-  private loadDashboardCentral() {
-    this.ticketProcessingCriteria = [{field: 4, searchtype: "equals", value: this.globalVars.session[this.glpiid]},
-      {link: "AND", field: 12, searchtype: "equals", value: "notold"}];
-    this.ticketLateCriteria = [{field: 5, searchtype: "equals", value: this.globalVars.session[this.glpiid]},
-      {link: "AND", field: 12, searchtype: "equals", value: "notold"},
-      {link: "AND", field: 82, searchtype: "equals", value: "1"}];
-    this.ticketNewCriteria = [{field: 12, searchtype: "equals", value: "1"}];
-    this.ticketTovalidateCriteria = [{field: 7, searchtype: "equals", value: this.globalVars.session[this.glpiid]}];
-    this.ticketSatisfactionCriteria = [{field: 12, searchtype: "equals", value: "6"},
-      {link: "AND", field: 60, searchtype: "contains", value: "^"},
-      {link: "AND", field: 61, searchtype: "contains", value: "NULL"},
-      {link: "AND", field: 22, searchtype: "equals", value: this.globalVars.session[this.glpiid]}];
-    this.ticketTasktodoCriteria = [{field: 95, searchtype: "equals", value: this.globalVars.session[this.glpiid]},
-      {link: "AND", field: 12, searchtype: "equals", value: "notold"},
-      {link: "AND", field: 33, searchtype: "equals", value: "1"}];
-
-    // Tickets processing...
-    this.httpGlpiService.search("Ticket", [1, 2, 80],
-      this.ticketProcessingCriteria, "0-1")
-      .subscribe(function(data) {
-        this.ticketProcessing = data.totalcount;
-        if (this.ticketProcessing > 0) {
-          this.ticketProcessingClass = ["dashboard"];
-        }
-      }.bind(this));
-
-    // Tickets exceedeed time to resolv
-    this.httpGlpiService.search("Ticket", [1, 2, 80],
-      this.ticketLateCriteria, "0-1")
-      .subscribe(function(data) {
-        this.ticketLate = data.totalcount;
-        if (this.ticketLate > 0) {
-          this.ticketLateClass = ["dashboard", "dashboard-danger"];
-        }
-      }.bind(this));
-
-    // Tickets new...
-    this.httpGlpiService.search("Ticket", [1, 2, 80],
-      this.ticketNewCriteria, "0-1")
-      .subscribe(function(data) {
-        this.ticketNew = data.totalcount;
-        if (this.ticketNew > 0) {
-          this.ticketNewClass = ["dashboard"];
-        }
-      }.bind(this));
-
-    // Tickets to validate...
-    this.httpGlpiService.search("TicketValidation", [1, 2, 80],
-      this.ticketTovalidateCriteria, "0-1")
-      .subscribe(function(data) {
-        this.ticketTovalidate = data.totalcount;
-        if (this.ticketTovalidate > 0) {
-          this.ticketTovalidateClass = ["dashboard"];
-        }
-      }.bind(this));
-
-    // Tickets to fill survey...
-    this.httpGlpiService.search("Ticket", [1, 2, 80],
-      this.ticketSatisfactionCriteria, "0-1")
-      .subscribe(function(data) {
-        this.ticketSatisfaction = data.totalcount;
-        if (this.ticketSatisfaction > 0) {
-          this.ticketSatisfactionClass = ["dashboard"];
-        }
-      }.bind(this));
-
-    // Tickets task to do...
-    this.httpGlpiService.search("Ticket", [1, 2, 80],
-      this.ticketTasktodoCriteria, "0-1")
-      .subscribe(function(data) {
-        this.ticketTasktodo = data.totalcount;
-        if (this.ticketTasktodo > 0) {
-          this.ticketTasktodoClass = ["dashboard"];
-        }
-      }.bind(this));
   }
 
   private loadDashboardEnduser() {

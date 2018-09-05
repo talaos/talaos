@@ -1,7 +1,7 @@
 import { Component} from "@angular/core";
-import {Events, FabContainer} from "ionic-angular";
-import { GlobalVars } from "../../app/globalvars";
+import { App, Config, Events, FabContainer } from "ionic-angular";
 import { BackendGlpiService } from "../../backends/backend.glpi.service";
+import { HomePage } from "../../pages/home/home";
 
 @Component({
     providers: [ BackendGlpiService ],
@@ -16,11 +16,13 @@ export class LoginPage {
     public apptokenf: string = "";
     public username: string = "";
     public password: string = "";
+    public display: boolean = false;
 
     public connections;
     public types = [];
 
-    constructor(private httpGlpiService: BackendGlpiService, private globalVars: GlobalVars, public events: Events) {
+    constructor(private httpGlpiService: BackendGlpiService, public events: Events,
+                public appCtrl: App, public config: Config) {
       this.types = [
         {value: "glpi", viewValue: "Glpi"},
       ];
@@ -31,11 +33,8 @@ export class LoginPage {
    * Run the login
    */
   public login() {
-    this.globalVars.numberConnections = this.connections.length;
-
     // register in local storage
     localStorage.setItem("number_connections", this.connections.length);
-
     let i = 0;
     for (const connection of this.connections) {
       localStorage.setItem("connection_" + i + "_name", connection.name);
@@ -45,9 +44,16 @@ export class LoginPage {
       localStorage.setItem("connection_" + i + "_url", connection.url);
 
       this.httpGlpiService.doLogin(connection.username, connection.password, i)
-        .subscribe((data) => data);
+        .subscribe((data) => {},
+          (error) => {},
+          () => {
+            this.establishConnections();
+          });
       i++;
     }
+    this.httpGlpiService.connections = [];
+    this.httpGlpiService.loadConnections();
+    this.establishConnections();
   }
 
   /**
@@ -65,42 +71,70 @@ export class LoginPage {
    * show / hide connection options
    */
   public toggleOptions(myconnection) {
-      myconnection.display_options = !myconnection.display_options;
+    myconnection.display_options = !myconnection.display_options;
+  }
+
+  /**
+   * Try establish connection with backends (API REST)
+   */
+  public establishConnections() {
+    for (const connection of this.httpGlpiService.connections) {
+      this.httpGlpiService.getFullSession()
+        .subscribe(function(data) {
+          if (data.session.glpiID !== undefined) {
+            connection.established = true;
+            connection.session = data.session;
+          } else {
+            connection.session_token = "";
+            connection.try++;
+          }
+        }.bind(this),
+        (error) => {
+          connection.try++;
+          connection.session_token = "";
+          this.config.set("connections_glpi", this.httpGlpiService.connections);
+          this.checkConnections();
+        },
+        function() {
+          this.config.set("connections_glpi", this.httpGlpiService.connections);
+          this.checkConnections();
+        }.bind(this));
     }
+  }
+
+  /**
+   * Check if all connections are established
+   */
+  public checkConnections() {
+    console.log("Check connections....");
+    let allConnections = 0;
+    let successConnections = 0;
+    let failedConnections = 0;
+    for (const connection of this.httpGlpiService.connections) {
+      allConnections++;
+      if (connection.established) {
+        successConnections++;
+      } else if (connection.try > 0) {
+        this.connections.push(connection);
+        failedConnections++;
+      }
+    }
+
+    if (allConnections > 0
+      && allConnections === successConnections) {
+      // Go to homepage
+      this.appCtrl.getRootNav().setRoot(HomePage);
+    } else {
+      // display login page
+      console.log("DISPLAY");
+      this.display = true;
+    }
+  }
 
   /**
    * Load connections in the localstorage
    */
   private ngOnInit() {
-    const numberConnections = Number(localStorage.getItem("number_connections"));
-    this.globalVars.numberConnections = numberConnections;
-    let i = 0;
-    while (i < numberConnections) {
-      if (localStorage.getItem("connection_" + i + "_name")) {
-        let displayOptions = true;
-        if (localStorage.getItem("connection_" + i + "_app_token")
-          && localStorage.getItem("connection_" + i + "_url")) {
-
-          displayOptions = false;
-        }
-
-        this.connections.push({
-          app_token: localStorage.getItem("connection_" + i + "_app_token"),
-          display_options: displayOptions,
-          name: localStorage.getItem("connection_" + i + "_name"),
-          password: "",
-          session_token: localStorage.getItem("connection_" + i + "_session_token"),
-          type: localStorage.getItem("connection_" + i + "_type"),
-          url: localStorage.getItem("connection_" + i + "_url"),
-          username: localStorage.getItem("connection_" + i + "_username"),
-        });
-        if (localStorage.getItem("connection_" + i + "_session_token") !== "") {
-          this.events.publish("login:successful", "");
-
-        }
-      }
-      i++;
-    }
+    this.establishConnections();
   }
-
 }

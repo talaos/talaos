@@ -11,7 +11,7 @@ import {Subscription} from "rxjs/Subscription";
 @Component({
   providers: [ BackendGlpiService ],
   selector: "ticket_form",
-  templateUrl: "ticket_form.html",
+  templateUrl: "ticket_form_alternatif.html",
 })
 export class TicketForm {
   public selectedItem: any;
@@ -42,7 +42,7 @@ export class TicketForm {
   public rateClass = {};
   public typeIncidentClass: string = "";
   public typeRequestClass: string = "";
-  private interfacetype = "helpdesk";
+  private interfacetype = "central";
   private subscription: Subscription;
   private disablechanges: boolean;
 
@@ -50,9 +50,7 @@ export class TicketForm {
               public modalCtrl: ModalController, translate: TranslateService, public toastCtrl: ToastController,
               private globalVars: GlobalVars) {
     const valueFieldName = "value";
-    this.subscription = this.globalVars.getInterfacetype().subscribe((interfacetype) => {
-      this.interfacetype = interfacetype;
-    });
+    this.interfacetype = this.httpService.getSessionValue("interface");
 
     this.types = [
       {value: 1, viewValue: translate.get("Incident")[valueFieldName]},
@@ -92,7 +90,7 @@ export class TicketForm {
 
     // Get the ticket
     this.changed = false;
-    this.timeline = [];
+    this.timeline = {};
     this.actors = {};
     this.groups = {};
     this.changedFields = [];
@@ -150,10 +148,9 @@ export class TicketForm {
               this.SetAllItemVisible();
               this.disablechanges = false;
               this.loadTemplate();
+              this.loadTimeline();
             }.bind(this));
         }.bind(this));
-
-      this.loadTimeline();
 
       // get actors
       this._getActors();
@@ -172,14 +169,89 @@ export class TicketForm {
   }
 
   public loadTimeline() {
-    this.timeline = [];
+    /* data format
+    {
+      "indexes": [
+        "20180824",
+        "20180823",
+      ],
+      "20180824": {
+        meta: {
+          document: 0
+          solution: 0,
+          followup: 1,
+          task: 0,
+          history: 0,
+        },
+        data: {
+          "indexes": [
+            "140832",
+          ],
+          "140832": {
+            meta: {
+              document: 0
+              solution: 0,
+              followup: 1,
+              task: 0,
+              history: 0,
+            },
+            data: [
+              {
+                _type: "followup",
+                ...
+              }
+          ],
+        },
+      },
+      "20180823": {
+        meta: {
+          document: 0
+          solution: 0,
+          followup: 0,
+          task: 1,
+          history: 1,
+        },
+        data: {
+          "indexes": [
+            "162205",
+          ],
+          "162205":
+            meta: {
+              document: 0
+              solution: 0,
+              followup: 0,
+              task: 1,
+              history: 1,
+            },
+            data: [
+              {
+                _type: "task",
+                ...
+              },
+              {
+                _type: "history",
+                ...
+              },
+            ],
+          },
+        }
+     */
+
+    this.timeline = {
+      indexes: [],
+    };
 
     // Get followups
     this.httpService.getItemsRestrict("TicketFollowup", {tickets_id: "^" + this.selectedItem.id + "$"},
       true, true, false, "0-200")
       .subscribe(function(data) {
         this.followups = data;
-        for (const item of data) {
+        for (const item of data.data) {
+          item._icon = "comments";
+          item._color = "ticket-followup";
+          item._user = item.users_id;
+          this.addItemTimeline(item, "followup");
+          /*
           const myDate = new Date(item.date.replace(" ", "T"));
           if (item.requesttypes_id === 0) {
             item.requesttypes_id = "";
@@ -188,24 +260,127 @@ export class TicketForm {
           item._color = "ticketfollowup";
           item._date = myDate.getTime();
           this.timeline.push(item);
+          */
         }
-        this.timeline = _.orderBy(this.timeline, "_date", "desc");
+        // this.timeline = _.orderBy(this.timeline, "_date", "desc");
       }.bind(this));
 
     // Get tasks
     this.httpService.getItemsRestrict("TicketTask", {tickets_id: "^" + this.selectedItem.id + "$"},
       true, true, false, "0-200")
       .subscribe(function(data) {
-        for (const item of data) {
+        for (const item of data.data) {
+          item._icon = "tasks";
+          item._color = "ticket-task";
+          item._user = item.users_id;
+          this.addItemTimeline(item, "task");
+          /*
           item.date = item.date.replace(" ", "T");
           const myDate = new Date(item.date);
           item._type = "md-checkbox-outline";
           item._color = "tickettask";
           item._date = myDate.getTime();
           this.timeline.push(item);
+          */
         }
-        this.timeline = _.orderBy(this.timeline, "_date", "desc");
+        // this.timeline = _.orderBy(this.timeline, "_date", "desc");
       }.bind(this));
+
+    // Get history
+    this.httpService.getItemsRestrict("Log", {
+      items_id: this.selectedItem.id,
+      itemtype: "Ticket",
+    }, true, true, false, "0-500")
+      .subscribe(function(data) {
+        for (const item of data.data) {
+          item._icon = "history";
+          item._color = "ticket-history";
+
+          item._user = item.user_name;
+          item.content = "itemtype_link: " + item.itemtype_link + " | linked_action: " + item.linked_action +
+            " | user_name:" + item.user_name + " | id_search_option:" + item.id_search_option +
+            " | old_value: " + item.old_value + " | new_value: " + item.new_value;
+          item.date_creation = item.date_mod;
+          if (item.itemtype_link !== "TicketFollowup" && item.itemtype_link !== "TicketTask") {
+            this.addItemTimeline(item, "task");
+          }
+        }
+      }.bind(this));
+
+    // add documents
+
+    // add resolution
+
+    // add ticket creation
+    const ticketItem = {
+      _color: "ticket-information",
+      _icon: "info",
+      _user: this.selectedItem.users_id_recipient,
+      content: "Création du ticket",
+      date_creation: this.selectedItem.date,
+    };
+    this.addItemTimeline(ticketItem, "information");
+
+    // add SLA / OLA points
+  }
+
+  public addItemTimeline(item, type) {
+    item._type = type;
+    const myDate = new Date(item.date_creation.replace(" ", "T"));
+    const today = new Date();
+    const yesterday = new Date(new Date().setDate(new Date().getDate() - 1));
+
+    const dateIndex = myDate.getFullYear() + (("0" + (myDate.getMonth() + 1)).slice(-2)) +
+      (("0" + (myDate.getDate() + 1)).slice(-2));
+    const timeIndex = (("0" + (myDate.getHours() + 1)).slice(-2)) +
+      (("0" + (myDate.getMinutes() + 1)).slice(-2)) +
+      (("0" + (myDate.getSeconds() + 1)).slice(-2));
+    const dateOptions = { weekday: "long", year: "numeric", month: "long", day: "numeric" };
+    let displayDate = myDate.toLocaleDateString("fr-FR", dateOptions);
+    if (myDate.toDateString() === today.toDateString()) {
+      displayDate = "Today";
+    } else if (myDate.toDateString() === yesterday.toDateString()) {
+      displayDate = "Yesterday";
+    }
+
+    if (this.timeline[dateIndex] === undefined) {
+      this.timeline[dateIndex] = {
+        _displaydate: displayDate,
+        data: {
+          indexes: [],
+        },
+        meta: {
+          document: 0,
+          followup: 0,
+          history: 0,
+          solution: 0,
+          task: 0,
+        },
+      };
+      this.timeline.indexes.push(dateIndex);
+      this.timeline.indexes = this.timeline.indexes.sort();
+      this.timeline.indexes = this.timeline.indexes.reverse();
+    }
+    if (this.timeline[dateIndex].data[timeIndex] === undefined) {
+      this.timeline[dateIndex].data[timeIndex] = {
+        data: [],
+        meta: {
+          document: 0,
+          followup: 0,
+          history: 0,
+          solution: 0,
+          task: 0,
+        },
+      };
+      this.timeline[dateIndex].data.indexes.push(timeIndex);
+      this.timeline[dateIndex].data.indexes = this.timeline[dateIndex].data.indexes.sort();
+      this.timeline[dateIndex].data.indexes = this.timeline[dateIndex].data.indexes.reverse();
+    }
+    item._displaytime = (("0" + (myDate.getHours() + 1)).slice(-2)) + ":" +
+      (("0" + (myDate.getMinutes() + 1)).slice(-2));
+    this.timeline[dateIndex].data[timeIndex].data.push(item);
+    this.timeline[dateIndex].meta[type]++;
+    this.timeline[dateIndex].data[timeIndex].meta[type]++;
   }
 
   public openDropdownSelect(itemtype, ticketitself: boolean, destination: string = "") {
@@ -413,19 +588,28 @@ export class TicketForm {
 
   private _getActors() {
     this.httpService.getItemsRestrict("Ticket_User", {tickets_id: "^" + this.selectedItem.id + "$"},
-      true, true, false, "0-200")
+      false, true, false, "0-200")
       .subscribe(function(data) {
         this.actors = {};
         this.actors.demandeurs = [];
         this.actors.observateurs = [];
         this.actors.assignes = [];
-        for (const item of data) {
+        for (const item of data.data) {
           if (item.type === 1) {
-            this.actors.demandeurs.push(item);
+            this.httpService.getUserInformation(item.users_id)
+              .subscribe((userinfo) => {
+                this.actors.demandeurs.push(userinfo);
+              });
           } else if (item.type === 2) {
-            this.actors.assignes.push(item);
+            this.httpService.getUserInformation(item.users_id)
+              .subscribe((userinfo) => {
+                this.actors.assignes.push(userinfo);
+              });
           } else if (item.type === 3) {
-            this.actors.observateurs.push(item);
+            this.httpService.getUserInformation(item.users_id)
+              .subscribe((userinfo) => {
+                this.actors.observateurs.push(userinfo);
+              });
           }
         }
       }.bind(this));

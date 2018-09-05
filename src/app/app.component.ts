@@ -10,8 +10,6 @@ import { BackendGlpiService } from "../backends/backend.glpi.service";
 
 import { GlobalVars } from "./globalvars";
 
-import { TicketPage } from "../pages/glpi/ticket/ticket";
-import { HomePage } from "../pages/home/home";
 import { LoginPage } from "../pages/login/login";
 
 @Component({
@@ -20,7 +18,7 @@ import { LoginPage } from "../pages/login/login";
 })
 export class MyApp {
   @ViewChild(Nav) public nav: Nav;
-  public rootPage: any = HomePage;
+  public rootPage: any = LoginPage;
   public pages: Array<{title: string, component: any}>;
   public successConnection = 0;
 
@@ -33,25 +31,25 @@ export class MyApp {
 
     // used for an example of ngFor and navigation
     this.pages = [
-      {title: translate.get("Home")[valueFieldName], component: HomePage},
-      {title: translate.get("Ticket")[valueFieldName], component: TicketPage},
+//      {title: translate.get("Ticket")[valueFieldName], component: TicketPage},
     ];
 
     events.subscribe("login:successful", () => {
       this.successConnection++;
       if (this.successConnection === this.globalVars.numberConnections) {
-        this.openPage({title: translate.get("Home")[valueFieldName], component: HomePage});
+        // this.openPage({title: translate.get("Home")[valueFieldName], component: HomePage});
       }
     });
 
     events.subscribe("login:new", () => {
-      this.openPage({title: translate.get("Login")[valueFieldName], component: LoginPage});
+//      this.openPage({title: translate.get("Login")[valueFieldName], component: LoginPage});
     });
 
     translate.setDefaultLang("en");
     translate.use("en");
 
     // Use language from GLPI session
+/*
     this.httpService.loadConnections();
     if (this.httpService.connections.length > 0) {
       this.httpService.getFullSession()
@@ -68,6 +66,7 @@ export class MyApp {
           }.bind(this),
         );
     }
+*/
   }
 
   public openPage(page) {
@@ -82,7 +81,7 @@ export class MyApp {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       this.statusBar.styleDefault();
-      this.splashScreen.hide();
+//      this.splashScreen.hide();
     });
     this.successConnection = 0;
   }

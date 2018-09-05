@@ -5,7 +5,6 @@ import { BackendGlpiService } from "../../../backends/backend.glpi.service";
 import { TranslateService } from "@ngx-translate/core";
 import { App } from "ionic-angular";
 import { SearchPage } from "../generic/searchlist";
-import {TicketPage} from "../ticket/ticket";
 
 @Component({
   providers: [ BackendGlpiService ],

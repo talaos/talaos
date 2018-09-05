@@ -82,7 +82,10 @@ export function createTranslateLoader(http: HttpClient) {
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp),
+    IonicModule.forRoot(MyApp, {
+      connections_glpi: {},
+      glpi_dashboard: "",
+    }),
     HttpClientModule,
     NgxDatatableModule,
     TranslateModule.forRoot({

@@ -2,7 +2,7 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { HttpClient } from "@angular/common/http";
 import { CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
 import { getTestBed, TestBed } from "@angular/core/testing";
-import { Events, ToastController } from "ionic-angular";
+import { Config, Events, ToastController } from "ionic-angular";
 import { ToastControllerMock } from "ionic-mocks";
 import {} from "jasmine";
 import { GlobalVars } from "../app/globalvars";
@@ -17,7 +17,7 @@ describe("BackendGlpiService", () => {
     TestBed.configureTestingModule({
       imports: [HttpClientModule],
       providers: [BackendGlpiService, Events, {provide: ToastController, useClass: ToastControllerMock}, GlobalVars,
-        HttpClient,
+        HttpClient, Config,
         {
           multi: true,
           provide: HTTP_INTERCEPTORS,
@@ -408,5 +408,40 @@ describe("BackendGlpiService", () => {
     }, 2000);
   });
 
+  it("test get user informations", (done) => {
+    const httpDatas = {
+      comment: null,
+      emails: [
+        "root@root.com",
+        "root2@foo.bar",
+      ],
+      firstname: "Durieux",
+      id: "2",
+      is_active: 1,
+      is_deleted: 0,
+      lastname: "David",
+      mobile: "07.00.00.00.00",
+      name: "glpi",
+      phone: "04.00.00.00.00",
+      phone2: "",
+      picture: "4c/2_5b7ed50e2b34c.png",
+      usercategory: "Admins",
+      usertitle: "Administrator",
+    };
+    let gotItem;
+
+    _addFirstConnection();
+
+    service.doLogin("glpi", "glpi", 0)
+      .subscribe((token) => {
+        service.getUserInformation("2").subscribe((data) => {
+          gotItem = data;
+        });
+      });
+    setTimeout(() => {
+      expect(gotItem).toEqual(httpDatas);
+      done();
+    }, 3000);
+  });
 
 });

@@ -1,6 +1,5 @@
 import { Component, ViewChild} from "@angular/core";
 import { LoadingController, ModalController, NavController, NavParams } from "ionic-angular";
-import { GlobalVars } from "../../../app/globalvars";
 import { BackendGlpiService } from "../../../backends/backend.glpi.service";
 import { SearchPreferenceModal } from "./modals/search.preference.modal";
 import { Searchmodal } from "./searchmodal";
@@ -54,8 +53,7 @@ export class SearchPage {
   private searchTemplate: SearchTemplateTicket;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private httpService: BackendGlpiService,
-              public modalCtrl: ModalController, public loadingCtrl: LoadingController,
-              private globalVars: GlobalVars) {
+              public modalCtrl: ModalController, public loadingCtrl: LoadingController) {
     // If we navigated to this page, we will have an item available as a nav param
     const criteria = navParams.get("criteria");
     this.itemtype = navParams.get("itemtype");
@@ -148,7 +146,6 @@ export class SearchPage {
       for (const fielduid of Object.keys(item)) {
         myrow[item[fielduid].name] = item[fielduid].value; // item[itemid];
       }
-      console.log(myrow);
       rows.push(myrow);
     }
     this.drows = [...rows];
@@ -188,7 +185,7 @@ export class SearchPage {
   public getColumnsToDisplay() {
     const where = {
       itemtype: "^" + this.itemtype + "$",
-      users_id: "^" + this.globalVars.session["glpiID"] + "$",
+      users_id: "^" + this.httpService.getSessionValue("glpiID") + "$",
     };
     this.forcedisplayBase = [1, 2, 80];
     this.dcolumns = [];
