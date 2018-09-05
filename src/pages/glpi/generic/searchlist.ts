@@ -117,8 +117,8 @@ export class SearchPage {
   }
 
   public onSort(event) {
-    this.sort = event.sorts[0].prop;
-    if (event.sorts[0].dir === "asc") {
+    this.sort = event.column.id;
+    if (event.newValue === "asc") {
       this.sortOrder = "ASC";
     } else {
       this.sortOrder = "DESC";
@@ -135,6 +135,7 @@ export class SearchPage {
         for (const fielduid of Object.keys(item)) {
           columns.push({
             cellTemplate: this.searchTemplate[fielduid],
+            id: item[fielduid].id,
             name: item[fielduid].name,
             prop: item[fielduid].name,
             uid: fielduid,

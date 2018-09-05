@@ -261,6 +261,7 @@ export class BackendGlpiService {
           for (const field of Object.keys(item)) {
             newItem[searchOptions[field].uid] = {
               datatype: searchOptions[field].datatype,
+              id: field,
               name: searchOptions[field].name,
               value: item[field],
             };
