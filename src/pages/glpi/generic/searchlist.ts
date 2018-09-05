@@ -6,7 +6,6 @@ import { Searchmodal } from "./searchmodal";
 
 // Import search templates
 import { SearchTemplateTicket } from "./searchtemplates/searchtemplate.ticket";
-import {TicketForm} from "../ticket/ticket_form";
 
 @Component({
   providers: [ BackendGlpiService ],
@@ -167,11 +166,6 @@ export class SearchPage {
     if (item === undefined) {
       item = {id: 0};
     }
-
-    // That's right, we're pushing to ourselves!
-//    this.navCtrl.push(TicketForm, {
-//      item,
-//    });
   }
 
   public doInfinite(infiniteScroll) {
