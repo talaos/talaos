@@ -2,7 +2,7 @@ import { HTTP_INTERCEPTORS } from "@angular/common/http";
 import { HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
 import {CUSTOM_ELEMENTS_SCHEMA} from "@angular/core";
 import { getTestBed, TestBed } from "@angular/core/testing";
-import {Events, NavParams, ToastController} from "ionic-angular";
+import { Config, Events, NavParams, ToastController } from "ionic-angular";
 import {ToastControllerMock} from "ionic-mocks";
 import {} from "jasmine";
 import {GlobalVars} from "../app/globalvars";
@@ -20,6 +20,7 @@ describe("BackendGlpiService", () => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [BackendGlpiService, Events, {provide: ToastController, useClass: ToastControllerMock}, GlobalVars,
+        Config,
         {
           multi: true,
           provide: HTTP_INTERCEPTORS,
