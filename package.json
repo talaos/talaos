@@ -10,7 +10,8 @@
     "ionic:build": "ionic-app-scripts build",
     "ionic:serve": "ionic-app-scripts serve",
     "test": "karma start ./test-config/karma.conf.js",
-    "test_real_backend": "karma start ./test-backends/karma.conf.js",
+    "test_real_backend:glpi93": "./test-config/glpi/glpi93/install.sh && karma start ./test-backends/karma.conf.js",
+
     "tslint": "./node_modules/.bin/tslint src/**/*.ts",
     "test-ci": "karma start ./test-config/karma.conf.js --single-run",
     "test-coverage": "karma start ./test-config/karma.conf.js --coverage",

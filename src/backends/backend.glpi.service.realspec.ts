@@ -3,6 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
 import { getTestBed, TestBed } from "@angular/core/testing";
 import { Config, Events, ToastController } from "ionic-angular";
+import { ConfigMock } from "ionic-mocks";
 import { ToastControllerMock } from "ionic-mocks";
 import {} from "jasmine";
 import { GlobalVars } from "../app/globalvars";
@@ -34,8 +35,12 @@ describe("BackendGlpiService", () => {
   function _addFirstConnection() {
     service.connections.push({
       app_token: "aRpH7UQAd7z3j7sq0WF1atqRFtDLLfal1c9oyWD8",
+      established: false,
       name: "glpidata",
+      session: {},
       session_token: "",
+      try: 0,
+      type: "glpi",
       url: "http://127.0.0.1/talaos_backends/glpi9.3/apirest.php",
     });
   }
@@ -76,6 +81,9 @@ describe("BackendGlpiService", () => {
           .subscribe((data) => {
               sessionAnswer = data;
             });
+      }, (error) => {
+        console.log("ERROR:");
+        console.log(error);
       });
     setTimeout(() => {
       expect(sessionAnswer.session.glpiID).toEqual(sessionData.session.glpiID);
@@ -249,16 +257,19 @@ describe("BackendGlpiService", () => {
         {
           Computer__Entity__completename: {
             datatype: "dropdown",
+            id: "80",
             name: "Entity",
             value: "Root entity",
           },
           Computer__id: {
             datatype: "number",
+            id: "2",
             name: "ID",
             value: 1,
           },
           Computer__name: {
             datatype: "itemlink",
+            id: "1",
             name: "Name",
             value: "test-PC1",
           },
@@ -266,16 +277,19 @@ describe("BackendGlpiService", () => {
         {
           Computer__Entity__completename: {
             datatype: "dropdown",
+            id: "80",
             name: "Entity",
             value: "Root entity",
           },
           Computer__id: {
             datatype: "number",
+            id: "2",
             name: "ID",
             value: 2,
           },
           Computer__name: {
             datatype: "itemlink",
+            id: "1",
             name: "Name",
             value: "test-PC2",
           },
@@ -283,16 +297,19 @@ describe("BackendGlpiService", () => {
         {
           Computer__Entity__completename: {
             datatype: "dropdown",
+            id: "80",
             name: "Entity",
             value: "Root entity",
           },
           Computer__id: {
             datatype: "number",
+            id: "2",
             name: "ID",
             value: 3,
           },
           Computer__name: {
             datatype: "itemlink",
+            id: "1",
             name: "Name",
             value: "test-PC3",
           },
@@ -300,16 +317,19 @@ describe("BackendGlpiService", () => {
         {
           Computer__Entity__completename: {
             datatype: "dropdown",
+            id: "80",
             name: "Entity",
             value: "Root entity",
           },
           Computer__id: {
             datatype: "number",
+            id: "2",
             name: "ID",
             value: 4,
           },
           Computer__name: {
             datatype: "itemlink",
+            id: "1",
             name: "Name",
             value: "test-PC4",
           },
@@ -411,20 +431,21 @@ describe("BackendGlpiService", () => {
   it("test get user informations", (done) => {
     const httpDatas = {
       comment: null,
+      completename: "David Durieux",
       emails: [
         "root@root.com",
         "root2@foo.bar",
       ],
-      firstname: "Durieux",
+      firstname: "David",
       id: "2",
       is_active: 1,
       is_deleted: 0,
-      lastname: "David",
+      lastname: "Durieux",
       mobile: "07.00.00.00.00",
       name: "glpi",
       phone: "04.00.00.00.00",
       phone2: "",
-      picture: "4c/2_5b7ed50e2b34c.png",
+      picture: null, // "4c/2_5b7ed50e2b34c.png",
       usercategory: "Admins",
       usertitle: "Administrator",
     };

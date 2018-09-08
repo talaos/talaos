@@ -18,7 +18,7 @@ export class BackendGlpiService {
   constructor(private http: HttpClient, public events: Events, public toastCtrl: ToastController,
               private globalVars: GlobalVars, public config: Config) {
     const connectionsGlpi = this.config.get("connections_glpi");
-    if (Object.keys(connectionsGlpi).length > 0) {
+    if (connectionsGlpi && Object.keys(connectionsGlpi).length > 0) {
       this.connections = connectionsGlpi;
     }
     this.loadConnections();
@@ -77,7 +77,7 @@ export class BackendGlpiService {
       };
     }
 
-    return this.http.get<IUserSession>(this.connections[0].url + "/getFullSession", httpOptions);
+    return this.http.get(this.connections[0].url + "/getFullSession", httpOptions);
   }
 
   public getItem(itemtype, itemId, expand: boolean = true) {
@@ -423,12 +423,12 @@ export class BackendGlpiService {
         userInfo.lastname = data.realname;
         userInfo.usercategory = data.usercategories_id;
         userInfo.usertitle = data.usertitles_id;
-        if (data.firstname && data.lastname) {
-          userInfo.completename = data.firstname + " " + data.lastname;
+        if (data.firstname && data.realname) {
+          userInfo.completename = data.firstname + " " + data.realname;
         } else if (data.firstname) {
           userInfo.completename = data.firstname;
-        } else if (data.lastname) {
-          userInfo.completename = data.lastname;
+        } else if (data.realname) {
+          userInfo.completename = data.realname;
         } else {
           userInfo.completename = data.name;
         }
