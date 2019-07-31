@@ -1,0 +1,97 @@
+<ion-header translucent>
+  <ion-toolbar>
+    <ion-title>Creation of a new deploy process</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">Close</ion-button>
+      <ion-button color="primary" fill="solid" (click)="save()">Save</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="0" size-lg="3">
+
+
+      </ion-col>
+      <ion-col size="12" size-lg="6">
+        <ion-list>
+          <ion-list-header color="primary">
+            <ion-label>General information</ion-label>
+          </ion-list-header>
+          <ion-item>
+            <ion-label position="stacked">Name <ion-text color="danger">*</ion-text></ion-label>
+            <ion-input [(ngModel)]="mydata.name"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label>Running</ion-label>
+            <ion-toggle [(ngModel)]="mydata.is_active"></ion-toggle>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Paquets <ion-text color="danger">*</ion-text></ion-label>
+            <ion-input [(ngModel)]="mydata.targets"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Ordinateurs <ion-text color="danger">*</ion-text></ion-label>
+            <ion-input [(ngModel)]="mydata.actors"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Comment</ion-label>
+            <ion-textarea rows="3" cols="20" [(ngModel)]="mydata.comment"></ion-textarea>
+          </ion-item>
+
+          <ion-list-header color="medium">
+            <ion-label>Advanced options</ion-label>
+          </ion-list-header>
+          <ion-item>
+            <ion-label position="stacked">Intervalle de réveil des agents (en minutes)</ion-label>
+            <ion-input type="number" max="120" [(ngModel)]="mydata.wakeup_agent_time"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Nombre d'agents à réveiller</ion-label>
+            <ion-input type="number" max="3000" [(ngModel)]="mydata.wakeup_agent_counter"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Date de début</ion-label>
+            <ion-datetime 
+              [(ngModel)]="mydata.datetime_start"
+              [dayShortNames]="customDayShortNames"
+              minuteValues="0,15,30,45"
+              min="2019"
+              max="2050"
+              displayFormat="DDD. DD MMM YYYY à HH:mm"
+              monthShortNames="jan, fev, mar, avr, mai, jui, jul, aou, sep, oct, nov, dec"></ion-datetime>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Date de fin</ion-label>
+            <ion-datetime 
+              [(ngModel)]="mydata.datetime_end"
+              [dayShortNames]="customDayShortNames"
+              minuteValues="0,15,30,45"
+              min="2019"
+              max="2050"
+              displayFormat="DDD. DD MMM YYYY à HH:mm"
+              monthShortNames="jan, fev, mar, avr, mai, jui, jul, aou, sep, oct, nov, dec"></ion-datetime>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Créneau horaire de préparation</ion-label>
+            <ion-input [(ngModel)]="mydata.plugin_fusioninventory_timeslots_prep_id"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Créneau horaire d'exécution </ion-label>
+            <ion-input [(ngModel)]="mydata.plugin_fusioninventory_timeslots_exec_id"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label>Re-préparer un job si l'exécution précédente était un succès</ion-label>
+            <ion-toggle [(ngModel)]="mydata.reprepare_if_successful"></ion-toggle>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+      <ion-col size="0" size-lg="3">
+
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+
+</ion-content>

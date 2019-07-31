@@ -1,0 +1,81 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/menu/deploy"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>Deploy packages on computers</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+
+  Test deploy details {{jobs_id}}
+
+  trier : date | nom d'ordinateur
+
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-list>
+          <ion-list-header>
+            <ion-label>Préparés</ion-label>
+            <ion-badge color="medium">{{status_total_counts.prepared}}</ion-badge>
+          </ion-list-header>
+          <ion-searchbar [(ngModel)]="search_text.prepared" (ionChange)="getPrepared()"></ion-searchbar>
+          <ion-item *ngFor="let data of status.prepared">
+            <ion-label>{{data.name}}</ion-label>
+          </ion-item>
+          <ion-item *ngIf="status_total_counts.prepared > 10" lines="none">
+            <ion-icon name="download"></ion-icon>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+      <ion-col>
+        <ion-list>
+          <ion-list-header>
+            <ion-label>En cours</ion-label>
+            <ion-badge color="primary">{{status_total_counts.running}}</ion-badge>
+          </ion-list-header>
+          <ion-searchbar></ion-searchbar>
+          <ion-item *ngFor="let data of status.running">
+            <ion-label>{{data.name}}</ion-label>
+          </ion-item>
+          <ion-item *ngIf="status_total_counts.running > 10" lines="none">
+            <ion-icon name="download"></ion-icon>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+      <ion-col>
+        <ion-list>
+          <ion-list-header>
+            <ion-label>Succès</ion-label>
+            <ion-badge color="success">{{status_total_counts.installed}}</ion-badge>
+          </ion-list-header>
+          <ion-searchbar></ion-searchbar>
+          <ion-item *ngFor="let data of status.installed">
+            <ion-label>{{data.name}}</ion-label>
+          </ion-item>
+          <ion-item *ngIf="status_total_counts.installed > 10" lines="none">
+            <ion-icon name="download"></ion-icon>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+      <ion-col>
+        <ion-list>
+          <ion-list-header>
+            <ion-label>En erreur</ion-label>
+            <ion-badge color="danger">{{status_total_counts.error}}</ion-badge>
+          </ion-list-header>
+          <ion-searchbar></ion-searchbar>
+          <ion-item *ngFor="let data of status.error">
+            <ion-label>{{data.name}}</ion-label>
+          </ion-item>
+          <ion-item *ngIf="status_total_counts.error > 10" lines="none">
+            <ion-icon name="download"></ion-icon>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>

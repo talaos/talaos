@@ -1,115 +1,49 @@
-import { HttpClient, HttpClientModule } from "@angular/common/http";
-import { CUSTOM_ELEMENTS_SCHEMA, ErrorHandler, NgModule } from "@angular/core";
-import { BrowserModule } from "@angular/platform-browser";
-import { IonicApp, IonicErrorHandler, IonicModule } from "ionic-angular";
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { RouteReuseStrategy } from '@angular/router';
 
-// Multilanguage
-import { TranslateLoader, TranslateModule } from "@ngx-translate/core";
-import { TranslateHttpLoader } from "@ngx-translate/http-loader";
-import "rxjs/add/operator/map";
+import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
+import { SplashScreen } from '@ionic-native/splash-screen/ngx';
+import { StatusBar } from '@ionic-native/status-bar/ngx';
 
-import { BackendGlpiComponent } from "../backends/backend.glpi.component";
-import { BackendGlpiService } from "../backends/backend.glpi.service";
-import { GlobalVars } from "./globalvars";
+import { AppComponent } from './app.component';
+import { AppRoutingModule } from './app-routing.module';
+import { GlpiService } from './services/glpi.service';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { GlpiHttpInterceptor } from './inteceptors/glpi.interceptor';
+import { GlobalvarsService } from './services/globalvars.service';
 
-import { DropdownSelect } from "../dropdownselect/dropdownselect";
-import { SearchPreferenceModal } from "../pages/glpi/generic/modals/search.preference.modal";
-import { SearchPage } from "../pages/glpi/generic/searchlist";
-import { Searchmodal } from "../pages/glpi/generic/searchmodal";
-import { TicketPage } from "../pages/glpi/ticket/ticket";
-import { HomePage } from "../pages/home/home";
-import { LoginPage } from "../pages/login/login";
-import { GeneralMenu } from "../pages/menu/menu";
-import { MyApp } from "./app.component";
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { library } from '@fortawesome/fontawesome-svg-core';
 
-import { TicketForm } from "../pages/glpi/ticket/ticket_form";
+import { fas } from '@fortawesome/free-solid-svg-icons';
+import { far } from '@fortawesome/free-regular-svg-icons';
+import { fab } from '@fortawesome/free-brands-svg-icons';
 
-import { GlpiHomeAdminPage } from "../pages/glpi/home/admin";
-import { GlpiHomeEnduserPage } from "../pages/glpi/home/end-user";
-import { GlpiHomePage } from "../pages/glpi/home/home";
-import { GlpiMenu } from "../pages/glpi/menu/menu";
-
-import { SplashScreen } from "@ionic-native/splash-screen";
-import { StatusBar } from "@ionic-native/status-bar";
-
-import { NgxDatatableModule } from "@swimlane/ngx-datatable";
-
-import { HTTP_INTERCEPTORS } from "@angular/common/http";
-import { GlpiHttpInterceptor } from "../backends/backend.glpi.interceptor";
-
-import { SearchTemplateTicket } from "../pages/glpi/generic/searchtemplates/searchtemplate.ticket";
-
-export function createTranslateLoader(http: HttpClient) {
-  return new TranslateHttpLoader(http, "./assets/i18n/", ".json");
-}
+library.add(fas, far, fab);
 
 @NgModule({
-  bootstrap: [IonicApp],
-  declarations: [
-    MyApp,
-    BackendGlpiComponent,
-    LoginPage,
-    HomePage,
-    GeneralMenu,
-    GlpiHomePage,
-    GlpiMenu,
-    TicketPage,
-    TicketForm,
-    SearchPage,
-    Searchmodal,
-    SearchPreferenceModal,
-    DropdownSelect,
-    GlpiHomeEnduserPage,
-    GlpiHomeAdminPage,
-    SearchTemplateTicket,
-  ],
-  entryComponents: [
-    MyApp,
-    LoginPage,
-    GlpiHomePage,
-    HomePage,
-    GeneralMenu,
-    GlpiMenu,
-    TicketPage,
-    TicketForm,
-    SearchPage,
-    Searchmodal,
-    SearchPreferenceModal,
-    DropdownSelect,
-    GlpiHomeEnduserPage,
-    GlpiHomeAdminPage,
-    SearchTemplateTicket,
-  ],
+  declarations: [AppComponent],
+  entryComponents: [],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp, {
-      connections_glpi: {},
-      glpi_dashboard: "",
-    }),
+    IonicModule.forRoot(),
+    AppRoutingModule,
     HttpClientModule,
-    NgxDatatableModule,
-    TranslateModule.forRoot({
-      loader: {
-        deps: [HttpClient],
-        provide: TranslateLoader,
-        useFactory: (createTranslateLoader),
-      },
-    }),
+    FontAwesomeModule
   ],
   providers: [
     StatusBar,
     SplashScreen,
-    BackendGlpiService,
-    GlobalVars,
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    GlpiService,
     {
       multi: true,
       provide: HTTP_INTERCEPTORS,
       useClass: GlpiHttpInterceptor,
     },
+    GlobalvarsService
   ],
-  schemas: [
-    CUSTOM_ELEMENTS_SCHEMA,
-  ],
+  bootstrap: [AppComponent]
 })
 export class AppModule {}

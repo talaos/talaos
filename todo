@@ -1,0 +1,109 @@
+# Tickets utilisateur
+
+Voici la liste des champs que le post-only voit : 
+
+* title
+* description
+* type
+* status
+* category
+* last update
+* Time to own
+* Time to resolve
+* Internal time to own
+* Internal time to resolve
+* Request source
+* urgency
+* Approval
+* Impact
+* priority
+* Location
+* requester
+* Watcher
+* Assigned to
+* Linked tickets
+* documents
+* followups
+* Statistics (tab)
+* items
+* history
+
+
+Voici la liste des champs que le post-only peut modifier : 
+
+* title
+* description
+* category
+* urgency
+* documents
+* followups
+* items
+
+
+
+
+
+Informations a mettre sur les vignettes post-only
+
+* id
+* titre
+* priority 		=> color / icon   => https://image.flaticon.com/icons/svg/829/829545.svg ou sur une ligne https://image.flaticon.com/icons/svg/60/60839.svg or https://i.redd.it/nz01doblh6g01.jpg
+* time to resolve	=> icon / chart
+* status		=> icon / color
+* last update
+* number followups
+* type			=> icon
+* approval		=> color / icon
+
+
+
+
+
+
+type : 
+
+* incident : ambulance
+* request  : avion en papier
+
+couleurs de fond : 
+* bleu = nouveau, en cours, planifie
+* gris clair  = en attente
+* vert = resole / clos
+
+
+
+
+
+# Dahboards
+
+## Admin
+
+* tasks / planning
+* nb tickets by due time (overdue, today, tomorrow, this week, next week)
+* number assets
+* task fusion (deploy...)
+
+
+## Technician
+
+* tasks / planning
+* tickets assigned to me
+* tickets assigned to my groups
+* nb tickets by due time (overdue, today, tomorrow, this week, next week)
+
+
+## Supervisor
+
+* Tickets after end SLA
+* tickets near to end SLA
+* stats like number tickets in last days per days
+* stats like number tickets per hour in last 24 hours
+* tickets by type (demande / incident)
+
+
+## end user
+
+
+
+
+

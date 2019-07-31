@@ -1,0 +1,66 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Incidents management</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+
+<ion-searchbar></ion-searchbar>
+
+<ion-chip [color]="bookmarkLoaded == 'mytickets' ? 'success' : (internalBookmarkCounters.mytickets > 0) ? 'primary' : 'medium'" (click)="loadBookmark('mytickets')">
+  <fa-icon icon="user" fixedWidth="true"></fa-icon>
+  <ion-label>Mes tickets</ion-label>
+  <ion-badge color="undefined">{{internalBookmarkCounters.mytickets}}</ion-badge>
+</ion-chip>
+
+<ion-chip [color]="bookmarkLoaded == 'newtickets' ? 'success' : (internalBookmarkCounters.newtickets > 0) ? 'primary' : 'medium'" (click)="loadBookmark('newtickets')">
+  <fa-icon icon="sign-in-alt" fixedWidth="true"></fa-icon>
+  <ion-label>Nouveaux tickets</ion-label>
+  <ion-badge color="undefined">{{internalBookmarkCounters.newtickets}}</ion-badge>
+</ion-chip>
+
+<ion-chip [color]="bookmarkLoaded == 'grouptickets' ? 'success' : (internalBookmarkCounters.grouptickets > 0) ? 'primary' : 'medium'" (click)="loadBookmark('grouptickets')">
+  <fa-icon icon="users" fixedWidth="true"></fa-icon>
+  <ion-label>Tickets de mes groupes</ion-label>
+  <ion-badge color="undefined">{{internalBookmarkCounters.grouptickets}}</ion-badge>
+</ion-chip>
+
+<ion-chip [color]="bookmarkLoaded == 'latetickets' ? 'success' : (internalBookmarkCounters.latetickets > 0) ? 'primary' : 'medium'" (click)="loadBookmark('latetickets')">
+  <fa-icon icon="hourglass-end" fixedWidth="true"></fa-icon>
+  <ion-label>Tickets en retard</ion-label>
+  <ion-badge color="undefined">{{internalBookmarkCounters.latetickets}}</ion-badge>
+</ion-chip>
+
+<ion-chip [color]="bookmarkLoaded == 'duedate4h' ? 'success' : (internalBookmarkCounters.duedate4h > 0) ? 'primary' : 'medium'" (click)="loadBookmark('duedate4h')">
+  <fa-icon icon="hourglass-half" fixedWidth="true"></fa-icon>
+  <ion-label>Date résolution < 4h</ion-label>
+  <ion-badge color="undefined">{{internalBookmarkCounters.duedate4h}}</ion-badge>
+</ion-chip>
+
+<ion-chip [color]="bookmarkLoaded == 'duedate24h' ? 'success' : (internalBookmarkCounters.duedate24h > 0) ? 'primary' : 'medium'" (click)="loadBookmark('duedate24h')">
+  <fa-icon icon="hourglass-start" fixedWidth="true"></fa-icon>
+  <ion-label>Date résolution < 24h</ion-label>
+  <ion-badge color="undefined">{{internalBookmarkCounters.duedate24h}}</ion-badge>
+</ion-chip>
+
+<ion-chip [color]="bookmarkLoaded == 'waiting' ? 'success' : (internalBookmarkCounters.waiting > 0) ? 'primary' : 'medium'" (click)="loadBookmark('waiting')">
+  <fa-icon icon="pause" fixedWidth="true"></fa-icon>
+  <ion-label>En attente</ion-label>
+  <ion-badge color="undefined">{{internalBookmarkCounters.waiting}}</ion-badge>
+</ion-chip>
+
+<ion-list>
+  <ion-item>
+    <fa-icon icon="user-cog" size="4x" [border]="true" slot="start"></fa-icon>
+    <ion-label>
+      <h2>Title</h2>
+      <h3>Category</h3>
+      <p>You will remove these restraints and leave...</p>
+    </ion-label>
+  </ion-item>
+</ion-list>
+
+</ion-content>

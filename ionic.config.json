@@ -1,7 +1,5 @@
 {
-  "name": "glpi_frontend_ionic",
-  "integrations": {
-    "cordova": {}
-  },
-  "type": "ionic-angular"
+  "name": "talaos",
+  "integrations": {},
+  "type": "angular"
 }

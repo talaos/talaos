@@ -1,0 +1,86 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+
+    <ion-title>Deploy packages on computers</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-fab vertical="top" horizontal="end" slot="fixed" edge="true">
+    <ion-fab-button color="danger" (click)="presentForm()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-searchbar debounce="500" [(ngModel)]="search_text" (ionChange)="getTasks()"></ion-searchbar>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col *ngFor="let task of tasks" size="12" size-lg="3">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>
+              <ion-button color="success" fill="outline" size="small" *ngIf="task.activated">
+                <ion-icon name="play" color="success"></ion-icon>
+              </ion-button>
+              <ion-button color="medium" fill="outline" size="small" *ngIf="!task.activated">
+                <ion-icon name="pause" color="medium"></ion-icon>
+              </ion-button>
+              {{task.name}}
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-list>
+              <ion-item>
+                <ion-label color="secondary">Cible</ion-label>
+                <ion-badge color="secondary">{{task.target}}</ion-badge>
+              </ion-item>
+              <ion-item [disabled]="task.status.prepared == 0">
+                <ion-label>Préparé</ion-label>
+                <ion-badge color="medium">{{task.status.prepared}}</ion-badge>
+              </ion-item>
+              <ion-item [disabled]="task.status.running == 0">
+                <ion-label>En cours</ion-label>
+                <ion-badge color="primary">{{task.status.running}}</ion-badge>
+              </ion-item>
+              <ion-item [disabled]="task.status.installed == 0">
+                <ion-label>Installé</ion-label>
+                <ion-badge color="success">{{task.status.installed}}</ion-badge>
+              </ion-item>
+              <ion-item [disabled]="task.status.error == 0">
+                <ion-label>Erreur</ion-label>
+                <ion-badge color="danger">{{task.status.error}}</ion-badge>
+              </ion-item>
+              <ion-item lines="none">
+                <ion-grid>
+                  <ion-row class="ion-align-items-center">
+                    <ion-col align-self-center size="12" size-lg="4">
+                      <ion-button color="primary" size="small" expand="block" routerLink="/deploydetails/{{task.taskjobs_id}}" routerDirection="forward">
+                        <ion-icon name="information-circle-outline" slot="start"></ion-icon>
+                        Details
+                      </ion-button>
+                    </ion-col>
+                    <ion-col align-self-center size="12" size-lg="4">
+                      <ion-button color="primary" size="small" fill="outline" expand="block" (click)="editForm(task.task_id)">
+                        <ion-icon name="create" slot="start"></ion-icon>
+                        Edit
+                      </ion-button>
+                    </ion-col>
+                    <ion-col align-self-center size="12" size-lg="4">
+                      <ion-button color="danger" size="small" fill="outline" expand="block">
+                        <ion-icon name="trash" slot="start"></ion-icon>
+                        Delete
+                      </ion-button>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
