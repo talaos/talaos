@@ -20,9 +20,8 @@ export class IncidentPage implements OnInit {
   };
   public bookmarkLoaded = 'mytickets';
 
-  constructor(private glpi:GlpiService) {
+  constructor(private glpi: GlpiService) {
     this.tickets = [];
-
   }
 
   ngOnInit() {
@@ -32,7 +31,7 @@ export class IncidentPage implements OnInit {
 
   getTickets() {
 
-    this.glpi.search("Ticket", [1, 2, 80], [], "0-20")
+    this.glpi.search('Ticket', [1, 2, 80], [], '0-20')
       .subscribe(res => {
         console.log(res);
 
@@ -42,108 +41,108 @@ export class IncidentPage implements OnInit {
   getInternalBookmarkCriteria(type) {
     let criteria = [];
     switch (type) {
-      case "mytickets":
+      case 'mytickets':
         criteria.push({
-          link: "AND",
-          field: 5, 
-          searchtype: "equals", 
+          link: 'AND',
+          field: 5,
+          searchtype: 'equals',
           value: 22496
         });
         criteria.push({
-          link: "AND",
-          field: 12, 
-          searchtype: "equals", 
-          value: "notold"
+          link: 'AND',
+          field: 12,
+          searchtype: 'equals',
+          value: 'notold'
         });
         break;
-    
-      case "newtickets":
+
+      case 'newtickets':
         criteria.push({
-          link: "AND",
-          field: 12, 
-          searchtype: "equals", 
+          link: 'AND',
+          field: 12,
+          searchtype: 'equals',
           value: 1
         });
         break;
 
-      case "grouptickets":
-        
+      case 'grouptickets':
+
         break;
 
-      case "latetickets":
+      case 'latetickets':
         criteria.push({
-          link: "AND",
-          field: 82, 
-          searchtype: "equals", 
+          link: 'AND',
+          field: 82,
+          searchtype: 'equals',
           value: 1
         });
         criteria.push({
-          link: "AND",
-          field: 12, 
-          searchtype: "equals", 
-          value: "notold"
+          link: 'AND',
+          field: 12,
+          searchtype: 'equals',
+          value: 'notold'
         });
         break;
 
-      case "duedate4h":
+      case 'duedate4h':
         criteria.push({
-          link: "AND",
-          field: 82, 
-          searchtype: "equals", 
+          link: 'AND',
+          field: 82,
+          searchtype: 'equals',
           value: 0
         });
         criteria.push({
-          link: "AND",
-          field: 12, 
-          searchtype: "equals", 
-          value: "notold"
+          link: 'AND',
+          field: 12,
+          searchtype: 'equals',
+          value: 'notold'
         });
         criteria.push({
-          link: "AND",
-          field: 18, 
-          searchtype: "morethan", 
-          value: "NOW"
+          link: 'AND',
+          field: 18,
+          searchtype: 'morethan',
+          value: 'NOW'
         });
         criteria.push({
-          link: "AND",
-          field: 18, 
-          searchtype: "lessthan", 
-          value: "4HOUR"
+          link: 'AND',
+          field: 18,
+          searchtype: 'lessthan',
+          value: '4HOUR'
         });
         break;
 
-      case "duedate24h":
+      case 'duedate24h':
         criteria.push({
-          link: "AND",
-          field: 82, 
-          searchtype: "equals", 
+          link: 'AND',
+          field: 82,
+          searchtype: 'equals',
           value: 0
         });
         criteria.push({
-          link: "AND",
-          field: 12, 
-          searchtype: "equals", 
-          value: "notold"
+          link: 'AND',
+          field: 12,
+          searchtype: 'equals',
+          value: 'notold'
         });
         criteria.push({
-          link: "AND",
-          field: 18, 
-          searchtype: "morethan", 
-          value: "NOW"
+          link: 'AND',
+          field: 18,
+          searchtype: 'morethan',
+          value: 'NOW'
         });
         criteria.push({
-          link: "AND",
-          field: 18, 
-          searchtype: "lessthan", 
-          value: "24HOUR"
+          link: 'AND',
+          field: 18,
+          searchtype: 'lessthan',
+          value: '24HOUR'
         });
         break;
 
-      case "waiting":
+      case 'waiting':
         criteria.push({
-          link: "AND",
-          field: 12, 
-          searchtype: "equals", 
+          link: 'AND',
+          field: 12,
+          searchtype: 'equals',
           value: 4
         });
         break;
@@ -154,7 +153,7 @@ export class IncidentPage implements OnInit {
   getInternalBookmarkCounters() {
     for (let bmkc in this.internalBookmarkCounters) {
       let criteria = this.getInternalBookmarkCriteria(bmkc);
-      this.glpi.search("Ticket", [1, 2, 80], criteria, "0-1")
+      this.glpi.search('Ticket', [1, 2, 80], criteria, '0-1')
         .subscribe(res => {
           this.internalBookmarkCounters[bmkc] = res.meta.totalcount;
         });

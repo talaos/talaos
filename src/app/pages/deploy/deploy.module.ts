@@ -6,7 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { DeployPage } from './deploy.page';
-import { DeployModal } from "../../modals/forms/deploy/deploy.modal";
+import { DeployModal } from '../../modals/forms/deploy/deploy.modal';
 
 const routes: Routes = [
   {

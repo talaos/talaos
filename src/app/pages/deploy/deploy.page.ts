@@ -11,7 +11,7 @@ import { DeployModal } from '../../modals/forms/deploy/deploy.modal';
 export class DeployPage implements OnInit {
 
   public tasks = [];
-  search_text = "";
+  search_text = '';
 
   constructor(private glpi: GlpiService, public modalController: ModalController) {
 
@@ -25,7 +25,7 @@ export class DeployPage implements OnInit {
     const modal = await this.modalController.create({
       component: DeployModal,
       backdropDismiss: false,
-      cssClass: "modal-fullscreen",
+      cssClass: 'modal-fullscreen',
     });
     return await modal.present();
   }
@@ -35,7 +35,7 @@ export class DeployPage implements OnInit {
       component: DeployModal,
       id: id,
       backdropDismiss: false,
-      cssClass: "modal-fullscreen",
+      cssClass: 'modal-fullscreen',
     });
     return await modal.present();
   }
@@ -44,26 +44,26 @@ export class DeployPage implements OnInit {
     this.tasks = [];
 
     // TODO use search PluginFusioninventoryTaskjob instead getItemsRestrict
-    let fields = [2, 4, 5, 6, 7];
-    let criteria = [
+    const fields = [2, 4, 5, 6, 7];
+    const criteria = [
       {
-        link: "OR",
-        field: 6, 
-        searchtype: "contains", 
-        value: "deployinstall"
+        link: 'OR',
+        field: 6,
+        searchtype: 'contains',
+        value: 'deployinstall'
       },
     ];
-    if (this.search_text != "") {
+    if (this.search_text !== '') {
       criteria.push({
-        link: "AND",
+        link: 'AND',
         field: 4,
-        searchtype: "contains", 
+        searchtype: 'contains',
         value: this.search_text
       });
     }
-    this.glpi.search("PluginFusioninventoryTaskjob", fields, criteria, "0-50")
+    this.glpi.search('PluginFusioninventoryTaskjob', fields, criteria, '0-50')
       .subscribe(res => {
-        for(let data of res.data) {
+        for (let data of res.data) {
           let myTask = {
             task_id: data.PluginFusioninventoryTaskjob__PluginFusioninventoryTask__id.value,
             taskjobs_id: data.PluginFusioninventoryTaskjob__id.value,
@@ -83,23 +83,23 @@ export class DeployPage implements OnInit {
   }
 
   getTaskJobState(myTask) {
-    this.glpi.search("PluginFusioninventoryTaskjobstate", [], 
-                     this.getSearchCriteriaPrepared(myTask.taskjobs_id), "0-1")
+    this.glpi.search('PluginFusioninventoryTaskjobstate', [],
+                     this.getSearchCriteriaPrepared(myTask.taskjobs_id), '0-1')
       .subscribe(res_prepared => {
         myTask.status.prepared = res_prepared.meta.totalcount;
         myTask.target += res_prepared.meta.totalcount;
-        this.glpi.search("PluginFusioninventoryTaskjobstate", [], 
-                  this.getSearchCriteriaRunning(myTask.taskjobs_id), "0-1")
+        this.glpi.search('PluginFusioninventoryTaskjobstate', [],
+                  this.getSearchCriteriaRunning(myTask.taskjobs_id), '0-1')
           .subscribe(res_running => {
             myTask.status.running = res_running.meta.totalcount;
             myTask.target += res_running.meta.totalcount;
-            this.glpi.search("PluginFusioninventoryTaskjobstate", [], 
-                      this.getSearchCriteriaInstalled(myTask.taskjobs_id), "0-1")
+            this.glpi.search('PluginFusioninventoryTaskjobstate', [],
+                      this.getSearchCriteriaInstalled(myTask.taskjobs_id), '0-1')
               .subscribe(res_installed => {
                 myTask.status.installed = res_installed.meta.totalcount;
                 myTask.target += res_installed.meta.totalcount;
-                this.glpi.search("PluginFusioninventoryTaskjobstate", [], 
-                          this.getSearchCriteriaError(myTask.taskjobs_id), "0-1")
+                this.glpi.search('PluginFusioninventoryTaskjobstate', [],
+                          this.getSearchCriteriaError(myTask.taskjobs_id), '0-1')
                   .subscribe(res_error => {
                     myTask.status.error = res_error.meta.totalcount;
                     myTask.target += res_error.meta.totalcount;
@@ -114,21 +114,21 @@ export class DeployPage implements OnInit {
   getSearchCriteriaPrepared(taskjobs_id) {
     return [
       {
-        link: "OR",
-        field: 3, 
-        searchtype: "equals", 
+        link: 'OR',
+        field: 3,
+        searchtype: 'equals',
         value: taskjobs_id
       },
       {
-        link: "AND",
-        field: 4, 
-        searchtype: "equals", 
+        link: 'AND',
+        field: 4,
+        searchtype: 'equals',
         value: 0
       },
       {
-        link: "AND",
-        field: 7, 
-        searchtype: "equals", 
+        link: 'AND',
+        field: 7,
+        searchtype: 'equals',
         value: 1
       },
     ];
@@ -137,39 +137,39 @@ export class DeployPage implements OnInit {
   getSearchCriteriaRunning(taskjobs_id) {
     return [
       {
-        link: "OR",
-        field: 3, 
-        searchtype: "equals", 
+        link: 'OR',
+        field: 3,
+        searchtype: 'equals',
         value: taskjobs_id
       },
       {
-        link: "AND",
-        field: 4, 
-        searchtype: "equals", 
+        link: 'AND',
+        field: 4,
+        searchtype: 'equals',
         value: 1
       },
       {
-        link: "AND",
-        field: 7, 
-        searchtype: "equals", 
+        link: 'AND',
+        field: 7,
+        searchtype: 'equals',
         value: 1
       },
       {
-        link: "OR",
-        field: 3, 
-        searchtype: "equals", 
+        link: 'OR',
+        field: 3,
+        searchtype: 'equals',
         value: taskjobs_id
       },
       {
-        link: "AND",
-        field: 4, 
-        searchtype: "equals", 
+        link: 'AND',
+        field: 4,
+        searchtype: 'equals',
         value: 2
       },
       {
-        link: "AND",
-        field: 7, 
-        searchtype: "equals", 
+        link: 'AND',
+        field: 7,
+        searchtype: 'equals',
         value: 1
       },
     ];
@@ -178,21 +178,21 @@ export class DeployPage implements OnInit {
   getSearchCriteriaInstalled(taskjobs_id) {
     return [
       {
-        link: "OR",
-        field: 3, 
-        searchtype: "equals", 
+        link: 'OR',
+        field: 3,
+        searchtype: 'equals',
         value: taskjobs_id
       },
       {
-        link: "AND",
+        link: 'AND',
         field: 4,
-        searchtype: "equals", 
+        searchtype: 'equals',
         value: 3
       },
       {
-        link: "AND",
-        field: 7, 
-        searchtype: "equals", 
+        link: 'AND',
+        field: 7,
+        searchtype: 'equals',
         value: 1
       },
     ];
@@ -201,21 +201,21 @@ export class DeployPage implements OnInit {
   getSearchCriteriaError(taskjobs_id) {
     return [
       {
-        link: "OR",
-        field: 3, 
-        searchtype: "equals", 
+        link: 'OR',
+        field: 3,
+        searchtype: 'equals',
         value: taskjobs_id
       },
       {
-        link: "AND",
-        field: 4, 
-        searchtype: "equals", 
+        link: 'AND',
+        field: 4,
+        searchtype: 'equals',
         value: 4
       },
       {
-        link: "AND",
-        field: 7, 
-        searchtype: "equals", 
+        link: 'AND',
+        field: 7,
+        searchtype: 'equals',
         value: 1
       },
     ];

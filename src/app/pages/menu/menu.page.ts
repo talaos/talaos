@@ -9,37 +9,37 @@ export class MenuPage implements OnInit {
 
   pages = [
     {
-      title: "Main",
-      url: "/menu/main",
-      icon: "home"
+      title: 'Main',
+      url: '/menu/main',
+      icon: 'home'
     },
     {
-      title: "CMDB",
+      title: 'CMDB',
       children: [
         {
-          title: "Inventory",
-          url: "/menu/inventory",
-          icon: "home"
+          title: 'Inventory',
+          url: '/menu/inventory',
+          icon: 'home'
         },
         {
-          title: "Applications",
-          url: "/menu/applications",
-          icon: "home"
+          title: 'Applications',
+          url: '/menu/applications',
+          icon: 'home'
         },
         {
-          title: "Deploy software",
-          url: "/menu/deploy",
-          icon: "home"
+          title: 'Deploy software',
+          url: '/menu/deploy',
+          icon: 'home'
         },
       ]
     },
     {
-      title: "Assistance",
+      title: 'Assistance',
       children: [
         {
-          title: "Incident",
-          url: "/menu/incident",
-          icon: "home"
+          title: 'Incident',
+          url: '/menu/incident',
+          icon: 'home'
         },
       ],
     }

@@ -1,17 +1,17 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { IncidentPage } from './incident.page';
+import { LoginPage } from './login.page';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 const routes: Routes = [
   {
     path: '',
-    component: IncidentPage
+    component: LoginPage
   }
 ];
 
@@ -19,10 +19,11 @@ const routes: Routes = [
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    FontAwesomeModule
+    FontAwesomeModule,
   ],
-  declarations: [IncidentPage]
+  declarations: [LoginPage]
 })
-export class IncidentPageModule {}
+export class LoginPageModule {}

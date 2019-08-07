@@ -1,0 +1,105 @@
+<ion-header>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-content *ngIf="displayLoading">
+      <ion-spinner name="bubbles"></ion-spinner>
+      Please wait...
+    </ion-card-content>
+    <ion-item no-padding *ngIf="!displayLoading">
+      <ion-grid no-padding>
+        <ion-row no-padding>
+          <ion-col no-padding size="8">
+            <div class="container">
+              <img src="assets/desk.png" />
+              <div style="font-size: 0.9rem;font-style: italic;">
+                <a href="https://www.flickr.com/photos/147592390@N06/32644268967">
+                  "Credit to https://myfriendscoffee.com/"
+                </a>
+                <span>by <a href="https://www.flickr.com/photos/147592390@N06">John Beans</a></span> is licensed under 
+                <a href="https://creativecommons.org/licenses/by/2.0/?ref=ccsearch&atype=html" style="margin-right: 5px;">CC BY 2.0</a>
+                <a href="https://creativecommons.org/licenses/by/2.0/?ref=ccsearch&atype=html" target="_blank">
+                  <fa-icon [icon]="['fab' , 'creative-commons']"></fa-icon>
+                </a>&nbsp;
+                <a href="https://creativecommons.org/licenses/by/2.0/?ref=ccsearch&atype=html" target="_blank">
+                  <fa-icon [icon]="['fab', 'creative-commons-by']"></fa-icon>
+                </a>
+              </div>
+            </div>
+          </ion-col>
+          <ion-col no-padding size="4">
+            <ion-card-header>
+              <ion-card-title>
+                TALAOS
+              </ion-card-title>
+              <ion-card-subtitle>
+                Login into the app.
+              </ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+              <form [formGroup]="loginForm">
+                <ion-list>
+                  <ion-item lines="none"></ion-item>
+                  <ion-item>
+                    <fa-icon icon="link" size="2x" slot="start"></fa-icon>
+                    <ion-input formControlName="glpiurl" placeholder="GLPI url like https://myglpi.net/" autocomplete="on"></ion-input>
+                  </ion-item>
+                  <div class="validation-errors">
+                    <ng-container *ngFor="let validation of validationMessages.glpiurl">
+                      <div class="error-message" *ngIf="loginForm.get('glpiurl').hasError(validation.type) && (loginForm.get('glpiurl').dirty || loginForm.get('glpiurl').touched)">
+                        {{ validation.message }}
+                      </div>
+                    </ng-container>
+                  </div>                  
+                  <ion-item>
+                    <fa-icon [icon]="['fab', 'keycdn']" size="2x" slot="start"></fa-icon>
+                    <ion-input formControlName="apptoken" placeholder="App token" autocomplete="on"></ion-input>
+                  </ion-item>
+                  <div class="validation-errors">
+                    <ng-container *ngFor="let validation of validationMessages.apptoken">
+                      <div class="error-message" *ngIf="loginForm.get('apptoken').hasError(validation.type) && (loginForm.get('apptoken').dirty || loginForm.get('apptoken').touched)">
+                        {{ validation.message }}
+                      </div>
+                    </ng-container>
+                  </div>                  
+                  <ion-item lines="none"></ion-item>
+                  <ion-item>
+                    <fa-icon icon="user-circle" size="2x" slot="start"></fa-icon>
+                    <ion-input formControlName="login" placeholder="Enter the username" autocomplete="on"></ion-input>
+                  </ion-item>
+                  <div class="validation-errors">
+                    <ng-container *ngFor="let validation of validationMessages.login">
+                      <div class="error-message" *ngIf="loginForm.get('login').hasError(validation.type) && (loginForm.get('login').dirty || loginForm.get('login').touched)">
+                        {{ validation.message }}
+                      </div>
+                    </ng-container>
+                  </div>                  
+                  <ion-item>
+                    <fa-icon icon="key" size="2x" slot="start"></fa-icon>
+                    <ion-input formControlName="password" type="password" placeholder="Enter the password"></ion-input>
+                  </ion-item>
+                  <div class="validation-errors">
+                    <ng-container *ngFor="let validation of validationMessages.password">
+                      <div class="error-message" *ngIf="loginForm.get('password').hasError(validation.type) && (loginForm.get('password').dirty || loginForm.get('password').touched)">
+                        {{ validation.message }}
+                      </div>
+                    </ng-container>
+                  </div>
+                  <ion-item lines="none"></ion-item>
+                  <div class="spinnerbutton">
+                    <ion-button expand="block" size="normal" slot="end" (click)="login()"  *ngIf="!doConnection">
+                      <ion-ripple-effect></ion-ripple-effect>
+                      LOGIN
+                    </ion-button>
+                    <ion-spinner name="bubbles" slot="end" *ngIf="doConnection"></ion-spinner>
+                  </div>
+                </ion-list>
+              </form>
+            </ion-card-content>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+  </ion-card>
+</ion-content>

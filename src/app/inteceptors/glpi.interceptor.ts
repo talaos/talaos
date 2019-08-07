@@ -1,6 +1,6 @@
-import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse} from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { Observable, of } from "rxjs";
+import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse} from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 @Injectable()
@@ -13,7 +13,7 @@ export class GlpiHttpInterceptor implements HttpInterceptor {
   }
 
   public intercept(req: HttpRequest<any>, next: HttpHandler) {
-    if (req.url.indexOf("listSearchOptions") === -1) {
+    if (req.url.indexOf('listSearchOptions') === -1) {
       return this.sendRequest(req, next);
     }
     const cachedResponse = this.cache.get(req.url);
